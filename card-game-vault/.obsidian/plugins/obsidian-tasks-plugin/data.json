@@ -1,0 +1,11 @@
+{
+  "globalFilter": "%%#task%%",
+  "removeGlobalFilter": false,
+  "setDoneDate": true,
+  "autoSuggestInEditor": true,
+  "autoSuggestMinMatch": 1,
+  "autoSuggestMaxItems": 6,
+  "features": {
+    "INTERNAL_TESTING_ENABLED_BY_DEFAULT": true
+  }
+}

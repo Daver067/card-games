@@ -1,0 +1,216 @@
+{
+  "main": {
+    "id": "c164bb4945a1ea88",
+    "type": "split",
+    "children": [
+      {
+        "id": "59eab2ffd408591c",
+        "type": "leaf",
+        "pane-relief:history-v1": {
+          "pos": 0,
+          "stack": [
+            {
+              "leaf": "59eab2ffd408591c",
+              "group": null,
+              "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Personal/Daily Journal/2022/12 October - Wednesday - 2022.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
+              "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}},\"scroll\":0}"
+            },
+            {
+              "leaf": "59eab2ffd408591c",
+              "group": null,
+              "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Home.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
+              "eState": "{\"cursor\":{\"from\":{\"line\":28,\"ch\":114},\"to\":{\"line\":28,\"ch\":114}},\"scroll\":12.573821339950372}"
+            }
+          ]
+        },
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Personal/Daily Journal/2022/12 October - Wednesday - 2022.md",
+            "mode": "source",
+            "backlinks": false,
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7007e90f36e814af",
+    "type": "split",
+    "children": [
+      {
+        "id": "eeafee5f1e9dcfa2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e35eaffe27a74c1d",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "b33d820eb02ec2ed",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "striketh",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "2e8d16714269dced",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          },
+          {
+            "id": "bc944ef38d8b88b5",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "recent-files",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 327.5
+  },
+  "right": {
+    "id": "253abb389409a7e8",
+    "type": "split",
+    "children": [
+      {
+        "id": "ece3572e8baeb65c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "994c8b41da9ad841",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Personal/Daily Journal/2022/12 October - Wednesday - 2022.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "2ca47a06d3d886fd",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": false
+              }
+            }
+          },
+          {
+            "id": "dca8df30548f9927",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Personal/Daily Journal/2022/12 October - Wednesday - 2022.md",
+                "linksCollapsed": true,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "dc24705092e45714",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Personal/Daily Journal/2022/12 October - Wednesday - 2022.md"
+              }
+            }
+          },
+          {
+            "id": "95a9853d9896c130",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": []
+            },
+            "state": {
+              "type": "calendar",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "59eab2ffd408591c",
+  "lastOpenFiles": [
+    "Home.md",
+    "Programming/2 Areas/3 JavaScript/Intermediate/Object Prototype.md",
+    "Programming/2 Areas/3 JavaScript/Basics/Data Types/Objects.md",
+    "THIS.md",
+    "Programming/2 Areas/3 JavaScript/Intermediate/Object Constructor.md",
+    "Personal/Daily Journal/2022/12 October - Wednesday - 2022.md",
+    "Templater/Daily Template Templater.md",
+    "Work/2 Areas/Work Dailys/Work - 28 September - Wednesday - 2022.md",
+    "Work/2 Areas/Work Dailys/Work - 27 September - Tuesday - 2022.md",
+    "Tagging.md"
+  ]
+}

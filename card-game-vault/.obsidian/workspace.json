@@ -1,0 +1,259 @@
+{
+  "main": {
+    "id": "c164bb4945a1ea88",
+    "type": "split",
+    "children": [
+      {
+        "id": "8d6677c7a76de0f8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1fc6e7a8e9a1660a",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Card Game.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7007e90f36e814af",
+    "type": "split",
+    "children": [
+      {
+        "id": "eeafee5f1e9dcfa2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e35eaffe27a74c1d",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "b33d820eb02ec2ed",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "2e8d16714269dced",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          },
+          {
+            "id": "bc944ef38d8b88b5",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "recent-files",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 439.5
+  },
+  "right": {
+    "id": "253abb389409a7e8",
+    "type": "split",
+    "children": [
+      {
+        "id": "ece3572e8baeb65c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "994c8b41da9ad841",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Card Game.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "2ca47a06d3d886fd",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": false
+              }
+            }
+          },
+          {
+            "id": "dca8df30548f9927",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Card Game.md",
+                "linksCollapsed": true,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "dc24705092e45714",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Card Game.md"
+              }
+            }
+          },
+          {
+            "id": "95a9853d9896c130",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "calendar",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "active": "1fc6e7a8e9a1660a",
+  "lastOpenFiles": [
+    "Personal/Daily Journal/2022/30 October - Sunday - 2022.md",
+    "Personal/Daily Journal/2022/29 October - Saturday - 2022.md",
+    "Personal/Daily Journal/2022/28 October - Friday - 2022.md",
+    "30 October - Sunday - 2022.md",
+    "Personal/Daily Journal/2022/26 October - Wednesday - 2022.md",
+    "Personal/Daily Journal/2022/25 October - Tuesday - 2022.md",
+    "Templater/Daily Template Templater.md",
+    "Personal/Daily Journal/2022/31 October - Monday - 2022.md",
+    "Home.md",
+    "Programming/2 Areas/3 JavaScript/Intermediate/Object Prototype.md"
+  ]
+}

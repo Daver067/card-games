@@ -1,0 +1,32 @@
+{
+  "showGettingStartedBanner": true,
+  "hasMigratedDailyNoteSettings": true,
+  "hasMigratedWeeklyNoteSettings": false,
+  "daily": {
+    "format": "D MMMM - dddd - Y",
+    "folder": "Personal/Daily Journal/2022",
+    "template": "Templater/Daily Template Templater.md",
+    "enabled": true
+  },
+  "weekly": {
+    "format": "gggg - [WEEK] ww MMMM",
+    "template": "Templater/Weekly Review Templater.md",
+    "folder": "Personal/Daily Journal/2022/Weekly Reviews",
+    "enabled": true
+  },
+  "monthly": {
+    "format": "",
+    "template": "",
+    "folder": ""
+  },
+  "quarterly": {
+    "format": "",
+    "template": "",
+    "folder": ""
+  },
+  "yearly": {
+    "format": "",
+    "template": "",
+    "folder": ""
+  }
+}
