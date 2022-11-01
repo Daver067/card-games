@@ -16,62 +16,6 @@
                 {
                   "state": "{}",
                   "eState": "{}"
-                }
-              ]
-            },
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Card Game.md",
-                "mode": "source",
-                "backlinks": false,
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "c9bd9ced0ae6c55d",
-            "type": "leaf",
-            "pane-relief:history-v1": {
-              "pos": 0,
-              "stack": [
-                {
-                  "state": "{}",
-                  "eState": "{}"
-                }
-              ]
-            },
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Card Object.md",
-                "mode": "source",
-                "backlinks": false,
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "cbd5dc0be6942434",
-            "type": "leaf",
-            "pane-relief:history-v1": {
-              "pos": 0,
-              "stack": [
-                {
-                  "state": "{}",
-                  "eState": "{}"
-                },
-                {
-                  "title": "Card Object",
-                  "icon": "lucide-file",
-                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Card Object.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
-                  "eState": "{\"cursor\":{\"from\":{\"line\":26,\"ch\":42},\"to\":{\"line\":26,\"ch\":42}},\"scroll\":0.2660016625103907}"
-                },
-                {
-                  "title": "Card Game",
-                  "icon": "lucide-file",
-                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Card Game.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
-                  "eState": "{\"cursor\":{\"from\":{\"line\":6,\"ch\":367},\"to\":{\"line\":6,\"ch\":367}}}"
                 },
                 {
                   "title": "Card Object",
@@ -83,25 +27,7 @@
                   "title": "Card Game",
                   "icon": "lucide-file",
                   "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Card Game.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
-                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
-                },
-                {
-                  "title": "Array Logic",
-                  "icon": "lucide-file",
-                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Array Logic.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
-                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
-                },
-                {
-                  "title": "Card Game",
-                  "icon": "lucide-file",
-                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Card Game.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
-                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
-                },
-                {
-                  "title": "Array Logic",
-                  "icon": "lucide-file",
-                  "state": "{\"type\":\"markdown\",\"state\":{\"file\":\"Array Logic.md\",\"mode\":\"source\",\"backlinks\":false,\"source\":false}}",
-                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":0},\"to\":{\"line\":0,\"ch\":0}}}"
+                  "eState": "{\"cursor\":{\"from\":{\"line\":0,\"ch\":57},\"to\":{\"line\":0,\"ch\":57}}}"
                 }
               ]
             },
@@ -114,9 +40,31 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "af8d684732b5c453",
+            "type": "leaf",
+            "pane-relief:history-v1": {
+              "pos": 0,
+              "stack": [
+                {
+                  "state": "{}",
+                  "eState": "{}"
+                }
+              ]
+            },
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Reading Material.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              }
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -235,7 +183,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Array Logic.md",
+                "file": "Reading Material.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -281,7 +229,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Array Logic.md",
+                "file": "Reading Material.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": false
               }
@@ -302,7 +250,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Array Logic.md"
+                "file": "Reading Material.md"
               }
             }
           },
@@ -330,11 +278,11 @@
     "direction": "horizontal",
     "width": 300
   },
-  "active": "cbd5dc0be6942434",
+  "active": "af8d684732b5c453",
   "lastOpenFiles": [
+    "Array Logic.md",
     "Card Object.md",
     "Card Game.md",
-    "Array Logic.md",
     "Personal/Daily Journal/2022/30 October - Sunday - 2022.md",
     "Personal/Daily Journal/2022/29 October - Saturday - 2022.md",
     "Personal/Daily Journal/2022/28 October - Friday - 2022.md",
