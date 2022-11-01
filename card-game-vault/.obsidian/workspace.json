@@ -119,7 +119,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -243,7 +244,7 @@
     "direction": "horizontal",
     "width": 300
   },
-  "active": "1fc6e7a8e9a1660a",
+  "active": "bc944ef38d8b88b5",
   "lastOpenFiles": [
     "Personal/Daily Journal/2022/30 October - Sunday - 2022.md",
     "Personal/Daily Journal/2022/29 October - Saturday - 2022.md",
