@@ -1,0 +1,41 @@
+[33mcommit a0c5f1037633950abd034490beb69915ec3f68a9[m[33m ([m[1;36mHEAD -> [m[1;32mChartley[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Carson Hartley <chartley1988@gmail.com>
+Date:   Tue Nov 1 07:09:47 2022 -0600
+
+    Added some reading material
+
+[33mcommit 187f0aa6f4f02052ce68969eefc09cb9cee26839[m
+Author: Carson Hartley <chartley1988@gmail.com>
+Date:   Tue Nov 1 06:06:28 2022 -0600
+
+    Changed gitignore file
+
+[33mcommit 3110f5fd08e69a2860923e57071e3008452a8c9a[m
+Author: Carson Hartley <chartley1988@gmail.com>
+Date:   Mon Oct 31 22:33:13 2022 -0600
+
+    Added some starter ideas on some things we could work on
+
+[33mcommit 5d6507b96d83c953a6639b6ac51a248a6223190d[m
+Author: Carson Hartley <chartley1988@gmail.com>
+Date:   Mon Oct 31 22:06:45 2022 -0600
+
+    Testing .gitignore. Seems to work well to ignore the .obsidian folder in its entirity. It just tracks anything else in vault folder now.
+
+[33mcommit fb5decf35d5c24ae13f18a0020c43be1a5600389[m
+Author: Carson Hartley <chartley1988@gmail.com>
+Date:   Mon Oct 31 22:00:32 2022 -0600
+
+    First commit to Chartley Branch test
+
+[33mcommit 41e3118fa5213d8aa4dfab3d33dc20d8ab008d17[m[33m ([m[1;31morigin/Daver[m[33m)[m
+Author: Dave <davediemert_88@hotmail.com>
+Date:   Mon Oct 31 12:38:06 2022 -0700
+
+    added an obsidian vault and branches for both of us
+
+[33mcommit 92b9451694d576bd7f6f68a4ae06c0d9ad45ab9d[m[33m ([m[1;32mDaver[m[33m)[m
+Author: Daver <99556730+Daver067@users.noreply.github.com>
+Date:   Mon Oct 31 12:34:19 2022 -0700
+
+    Initial commit
