@@ -1,0 +1,23 @@
+{
+  "name": "card-games",
+  "version": "0.1.0",
+  "description": "A foundation to build Card Games from",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daver067/card-games.git"
+  },
+  "author": "Daver067, Chartley88",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Daver067/card-games/issues"
+  },
+  "homepage": "https://github.com/Daver067/card-games#readme",
+  "dependencies": {
+    "weback": "^0.0.1-security",
+    "webpack-cli": "^4.10.0"
+  }
+}
