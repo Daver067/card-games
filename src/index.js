@@ -1,18 +1,23 @@
 import "./style_card.scss";
 
-const Standard = (function () { // Dictionary of Standard 52 Card deck definitions
+// Dictionary of Standard 52 Card deck definitions
+const Standard = (function () { 
 	const suit = {
     'diamond':"♦",
     'heart': "♥",
     'spade': "♠",
     'club': "♣"
     }
+
+    const members = ["A","2","3","4","5","6","7","8","9","J","Q","K"]
     
     return {
-        suit
+        suit,
+        members
     }
 })();
 
+// Creates card object, and handles DOM instantiation
 const Card = (number, suit) => {
     //Properties
     number = number;
@@ -21,39 +26,40 @@ const Card = (number, suit) => {
     //Functions
     const getNumber = () => number;
     const getSuit = () => suit;
-
-    const make = () => { // Makes the card as it appears on the board
+    
+    // Instances the card objoct in the DOM, the target arguement
+    // is where in the dom the card should be instanced.
+    const make = (target) => {
         const card = document.createElement('div');
         const top_left = document.createElement('div');
         const bottom_right = document.createElement('div');
-        
+        // Add CSS classes to DOM object
         card.classList.add('playing'); // Specific to Standard 52 Deck
         card.classList.add('card'); // Generic to all cards
-        card.dataset.suit = suit;
-
+        card.dataset.suit = suit; // Adds suit as a data attribute to DOM object.
+        // Adds CSS classes to corners of the card
         top_left.classList.add('top-left');
         bottom_right.classList.add('bottom-right');
-
         // Adds Suit and Number to opposite corners of cards
         [top_left, bottom_right].forEach(node => {
             const cornerNumber = document.createElement('div');
             const cornerSuit = document.createElement('div');
-            
+            // Sets text content of the card corners
             cornerNumber.textContent = number;
-            cornerNumber.dataset.suit = suit;
             cornerSuit.textContent = suit;
+            // Adds data attribute of suit to both symbol and Letters for each corner
+            cornerNumber.dataset.suit = suit;
             cornerSuit.dataset.suit = suit;
-            
+            // Adds both corner DOM elements to parent corner
             node.appendChild(cornerNumber);
             node.appendChild(cornerSuit);
-            
+            // Adds both corner elements to parent card
             card.appendChild(node);
         });
         
-        document.body.appendChild(card);
+        // TODO: Make this a target reference instead of `document.body`.
+        target.appendChild(card); 
     };
-
-    make();
 
     return {
         getNumber,
@@ -62,8 +68,54 @@ const Card = (number, suit) => {
     };
 }
 
-let testCard = Card(4, Standard.suit['diamond']);
-let testCard2 = Card(5, Standard.suit['heart']);
-let testCard3 = Card(9, Standard.suit['club']);
+// Generates a standard deck of 52 cards.
+const make52 = (target) => {
+    const suitArray = [
+        Standard.suit["diamond"],
+        Standard.suit["heart"],
+        Standard.suit["club"],
+        Standard.suit["spade"]
+    ]
+    
+    for (let index = 0; index < suitArray.length; index++) {
+        const suit = suitArray[index];
+        for (let index = 0; index < Standard.members.length; index++) {
+            const cardNumber = Standard.members[index];
+            const newCard = Card(cardNumber, suit);
+        }
+    }
+}
 
+// Generates 13 cards of a specified suit, to a specified target
+const make13 = (suit, target) => {
+    for (let index = 0; index < Standard.members.length; index++) {
+        const cardNumber = Standard.members[index];
+        const newCard = Card(cardNumber, suit);
+        newCard.make(target);
+    }
+}
 
+// Makes a grid for cards to instance to, For debug purposes.
+const makeFlop = (target) => {
+    const lineBreak = document.createElement('hr');
+    const flop = document.createElement('div');
+    flop.classList.add('flop');
+
+    target.appendChild(lineBreak);
+    target.appendChild(flop);
+    
+    return(flop);
+}
+
+const target = document.body;
+const diamondFlop = makeFlop(target);
+const heartFlop = makeFlop(target);
+const clubFlop = makeFlop(target);
+const spadeFlop = makeFlop(target);
+
+const lineBreak = document.createElement('hr');
+target.appendChild(lineBreak);
+make13(Standard.suit['diamond'], diamondFlop);
+make13(Standard.suit['heart'], heartFlop);
+make13(Standard.suit['club'], clubFlop);
+make13(Standard.suit['spade'], spadeFlop);
