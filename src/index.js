@@ -1,16 +1,15 @@
 import "./style_card.scss";
 
-const Standard = (function () { 
-	const diamond = "♦";
-    const heart = "♥";
-    const spade = "♠";
-    const club = "♣";
-
+const Standard = (function () { // Dictionary of Standard 52 Card deck definitions
+	const suit = {
+    'diamond':"♦",
+    'heart': "♥",
+    'spade': "♠",
+    'club': "♣"
+    }
+    
     return {
-        diamond,
-        heart,
-        spade,
-        club,
+        suit
     }
 })();
 
@@ -22,6 +21,7 @@ const Card = (number, suit) => {
     //Functions
     const getNumber = () => number;
     const getSuit = () => suit;
+
     const make = () => { // Makes the card as it appears on the board
         const card = document.createElement('div');
         const top_left = document.createElement('div');
@@ -35,12 +35,18 @@ const Card = (number, suit) => {
 
         // Adds Suit and Number to opposite corners of cards
         [top_left, bottom_right].forEach(node => {
-            node.textContent = suit;
+            const cornerNumber = document.createElement('div');
+            const cornerSuit = document.createElement('div');
+            
+            cornerNumber.textContent = number;
+            cornerSuit.textContent = suit;
+            
+            node.appendChild(cornerNumber);
+            node.appendChild(cornerSuit);
+            
             card.appendChild(node);
         });
         
-        
-
         document.body.appendChild(card);
     };
 
@@ -53,13 +59,7 @@ const Card = (number, suit) => {
     };
 }
 
-let testCard = Card(4, Standard.diamond);
-let testCard2 = Card(5, Standard.heart);
-
-const addText = () => {
-    const test = document.createElement('div');
-    test.textContent = "This was a successful test! How about that?";
-    document.body.appendChild(test);
-}
+let testCard = Card(4, Standard.suit['diamond']);
+let testCard2 = Card(5, Standard.suit['heart']);
 
 
