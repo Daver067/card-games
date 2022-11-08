@@ -25,7 +25,8 @@ body {
   background-color: whitesmoke;
   border-radius: calc(0.1 * $size-unit);
   border: calc(0.05 * $size-unit);
-  box-shadow: 0 0 0 calc(0.05 * $size-unit) black;
+  box-shadow: 0 0 0 calc(0.05 * $size-unit) black, 
+  rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .playing {
@@ -33,6 +34,11 @@ body {
   display: grid;
   grid-template-columns: 1fr 5fr 1fr;
   grid-template-rows: 1fr 7fr 1fr;
+  
+  div[data-suit="♥"],
+  div[data-suit="♦"] {
+    color: red;
+  }
   
   .top-left,
   .bottom-right {

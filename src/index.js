@@ -29,6 +29,7 @@ const Card = (number, suit) => {
         
         card.classList.add('playing'); // Specific to Standard 52 Deck
         card.classList.add('card'); // Generic to all cards
+        card.dataset.suit = suit;
 
         top_left.classList.add('top-left');
         bottom_right.classList.add('bottom-right');
@@ -39,7 +40,9 @@ const Card = (number, suit) => {
             const cornerSuit = document.createElement('div');
             
             cornerNumber.textContent = number;
+            cornerNumber.dataset.suit = suit;
             cornerSuit.textContent = suit;
+            cornerSuit.dataset.suit = suit;
             
             node.appendChild(cornerNumber);
             node.appendChild(cornerSuit);
@@ -61,5 +64,6 @@ const Card = (number, suit) => {
 
 let testCard = Card(4, Standard.suit['diamond']);
 let testCard2 = Card(5, Standard.suit['heart']);
+let testCard3 = Card(9, Standard.suit['club']);
 
 
