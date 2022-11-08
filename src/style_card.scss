@@ -1,0 +1,47 @@
+$size-unit: 60px;
+
+h1 {
+  color: rgb(0, 0, 0);
+}
+
+body {
+  background-color: rgb(108, 214, 135);
+}
+
+.card {
+
+  width: calc($size-unit * 2.5);
+  height: calc($size-unit * 3.5);
+  margin: calc(0.2 * $size-unit);
+  box-sizing: content-box;
+  
+  background-color: whitesmoke;
+  border-radius: calc(0.1 * $size-unit);
+  border: calc(0.05 * $size-unit);
+  box-shadow: 0 0 0 calc(0.05 * $size-unit) black;
+}
+
+.playing {
+  font-size: calc($size-unit * 0.5);
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  grid-template-rows: 1fr 7fr 1fr;
+  
+  .top-left {
+    padding: calc($size-unit * 0.08);
+    grid-column: 1/2;
+    grid-row: 1/2;
+  }
+
+  .bottom-right {
+    padding: calc($size-unit * 0.08);
+    grid-column: 3/4;
+    grid-row: 3/4;
+    transform: rotate(180deg);
+  }
+}
+
+.flop {
+  display: flex;
+  flex-direction: row;
+}
