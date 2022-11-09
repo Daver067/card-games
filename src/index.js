@@ -248,8 +248,71 @@ const makeFlop = (target) => {
     return(flop);
 }
 
+
 // For debugging purposes, everything below
 // doesn't need to be exported.
+
+// Debug Interface
+const interfaceUI = (function () { 
+	// Create container for dubug interface
+    const interfaceDiv = document.createElement('div');
+    interfaceDiv.classList.add('interface');
+    // Create form field for inputs
+    const interfaceForm = document.createElement('form');
+    interfaceForm.classList.add('interface-form');
+    // Prevents page from refreshing when enter is pressed
+    function handleForm(event) { event.preventDefault(); }
+    interfaceForm.addEventListener('submit', handleForm)
+    // Adds form to interface
+    interfaceDiv.appendChild(interfaceForm);
+    // Creates Label for card size input
+    const label = document.createElement('label');
+    label.classList.add('card-size-label')
+    label.for = 'card-size';
+    label.textContent= 'Card Size';
+
+
+    // Creates input field to change card size
+    const cardSizeInput = () => {
+        const input = document.createElement('input');
+        //Input Logic
+        input.classList.add('card-size-input');
+        input.name = 'card-size';
+        input.type = 'number';
+        input.minLength = 1;
+        input.maxLength = 3;
+        input.min = 20;
+        input.max = 150;
+        input.placeholder = 'Enter value 20 - 150'
+        //Add logic for when enter key is pressed
+        input.addEventListener('keydown', (event) => {
+            event.preventDefault;
+            if (event.code === 'Enter') {
+                console.log(input.value);
+                const root = document.documentElement;
+                root.style.setProperty('--card-size', `${input.value}px`);
+            }
+        })
+        //Adds input field to form
+        interfaceForm.appendChild(label);
+        interfaceForm.appendChild(input);  
+    }
+    
+    // Adds UI to document body. Add to top of page
+    const showUI = () => {
+        document.body.appendChild(interfaceDiv);
+    }
+
+    cardSizeInput();
+
+    return {
+        showUI,
+    }
+})();
+
+
+interfaceUI.showUI();
+
 const target = document.body;
 const diamondFlop = makeFlop(target);
 const heartFlop = makeFlop(target);
@@ -263,11 +326,3 @@ make13(Standard.suit['heart'], heartFlop);
 make13(Standard.suit['club'], clubFlop);
 make13(Standard.suit['spade'], spadeFlop);
 
-const interfaceUI = (function () { 
-	const interfaceDiv = document.createElement('div');
-    interfaceDiv.classList.add('interface');
-    
-    const showUI = () => {
-        document.body.appendChild(interfaceDiv);
-    }
-})();

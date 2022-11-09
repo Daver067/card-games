@@ -1,4 +1,7 @@
-$size-unit: 50px;
+:root {
+  --card-size: 60px;
+}
+
 
 * {
   padding: 0;
@@ -29,14 +32,14 @@ hr {
 }
 
 .card {
-  width: calc($size-unit * 2.5);
-  height: calc($size-unit * 3.5);
-  margin: calc(0.2 * $size-unit);
+  width: calc(var(--card-size) * 2.5);
+  height: calc(var(--card-size) * 3.5);
+  margin: calc(0.2 * var(--card-size));
   
   background-color: whitesmoke;
-  border-radius: calc(0.1 * $size-unit);
-  border: calc(0.05 * $size-unit);
-  box-shadow: 0 0 0 calc(0.05 * $size-unit) black, 
+  border-radius: calc(0.1 * var(--card-size));
+  border: calc(0.05 * var(--card-size));
+  box-shadow: 0 0 0 calc(0.05 * var(--card-size)) black, 
   rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 
   transition-property: all;
@@ -50,7 +53,7 @@ hr {
 }
 
 .playing {
-  font-size: calc($size-unit * 0.355);
+  font-size: calc(var(--card-size) * 0.355);
   display: grid;
   grid-template-columns: 1fr 5fr 1fr;
   grid-template-rows: 1fr 7fr 1fr;
@@ -63,17 +66,17 @@ hr {
   /* CORNER SYMBOLS */  
   .top-left,
   .bottom-right {
-    padding-left: calc($size-unit * 0.06);
+    padding-left: calc(var(--card-size) * 0.06);
     display: flex;
     flex-direction: column;
-    gap: calc($size-unit*0.06);
+    gap: calc(var(--card-size)*0.06);
     justify-content: start;
     align-items: center;
   }
 
   .top-left > div,
   .bottom-right > div {
-    margin-bottom: calc($size-unit * (-0.1));
+    margin-bottom: calc(var(--card-size) * (-0.1));
   }
 
 
@@ -92,15 +95,15 @@ hr {
 /* CENTER SYMBOLS */ 
 .card-center {
   height: 100%;
-  padding-top: calc($size-unit/8);
-  padding-bottom: calc($size-unit/8);
+  padding-top: calc(var(--card-size)/8);
+  padding-bottom: calc(var(--card-size)/8);
   grid-column: 2/3;
   grid-row: 1/4;
   align-self: center;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  font-size: calc($size-unit * 0.75);
+  font-size: calc(var(--card-size) * 0.75);
 }
 
 .center-flex {
@@ -112,7 +115,7 @@ hr {
 
 .center-flex[data-number= "A"] {
   justify-content: center;
-  font-size: calc($size-unit * 2);
+  font-size: calc(var(--card-size) * 2);
 }
 
 .center-flex[data-number= "5"] {
@@ -126,7 +129,7 @@ hr {
 
 .center-flex[data-number= "8"] {
   justify-content: center;
-  gap: calc($size-unit*0.5);
+  gap: calc(var(--card-size)*0.5);
 }
 
 .center-flex[data-number= "10"] {
@@ -136,23 +139,57 @@ hr {
 
 .center-flex[data-number= "J"] {
   justify-content: center;
-  font-size: calc($size-unit * 2);
+  font-size: calc(var(--card-size) * 2);
 }
 
 .center-flex[data-number= "Q"] {
   justify-content: center;
-  font-size: calc($size-unit * 2);
+  font-size: calc(var(--card-size) * 2);
 }
 
 .center-flex[data-number= "K"] {
   justify-content: center;
-  font-size: calc($size-unit * 2);
+  font-size: calc(var(--card-size) * 2);
 }
 
 
 .flop {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(($size-unit*2.6), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--card-size)*2.6), 1fr));
   grid-auto-flow: row;
-  gap: calc($size-unit/10);
+  gap: calc(var(--card-size)/10);
+}
+
+.interface {
+  padding: 1rem;
+  margin: 1rem 0 1rem 0;
+  display: flex;
+  flex-direction: row;
+
+
+  background-color: rgba(95, 158, 160, 0.311);
+  border-radius: 1rem;
+}
+
+.interface-form {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgba(255, 228, 196, 0.742);
+  border-radius: 1rem;
+}
+
+.card-size-label {
+  padding-right: 1rem;
+  font-size: 2rem;
+}
+
+.card-size-input {
+  padding: 0.5rem;
+  width: 260px;
+  height: 2rem;
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
 }
