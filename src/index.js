@@ -80,6 +80,8 @@ const Card = (number, suit) => {
             return(symbol);
         }
 
+        // These functions specify instructions for each type of card,
+        // including instructions on how many flex containers to add.
         const makeAce = () => {
             const flex = makeCenterFlex();
             makeSymbol(flex);
@@ -178,7 +180,8 @@ const Card = (number, suit) => {
             flex.dataset.number = "K";
         }
 
-        
+        // Determines which of the above functions to run
+        // depending on card number.
         if(number ==="A") makeAce();
         if(number ==="2") makeTwo();
         if(number ==="3") makeThree();
@@ -195,7 +198,7 @@ const Card = (number, suit) => {
 
 
 
-
+        // Adds card to dom in specified location
         target.appendChild(card);
     };
 
@@ -206,7 +209,7 @@ const Card = (number, suit) => {
     };
 }
 
-// Generates a standard deck of 52 cards.
+// Generates a standard deck of 52 cards to a specified target
 const make52 = (target) => {
     const suitArray = [
         Standard.suit["diamond"],
@@ -245,6 +248,8 @@ const makeFlop = (target) => {
     return(flop);
 }
 
+// For debugging purposes, everything below
+// doesn't need to be exported.
 const target = document.body;
 const diamondFlop = makeFlop(target);
 const heartFlop = makeFlop(target);
