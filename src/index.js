@@ -9,7 +9,7 @@ const Standard = (function () {
     'club': "♣"
     }
 
-    const members = ["A","2","3","4","5","6","7","8","9","J","Q","K"]
+    const members = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
     
     return {
         suit,
@@ -37,6 +37,7 @@ const Card = (number, suit) => {
         card.classList.add('playing'); // Specific to Standard 52 Deck
         card.classList.add('card'); // Generic to all cards
         card.dataset.suit = suit; // Adds suit as a data attribute to DOM object.
+        card.dataset.number = number;
         // Adds CSS classes to corners of the card
         top_left.classList.add('top-left');
         bottom_right.classList.add('bottom-right');
@@ -56,9 +57,40 @@ const Card = (number, suit) => {
             // Adds both corner elements to parent card
             card.appendChild(node);
         });
+        // Adds center div to card with class 'card-center'
+        const cardCenter = document.createElement('div');
+        cardCenter.classList.add('card-center');
+        card.appendChild(cardCenter);
+        cardCenter.dataset.number = number;
+        cardCenter.dataset.suit = suit;
+        switch (number) {
+            case "A":
+                const centerSymbol = document.createElement('div');
+                centerSymbol.textContent = suit;    
+                cardCenter.appendChild(centerSymbol);
+                break;
+            case "2": case "3": case "4": case "5": case "6": case "7": case "8": case "9": case "10":
+                for (let index = 0; index < number; index++) {
+                    const centerSymbol = document.createElement('div');
+                    centerSymbol.textContent = suit;
+                    cardCenter.appendChild(centerSymbol);
+                }
+            
+                break;
+            case "J":
+                break;
+            case "Q":
+                break;
+            case "K":
+                break; 
+
+                
+            default:
+                break;
+        }
         
         // TODO: Make this a target reference instead of `document.body`.
-        target.appendChild(card); 
+        target.appendChild(card);
     };
 
     return {
