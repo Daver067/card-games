@@ -63,33 +63,139 @@ const Card = (number, suit) => {
         card.appendChild(cardCenter);
         cardCenter.dataset.number = number;
         cardCenter.dataset.suit = suit;
-        switch (number) {
-            case "A":
-                const centerSymbol = document.createElement('div');
-                centerSymbol.textContent = suit;    
-                cardCenter.appendChild(centerSymbol);
-                break;
-            case "2": case "3": case "4": case "5": case "6": case "7": case "8": case "9": case "10":
-                for (let index = 0; index < number; index++) {
-                    const centerSymbol = document.createElement('div');
-                    centerSymbol.textContent = suit;
-                    cardCenter.appendChild(centerSymbol);
-                }
-            
-                break;
-            case "J":
-                break;
-            case "Q":
-                break;
-            case "K":
-                break; 
-
-                
-            default:
-                break;
-        }
         
-        // TODO: Make this a target reference instead of `document.body`.
+        // Makes a center flexbox, appends it to cardCenter
+        const makeCenterFlex = () => {
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('center-flex');
+            cardCenter.appendChild(newDiv);
+            return(newDiv);
+        }
+
+        // Makes a new card symbol, appends it to target
+        const makeSymbol = (target) => {
+            const symbol = document.createElement('div');
+            symbol.textContent = suit;
+            target.appendChild(symbol)
+            return(symbol);
+        }
+
+        const makeAce = () => {
+            const flex = makeCenterFlex();
+            makeSymbol(flex);
+            flex.dataset.number = "A";
+        }
+
+        const makeTwo = () => {
+            const flex = makeCenterFlex();
+            for (let i = 1; i <= number; i++) makeSymbol(flex);
+        }
+
+        const makeThree = () => {
+            const flex = makeCenterFlex();
+            for (let i = 1; i <= number; i++) makeSymbol(flex);
+        }
+
+        const makeFour = () => {
+            const flex1 = makeCenterFlex();
+            const flex2 = makeCenterFlex();
+            for (let i = 1; i <= 2; i++) makeSymbol(flex1);
+            for (let i = 1; i <= 2; i++) makeSymbol(flex2);
+        }
+
+        const makeFive = () => {
+            const flex1 = makeCenterFlex();
+            const flex2 = makeCenterFlex();
+            const flex3 = makeCenterFlex();
+            for (let i = 1; i <= 2; i++) makeSymbol(flex1);
+            for (let i = 1; i <= 2; i++) makeSymbol(flex3);
+            makeSymbol(flex2);
+            flex2.dataset.number = "5";
+        }
+
+        const makeSix = () => {
+            const flex1 = makeCenterFlex();
+            const flex2 = makeCenterFlex();
+            for (let i = 1; i <= 3; i++) makeSymbol(flex1);
+            for (let i = 1; i <= 3; i++) makeSymbol(flex2);
+        }
+
+        const makeSeven = () => {
+            const flex1 = makeCenterFlex();
+            const flex2 = makeCenterFlex();
+            const flex3 = makeCenterFlex();
+            for (let i = 1; i <= 3; i++) makeSymbol(flex1);
+            for (let i = 1; i <= 3; i++) makeSymbol(flex3);
+            makeSymbol(flex2);
+            flex2.dataset.number = "7";
+        }
+
+        const makeEight = () => {
+            const flex1 = makeCenterFlex();
+            const flex2 = makeCenterFlex();
+            const flex3 = makeCenterFlex();
+            for (let i = 1; i <= 3; i++) makeSymbol(flex1);
+            for (let i = 1; i <= 3; i++) makeSymbol(flex3);
+            for (let i = 1; i <= 2; i++) makeSymbol(flex2);
+            flex2.dataset.number = "8";
+        }
+
+        const makeNine = () => {
+            const flex1 = makeCenterFlex();
+            const flex2 = makeCenterFlex();
+            const flex3 = makeCenterFlex();
+            for (let i = 1; i <= 4; i++) makeSymbol(flex1);
+            for (let i = 1; i <= 4; i++) makeSymbol(flex3);
+            makeSymbol(flex2);
+            flex2.dataset.number = "5";
+        }
+
+        const makeTen = () => {
+            const flex1 = makeCenterFlex();
+            const flex2 = makeCenterFlex();
+            const flex3 = makeCenterFlex();
+            for (let i = 1; i <= 4; i++) makeSymbol(flex1);
+            for (let i = 1; i <= 4; i++) makeSymbol(flex3);
+            for (let i = 1; i <= 2; i++) makeSymbol(flex2);
+            flex2.dataset.number = "10";
+        }
+
+        const makeJack = () => {
+            const flex = makeCenterFlex();
+            makeSymbol(flex);
+            flex.dataset.number = "J";
+        }
+
+        const makeQueen = () => {
+            const flex = makeCenterFlex();
+            makeSymbol(flex);
+            flex.dataset.number = "Q";
+        }
+
+        const makeKing = () => {
+            const flex = makeCenterFlex();
+            makeSymbol(flex);
+            flex.dataset.number = "K";
+        }
+
+        
+        if(number ==="A") makeAce();
+        if(number ==="2") makeTwo();
+        if(number ==="3") makeThree();
+        if(number ==="4") makeFour();
+        if(number ==="5") makeFive();
+        if(number ==="6") makeSix();
+        if(number ==="7") makeSeven();
+        if(number ==="8") makeEight();
+        if(number ==="9") makeNine();
+        if(number ==="10") makeTen();
+        if(number ==="J") makeJack();
+        if(number ==="Q") makeQueen();
+        if(number ==="K") makeKing();
+
+
+
+
         target.appendChild(card);
     };
 
