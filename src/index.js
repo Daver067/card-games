@@ -262,3 +262,12 @@ make13(Standard.suit['diamond'], diamondFlop);
 make13(Standard.suit['heart'], heartFlop);
 make13(Standard.suit['club'], clubFlop);
 make13(Standard.suit['spade'], spadeFlop);
+
+const interfaceUI = (function () { 
+	const interfaceDiv = document.createElement('div');
+    interfaceDiv.classList.add('interface');
+    
+    const showUI = () => {
+        document.body.appendChild(interfaceDiv);
+    }
+})();
