@@ -27,9 +27,7 @@ const Card = (number, suit) => {
     const getNumber = () => number;
     const getSuit = () => suit;
     
-    // Instances the card objoct in the DOM, the target arguement
-    // is where in the dom the card should be instanced.
-    const make = (target) => {
+    const front = (() => {
         const card = document.createElement('div');
         const top_left = document.createElement('div');
         const bottom_right = document.createElement('div');
@@ -224,18 +222,26 @@ const Card = (number, suit) => {
         if(number ==="Q") makeQueen();
         if(number ==="K") makeKing();
         if(number ==="joker") makeJoker();
-        if(number ==="back") makeBack();
 
+        return(card);
+    })();
 
+    const back = (() => {
+        const card = document.createElement('div');
+        card.classList.add('back')
+        const symbol = document.createElement('div');
+        card.appendChild(symbol)
+        card.dataset.number = "back";
+        return(card);
+    })();
 
-        // Adds card to dom in specified location
-        target.appendChild(card);
-    };
 
     return {
+        front,
+        back,
+
         getNumber,
         getSuit,
-        make
     };
 }
 
@@ -253,6 +259,7 @@ const make52 = (target) => {
         for (let index = 0; index < Standard.members.length; index++) {
             const cardNumber = Standard.members[index];
             const newCard = Card(cardNumber, suit);
+            target.appendChild(newCard.front)
         }
     }
 }
@@ -272,6 +279,7 @@ const make54 = (target) => {
         for (let index = 0; index < Standard.members.length; index++) {
             const cardNumber = Standard.members[index];
             const newCard = Card(cardNumber, suit);
+            target.appendChild(newCard.front)
         }
     }
 
@@ -283,11 +291,14 @@ const make54 = (target) => {
 
 // Generates 13 cards of a specified suit, to a specified target
 const make13 = (suit, target) => {
+    const cardSpread = [];
     for (let index = 0; index < Standard.members.length; index++) {
         const cardNumber = Standard.members[index];
         const newCard = Card(cardNumber, suit);
-        newCard.make(target);
+        cardSpread.push(newCard);
+        target.appendChild(newCard.front)
     }
+    return(cardSpread);
 }
 
 // Makes a grid for cards to instance to, For debug purposes.
@@ -376,14 +387,16 @@ const extraFlop = makeFlop(target);
 
 const lineBreak = document.createElement('hr');
 target.appendChild(lineBreak);
-make13(Standard.suit['diamond'], diamondFlop);
-make13(Standard.suit['heart'], heartFlop);
-make13(Standard.suit['club'], clubFlop);
-make13(Standard.suit['spade'], spadeFlop);
+const diamonds = make13(Standard.suit['diamond'], diamondFlop);
+const hearts = make13(Standard.suit['heart'], heartFlop);
+const clubs = make13(Standard.suit['club'], clubFlop);
+const spades = make13(Standard.suit['spade'], spadeFlop);
 const joker1 = Card("joker", "");
-joker1.make(extraFlop);
+extraFlop.appendChild(joker1.front);
 const joker2 = Card("joker", "");
-joker2.make(extraFlop);
-const cardBack = Card("back", "");
-cardBack.make(extraFlop);
+extraFlop.appendChild(joker2.front);
+const cardBack = Card("joker", "");
+extraFlop.appendChild(cardBack.back);
+console.log(clubs);
+extraFlop.appendChild(clubs[6].back);
 
