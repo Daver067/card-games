@@ -180,6 +180,34 @@ const Card = (number, suit) => {
             flex.dataset.number = "K";
         }
 
+        const makeJoker = () => {
+            card.classList.add('back')
+            card.classList.remove('playing')
+            card.classList.remove('card')
+            card.removeChild(cardCenter);
+            card.removeChild(top_left);
+            card.removeChild(bottom_right);
+
+            const symbol = document.createElement('div');
+            card.appendChild(symbol)
+
+            card.dataset.number = "joker";
+        }
+
+        const makeBack = () => {
+            card.classList.add('back')
+            card.classList.remove('playing')
+            card.classList.remove('card')
+            card.removeChild(cardCenter);
+            card.removeChild(top_left);
+            card.removeChild(bottom_right);
+
+            const symbol = document.createElement('div');
+            card.appendChild(symbol)
+
+            card.dataset.number = "back";
+        }
+
         // Determines which of the above functions to run
         // depending on card number.
         if(number ==="A") makeAce();
@@ -195,6 +223,8 @@ const Card = (number, suit) => {
         if(number ==="J") makeJack();
         if(number ==="Q") makeQueen();
         if(number ==="K") makeKing();
+        if(number ==="joker") makeJoker();
+        if(number ==="back") makeBack();
 
 
 
@@ -225,6 +255,30 @@ const make52 = (target) => {
             const newCard = Card(cardNumber, suit);
         }
     }
+}
+
+// Generates a standard deck of 54 cards to a specified target.
+// Same as a 52 card deck, but incldues two jokers
+const make54 = (target) => {
+    const suitArray = [
+        Standard.suit["diamond"],
+        Standard.suit["heart"],
+        Standard.suit["club"],
+        Standard.suit["spade"]
+    ]
+    
+    for (let index = 0; index < suitArray.length; index++) {
+        const suit = suitArray[index];
+        for (let index = 0; index < Standard.members.length; index++) {
+            const cardNumber = Standard.members[index];
+            const newCard = Card(cardNumber, suit);
+        }
+    }
+
+    const joker1 = Card("joker", "");
+    const joker2 = Card("joker", "");
+    joker1.make(target);
+    joker2.make(target);
 }
 
 // Generates 13 cards of a specified suit, to a specified target
@@ -310,7 +364,7 @@ const interfaceUI = (function () {
     }
 })();
 
-
+// Debug Commands
 interfaceUI.showUI();
 
 const target = document.body;
@@ -318,6 +372,7 @@ const diamondFlop = makeFlop(target);
 const heartFlop = makeFlop(target);
 const clubFlop = makeFlop(target);
 const spadeFlop = makeFlop(target);
+const extraFlop = makeFlop(target);
 
 const lineBreak = document.createElement('hr');
 target.appendChild(lineBreak);
@@ -325,4 +380,10 @@ make13(Standard.suit['diamond'], diamondFlop);
 make13(Standard.suit['heart'], heartFlop);
 make13(Standard.suit['club'], clubFlop);
 make13(Standard.suit['spade'], spadeFlop);
+const joker1 = Card("joker", "");
+joker1.make(extraFlop);
+const joker2 = Card("joker", "");
+joker2.make(extraFlop);
+const cardBack = Card("back", "");
+cardBack.make(extraFlop);
 
