@@ -218,10 +218,12 @@ hr {
 }
 
 .interface-form {
-  padding: 0.5rem;
+  width: 100%;
+  padding: 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: start;
   background-color: rgba(255, 228, 196, 0.742);
   border-radius: 1rem;
 }
@@ -229,13 +231,15 @@ hr {
 .card-size-label {
   padding-right: 1rem;
   font-size: 2rem;
+  text-align: center;
 }
 
 .card-size-input {
-  padding: 0.5rem;
-  width: 260px;
-  height: 2rem;
+  padding: 0.2rem;
+  max-width: 80px;
+  height: 100%;
   font-size: 1.5rem;
   border-radius: 0.5rem;
   border: none;
+  text-align: center;
 }

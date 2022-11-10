@@ -18,15 +18,12 @@ const Standard = (function () {
 })();
 
 // Creates card object, and handles DOM instantiation
-const Card = (number, suit) => {
+const Card = (number, suit, faceUp) => {
     //Properties
     number = number;
-    suit =  suit;
+    suit =  suit;; // True of False, describes whether card is face up or down
+    let parent = 0; // Describes where in the DOM the card currently resides
 
-    //Functions
-    const getNumber = () => number;
-    const getSuit = () => suit;
-    
     const front = (() => {
         const card = document.createElement('div');
         const top_left = document.createElement('div');
@@ -235,13 +232,48 @@ const Card = (number, suit) => {
         return(card);
     })();
 
+    const card = (() => {
+        const card = document.createElement('div');
+        if(faceUp === true){
+            card.appendChild(front);
+        } else {
+            card.appendChild(back);
+        }
+        return(card);
+    })();
 
+    //Functions
+    const getNumber = () => number;
+    const getSuit = () => suit;
+    const setParent = (newParent) => {parent = newParent}; // Set to "front" or "back";
+    
+    const flipCard = (Instance) => {
+        console.log(Instance);
+        if(faceUp === true){ 
+            card.removeChild(front);
+            card.appendChild(back);
+            faceUp=false;
+            return
+        } else {
+            card.removeChild(back);
+            card.appendChild(front);
+            faceUp=true;
+            return
+        };
+        console.log(faceUp);
+    }
+    
     return {
+        card,
         front,
         back,
+        faceUp,
+        parent,
 
         getNumber,
         getSuit,
+        setParent,
+        flipCard,
     };
 }
 
@@ -258,8 +290,8 @@ const make52 = (target) => {
         const suit = suitArray[index];
         for (let index = 0; index < Standard.members.length; index++) {
             const cardNumber = Standard.members[index];
-            const newCard = Card(cardNumber, suit);
-            target.appendChild(newCard.front)
+            const newCard = Card(cardNumber, suit, true);
+            target.appendChild(newCard.card)
         }
     }
 }
@@ -278,13 +310,13 @@ const make54 = (target) => {
         const suit = suitArray[index];
         for (let index = 0; index < Standard.members.length; index++) {
             const cardNumber = Standard.members[index];
-            const newCard = Card(cardNumber, suit);
-            target.appendChild(newCard.front)
+            const newCard = Card(cardNumber, suit, true);
+            target.appendChild(newCard.card)
         }
     }
 
-    const joker1 = Card("joker", "");
-    const joker2 = Card("joker", "");
+    const joker1 = Card("joker", "", true);
+    const joker2 = Card("joker", "", true);
     joker1.make(target);
     joker2.make(target);
 }
@@ -294,9 +326,14 @@ const make13 = (suit, target) => {
     const cardSpread = [];
     for (let index = 0; index < Standard.members.length; index++) {
         const cardNumber = Standard.members[index];
-        const newCard = Card(cardNumber, suit);
+        const newCard = Card(cardNumber, suit, true);
         cardSpread.push(newCard);
-        target.appendChild(newCard.front)
+        newCard.setParent(target);
+        newCard.card.addEventListener('click', () => {
+            console.log(newCard.card.children);
+            newCard.flipCard(newCard);
+        })
+        target.appendChild(newCard.card);
     }
     return(cardSpread);
 }
@@ -348,7 +385,7 @@ const interfaceUI = (function () {
         input.maxLength = 3;
         input.min = 20;
         input.max = 150;
-        input.placeholder = 'Enter value 20 - 150'
+        input.placeholder = '60'
         //Add logic for when enter key is pressed
         input.addEventListener('keydown', (event) => {
             event.preventDefault;
@@ -391,12 +428,11 @@ const diamonds = make13(Standard.suit['diamond'], diamondFlop);
 const hearts = make13(Standard.suit['heart'], heartFlop);
 const clubs = make13(Standard.suit['club'], clubFlop);
 const spades = make13(Standard.suit['spade'], spadeFlop);
-const joker1 = Card("joker", "");
+const joker1 = Card("joker", "", true);
 extraFlop.appendChild(joker1.front);
-const joker2 = Card("joker", "");
+const joker2 = Card("joker", "", true);
 extraFlop.appendChild(joker2.front);
-const cardBack = Card("joker", "");
+const cardBack = Card("joker", "", true);
 extraFlop.appendChild(cardBack.back);
-console.log(clubs);
-extraFlop.appendChild(clubs[6].back);
+const testCard = diamonds[0];
 
