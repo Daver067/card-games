@@ -246,9 +246,8 @@ const Card = (number, suit, faceUp) => {
     const getNumber = () => number;
     const getSuit = () => suit;
     const setParent = (newParent) => {parent = newParent}; // Set to "front" or "back";
-    
-    const flipCard = (Instance) => {
-        console.log(Instance);
+
+    const flipCard = () => {
         if(faceUp === true){ 
             card.removeChild(front);
             card.appendChild(back);
@@ -260,7 +259,7 @@ const Card = (number, suit, faceUp) => {
             faceUp=true;
             return
         };
-        console.log(faceUp);
+        return
     }
     
     return {
@@ -299,6 +298,7 @@ const make52 = (target) => {
 // Generates a standard deck of 54 cards to a specified target.
 // Same as a 52 card deck, but incldues two jokers
 const make54 = (target) => {
+    const deck = [];
     const suitArray = [
         Standard.suit["diamond"],
         Standard.suit["heart"],
@@ -311,14 +311,28 @@ const make54 = (target) => {
         for (let index = 0; index < Standard.members.length; index++) {
             const cardNumber = Standard.members[index];
             const newCard = Card(cardNumber, suit, true);
-            target.appendChild(newCard.card)
+            deck.push(newCard);
+            newCard.setParent(target);
+            newCard.card.addEventListener('click', () => {
+                newCard.flipCard(newCard);
+            })
+            target.appendChild(newCard.card);
         }
     }
 
-    const joker1 = Card("joker", "", true);
-    const joker2 = Card("joker", "", true);
-    joker1.make(target);
-    joker2.make(target);
+    const makeJoker = () => {
+        const joker = Card("joker", "joker", true);
+        deck.push(joker);
+        joker.setParent(target);
+        joker.card.addEventListener('click', () => {
+            joker.flipCard(joker);
+        })
+        target.appendChild(joker.card);   
+        return(joker);
+    };
+
+    const joker1 = makeJoker();
+    const joker2 = makeJoker();
 }
 
 // Generates 13 cards of a specified suit, to a specified target
@@ -330,7 +344,6 @@ const make13 = (suit, target) => {
         cardSpread.push(newCard);
         newCard.setParent(target);
         newCard.card.addEventListener('click', () => {
-            console.log(newCard.card.children);
             newCard.flipCard(newCard);
         })
         target.appendChild(newCard.card);
@@ -390,7 +403,6 @@ const interfaceUI = (function () {
         input.addEventListener('keydown', (event) => {
             event.preventDefault;
             if (event.code === 'Enter') {
-                console.log(input.value);
                 const root = document.documentElement;
                 root.style.setProperty('--card-size', `${input.value}px`);
             }
@@ -416,23 +428,20 @@ const interfaceUI = (function () {
 interfaceUI.showUI();
 
 const target = document.body;
-const diamondFlop = makeFlop(target);
-const heartFlop = makeFlop(target);
-const clubFlop = makeFlop(target);
-const spadeFlop = makeFlop(target);
+// const diamondFlop = makeFlop(target);
+// const heartFlop = makeFlop(target);
+// const clubFlop = makeFlop(target);
+//const spadeFlop = makeFlop(target);
 const extraFlop = makeFlop(target);
 
 const lineBreak = document.createElement('hr');
 target.appendChild(lineBreak);
-const diamonds = make13(Standard.suit['diamond'], diamondFlop);
-const hearts = make13(Standard.suit['heart'], heartFlop);
-const clubs = make13(Standard.suit['club'], clubFlop);
-const spades = make13(Standard.suit['spade'], spadeFlop);
-const joker1 = Card("joker", "", true);
-extraFlop.appendChild(joker1.front);
-const joker2 = Card("joker", "", true);
-extraFlop.appendChild(joker2.front);
-const cardBack = Card("joker", "", true);
-extraFlop.appendChild(cardBack.back);
-const testCard = diamonds[0];
+//const diamonds = make13(Standard.suit['diamond'], diamondFlop);
+//const hearts = make13(Standard.suit['heart'], heartFlop);
+//const clubs = make13(Standard.suit['club'], clubFlop);
+//const spades = make13(Standard.suit['spade'], spadeFlop);
+//const joker1 = Card("joker", "", true);
+const allCards = make54(extraFlop);
+
+
 

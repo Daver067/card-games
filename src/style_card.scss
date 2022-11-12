@@ -44,13 +44,13 @@ hr {
 
   transition-property: all;
   transition-duration: 0.1s;
+
+  /* Prevents text from being highlighted on cards */
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
-.card:hover, .back:hover{
-  position: relative;
-  transform: scale(1.1) rotate(4deg) translateY(-8%);
-  /* transform: translate(0%, -10%); */
-}
 
 .back {
   box-sizing: border-box;
@@ -66,9 +66,11 @@ hr {
 
   transition-property: all;
   transition-duration: 0.1s;
+
+  backface-visibility: hidden;
 }
 
-.card:hover {
+.card:hover, .back:hover{
   position: relative;
   transform: scale(1.1) rotate(4deg) translateY(-8%);
   /* transform: translate(0%, -10%); */
