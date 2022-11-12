@@ -18,19 +18,82 @@ const Standard = (function () {
 })();
 
 // Creates card object, and handles DOM instantiation
-const Card = (number, suit, faceUp) => {
+const Card = (faceUp) => {
     //Properties
-    number = number;
-    suit =  suit;; // True of False, describes whether card is face up or down
-    let parent = 0; // Describes where in the DOM the card currently resides
+    let parent; // Describes where in the DOM the card currently resides
 
     const front = (() => {
+        const front = document.createElement('div');
+        front.classList.add('front')
+        front.classList.add('card'); // Generic to all cards
+        front.dataset.number = "front";
+        return(front);
+    })();
+
+    const back = (() => {
+        const back = document.createElement('div');
+        back.classList.add('back')
+        back.dataset.number = "back";
+        return(back);
+    })();
+
+    const card = (() => {
         const card = document.createElement('div');
+        if(faceUp === true){
+            card.appendChild(front);
+        } else {
+            card.appendChild(back);
+        }
+        return(card);
+    })();
+
+    //Functions
+    const setParent = (newParent) => {
+        parent = newParent;
+        return;
+    }; // Set to "front" or "back";
+
+    const getParent = () => parent;
+
+    const flipCard = () => {
+        if(faceUp === true){ 
+            card.removeChild(front);
+            card.appendChild(back);
+            faceUp=false;
+            return
+        } else {
+            card.removeChild(back);
+            card.appendChild(front);
+            faceUp=true;
+            return
+        };
+        return
+    }
+    
+    return {
+        card,
+        front,
+        back,
+        faceUp,
+
+        setParent,
+        getParent,
+        flipCard,
+    };
+}
+
+const Playing = (instance, number, suit) => {
+    //Properties
+    number = number;
+    suit =  suit; // True of False, describes whether card is face up or down // Describes where in the DOM the card currently resides
+
+    const face = (() => {
+        const card = instance.front;
         const top_left = document.createElement('div');
         const bottom_right = document.createElement('div');
         // Add CSS classes to DOM object
         card.classList.add('playing'); // Specific to Standard 52 Deck
-        card.classList.add('card'); // Generic to all cards
+        
         card.dataset.suit = suit; // Adds suit as a data attribute to DOM object.
         card.dataset.number = number;
         // Adds CSS classes to corners of the card
@@ -189,19 +252,6 @@ const Card = (number, suit, faceUp) => {
             card.dataset.number = "joker";
         }
 
-        const makeBack = () => {
-            card.classList.add('back')
-            card.classList.remove('playing')
-            card.classList.remove('card')
-            card.removeChild(cardCenter);
-            card.removeChild(top_left);
-            card.removeChild(bottom_right);
-
-            const symbol = document.createElement('div');
-            card.appendChild(symbol)
-
-            card.dataset.number = "back";
-        }
 
         // Determines which of the above functions to run
         // depending on card number.
@@ -223,77 +273,39 @@ const Card = (number, suit, faceUp) => {
         return(card);
     })();
 
-    const back = (() => {
-        const card = document.createElement('div');
-        card.classList.add('back')
+    const reverse = (() => {
+        const card = instance.back;
         const symbol = document.createElement('div');
         card.appendChild(symbol)
-        card.dataset.number = "back";
-        return(card);
-    })();
-
-    const card = (() => {
-        const card = document.createElement('div');
-        if(faceUp === true){
-            card.appendChild(front);
-        } else {
-            card.appendChild(back);
-        }
         return(card);
     })();
 
     //Functions
     const getNumber = () => number;
     const getSuit = () => suit;
-    const setParent = (newParent) => {parent = newParent}; // Set to "front" or "back";
-
-    const flipCard = () => {
-        if(faceUp === true){ 
-            card.removeChild(front);
-            card.appendChild(back);
-            faceUp=false;
-            return
-        } else {
-            card.removeChild(back);
-            card.appendChild(front);
-            faceUp=true;
-            return
-        };
-        return
-    }
     
     return {
-        card,
-        front,
-        back,
-        faceUp,
-        parent,
+        number,
+        suit,
+        face,
+        reverse,
 
         getNumber,
         getSuit,
-        setParent,
-        flipCard,
     };
 }
 
-// Generates a standard deck of 52 cards to a specified target
-const make52 = (target) => {
-    const suitArray = [
-        Standard.suit["diamond"],
-        Standard.suit["heart"],
-        Standard.suit["club"],
-        Standard.suit["spade"]
-    ]
-    
-    for (let index = 0; index < suitArray.length; index++) {
-        const suit = suitArray[index];
-        for (let index = 0; index < Standard.members.length; index++) {
-            const cardNumber = Standard.members[index];
-            const newCard = Card(cardNumber, suit, true);
-            target.appendChild(newCard.card)
-        }
-    }
+const makePlayingCard = (number, suit) => {
+    const instance = Card(true);
+    const playing = Playing(instance, number, suit);
+    return Object.assign(
+        {},
+        instance,
+        playing
+    )
 }
+
+
 
 // Generates a standard deck of 54 cards to a specified target.
 // Same as a 52 card deck, but incldues two jokers
@@ -310,7 +322,7 @@ const make54 = (target) => {
         const suit = suitArray[index];
         for (let index = 0; index < Standard.members.length; index++) {
             const cardNumber = Standard.members[index];
-            const newCard = Card(cardNumber, suit, true);
+            const newCard = makePlayingCard(cardNumber, suit);
             deck.push(newCard);
             newCard.setParent(target);
             newCard.card.addEventListener('click', () => {
@@ -321,7 +333,7 @@ const make54 = (target) => {
     }
 
     const makeJoker = () => {
-        const joker = Card("joker", "joker", true);
+        const joker = makePlayingCard("joker", "joker");
         deck.push(joker);
         joker.setParent(target);
         joker.card.addEventListener('click', () => {
@@ -333,6 +345,7 @@ const make54 = (target) => {
 
     const joker1 = makeJoker();
     const joker2 = makeJoker();
+    return(deck);
 }
 
 // Generates 13 cards of a specified suit, to a specified target
@@ -442,6 +455,8 @@ target.appendChild(lineBreak);
 //const spades = make13(Standard.suit['spade'], spadeFlop);
 //const joker1 = Card("joker", "", true);
 const allCards = make54(extraFlop);
+console.log(allCards);
+console.log(allCards[42].parent);
 
 
 
