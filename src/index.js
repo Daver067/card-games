@@ -6,6 +6,7 @@ import { make54 } from "./scripts/deckBuilding";
 // Debug Commands
 interfaceUI.showUI();
 
+// tester appending a deck to the page
 const Table = new TableDeck();
 Table.deck = make54();
 
@@ -16,3 +17,8 @@ Table.deck.forEach((card) => {
   testFlop.appendChild(card.card);
   card.setParent(testFlop);
 });
+// end
+
+// additional console logs
+console.log(Table);
+// end

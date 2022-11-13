@@ -1,5 +1,5 @@
 import { Card } from "./card";
-import { Playing } from "./playing";
+import { Playing } from "./playingClass";
 
 // Dictionary of Standard 52 Card deck definitions
 const standardDeck = {
@@ -14,7 +14,7 @@ const standardDeck = {
 
 const makePlayingCard = (number, suit) => {
   const instance = Card(true);
-  const playing = Playing(instance, number, suit);
+  const playing = new Playing(instance, number, suit);
   return Object.assign({}, instance, playing);
 };
 
@@ -36,7 +36,7 @@ const make54 = () => {
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
       newCard.card.addEventListener("click", () => {
-        newCard.flipCard(newCard);
+        newCard.flipCard();
       });
     }
   }
