@@ -2,3 +2,4 @@
 .DS_Store
 Card-game-vault/.DS_Store
 /node_modules/
+.gitignore
