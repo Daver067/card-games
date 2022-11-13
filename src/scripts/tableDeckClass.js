@@ -5,6 +5,19 @@ class TableDeck {
     this.discardPile = [];
     this.deck = []; // not sure if this is needed... may be nice to have the full deck being used here Just In Case....? May cause confusion tho.
   }
+  // getters
+
+  get deck() {
+    return this._deck;
+  }
+
+  // setters
+
+  set deck(newDeck) {
+    this._deck = newDeck;
+  }
+
+  // methods
 
   shuffle = (deckToShuffle) => {
     // shuffle
