@@ -1,12 +1,23 @@
-import { makeFlop, make54, } from "./card";
-
 class TableDeck {
   constructor() {
     this.drawPile = [];
     this.faceUp = [];
     this.discardPile = [];
-    this.cards = []; // not sure if this is needed... may be nice to have the full deck being used here Just In Case....? May cause confusion tho.
+    this.deck = []; // not sure if this is needed... may be nice to have the full deck being used here Just In Case....? May cause confusion tho.
   }
+  // getters
+
+  get deck() {
+    return this._deck;
+  }
+
+  // setters
+
+  set deck(newDeck) {
+    this._deck = newDeck;
+  }
+
+  // methods
 
   shuffle = (deckToShuffle) => {
     // shuffle
@@ -24,18 +35,5 @@ class TableDeck {
     // deal x amount of cards to y amount of players from this.drawpile
   };
 }
-
-const table = new TableDeck();
-const deck = make54();
-
-const target = document.body;
-const testFlop = makeFlop(target);
-
-deck.forEach(card => {
-  testFlop.appendChild(card.card);
-  card.setParent(testFlop);
-});
-
-console.log(deck);
 
 export default TableDeck;
