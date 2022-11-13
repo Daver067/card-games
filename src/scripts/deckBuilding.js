@@ -15,7 +15,9 @@ const standardDeck = {
 const makePlayingCard = (number, suit) => {
   const instance = Card(true);
   const playing = new Playing(instance, number, suit);
-  return Object.assign({}, instance, playing);
+  const returnObj = { card: { ...instance }, playing: { ...playing } };
+  console.log(returnObj);
+  return returnObj;
 };
 
 // Generates a standard deck of 54 cards to a specified target.
@@ -35,8 +37,8 @@ const make54 = () => {
       const cardNumber = standardDeck.members[index2];
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
-      newCard.card.addEventListener("click", () => {
-        newCard.flipCard();
+      newCard.card.card.addEventListener("click", () => {
+        newCard.card.flipCard();
       });
     }
   }
@@ -44,7 +46,7 @@ const make54 = () => {
   const makeJoker = () => {
     const joker = makePlayingCard("joker", "joker");
     deck.push(joker);
-    joker.card.addEventListener("click", () => {
+    joker.card.card.addEventListener("click", () => {
       joker.flipCard(joker);
     });
     return joker;

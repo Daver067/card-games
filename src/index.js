@@ -13,9 +13,9 @@ Table.deck = make54();
 const target = document.body;
 const testFlop = makeFlop(target);
 
-Table.deck.forEach((card) => {
-  testFlop.appendChild(card.card);
-  card.setParent(testFlop);
+Table.deck.forEach((cardInDeck) => {
+  testFlop.appendChild(cardInDeck.card.card);
+  cardInDeck.card.setParent(testFlop);
 });
 // end
 
