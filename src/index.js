@@ -1,1 +1,2 @@
-import "./style.scss";
+import defaultExport from  './scripts/tableDeckClass';
+
