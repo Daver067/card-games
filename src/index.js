@@ -14,8 +14,8 @@ const target = document.body;
 const testFlop = makeFlop(target);
 
 Table.deck.forEach((cardInDeck) => {
-  testFlop.appendChild(cardInDeck.card.card);
-  cardInDeck.card.setParent(testFlop);
+  testFlop.appendChild(cardInDeck.card);
+  cardInDeck.setParent(testFlop);
 });
 // end
 

@@ -15,7 +15,7 @@ const standardDeck = {
 const makePlayingCard = (number, suit) => {
   const instance = Card(true);
   const playing = new Playing(instance, number, suit);
-  const returnObj = { card: { ...instance }, playing: { ...playing } };
+  const returnObj = { ...instance, ...playing };
   console.log(returnObj);
   return returnObj;
 };
@@ -37,8 +37,8 @@ const make54 = () => {
       const cardNumber = standardDeck.members[index2];
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
-      newCard.card.card.addEventListener("click", () => {
-        newCard.card.flipCard();
+      newCard.card.addEventListener("click", () => {
+        newCard.flipCard(newCard);
       });
     }
   }
@@ -46,7 +46,7 @@ const make54 = () => {
   const makeJoker = () => {
     const joker = makePlayingCard("joker", "joker");
     deck.push(joker);
-    joker.card.card.addEventListener("click", () => {
+    joker.card.addEventListener("click", () => {
       joker.flipCard(joker);
     });
     return joker;

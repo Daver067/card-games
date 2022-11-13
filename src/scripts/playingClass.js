@@ -2,9 +2,9 @@ class Playing {
   constructor(instanceOf, number, suit) {
     this.number = number;
     this.suit = suit;
-    this.instance = instanceOf;
-    this.faceDom = this.setFaceDom();
-    this.backDom = this.reverse();
+    this.instance = Object.assign({}, instanceOf);
+    this.front = this.setFaceDom();
+    this.back = this.reverse();
   }
 
   // methods
