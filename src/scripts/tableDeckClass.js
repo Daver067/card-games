@@ -1,3 +1,5 @@
+import { makeFlop, make54, } from "./card";
+
 class TableDeck {
   constructor() {
     this.drawPile = [];
@@ -22,5 +24,18 @@ class TableDeck {
     // deal x amount of cards to y amount of players from this.drawpile
   };
 }
+
+const table = new TableDeck();
+const deck = make54();
+
+const target = document.body;
+const testFlop = makeFlop(target);
+
+deck.forEach(card => {
+  testFlop.appendChild(card.card);
+  card.setParent(testFlop);
+});
+
+console.log(deck);
 
 export default TableDeck;
