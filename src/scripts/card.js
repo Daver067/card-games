@@ -26,7 +26,6 @@ const Card = (faceUp) => {
     const front = (() => {
         const front = document.createElement('div');
         front.classList.add('front')
-        front.classList.add('card'); // Generic to all cards
         front.dataset.number = "front";
         return(front);
     })();
@@ -40,6 +39,7 @@ const Card = (faceUp) => {
 
     const card = (() => {
         const card = document.createElement('div');
+        card.classList.add('card');
         if(faceUp === true){
             card.appendChild(front);
         } else {
@@ -240,10 +240,7 @@ const Playing = (instance, number, suit) => {
         }
 
         const makeJoker = () => {
-            card.classList.add('back')
-            card.classList.remove('playing')
-            card.classList.remove('card')
-            card.removeChild(cardCenter);
+            cardCenter.dataset.number = "joker";
             card.removeChild(top_left);
             card.removeChild(bottom_right);
 
