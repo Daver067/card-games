@@ -1,15 +1,31 @@
-class Playing {
-  constructor(instanceOf, number, suit) {
+import { Card } from "./cardClass";
+
+class StandardPlayingCard extends Card {
+  constructor(number, suit) {
+    super();
     this.number = number;
     this.suit = suit;
-    this.instance = Object.assign({}, instanceOf);
-    this.front = this.setFaceDom();
-    this.back = this.reverse();
+    this.front = this.#setFaceDom();
+    this.back = this.#reverse();
+    this.card = this.makeCard();
   }
 
-  // methods
-  setFaceDom = () => {
-    const card = this.instance.front;
+  // private methods
+
+  #reverse = () => {
+    const card = document.createElement("div");
+    card.classList.add("back");
+    card.dataset.number = "back";
+    const symbol = document.createElement("div");
+    card.appendChild(symbol);
+    return card;
+  };
+
+  #setFaceDom = () => {
+    const card = document.createElement("div");
+    card.classList.add("front");
+    card.classList.add("card"); // Generic to all cards
+    card.dataset.number = "front";
     const top_left = document.createElement("div");
     const bottom_right = document.createElement("div");
     // Add CSS classes to DOM object
@@ -193,20 +209,27 @@ class Playing {
     return card;
   };
 
-  reverse = () => {
-    const card = this.instance.back;
-    const symbol = document.createElement("div");
-    card.appendChild(symbol);
-    return card;
-  };
+  // public methods
 
-  get Number() {
-    return this.number;
+  // setters
+
+  set number(newNumber) {
+    this._number = newNumber;
   }
 
-  get Suit() {
-    return this.suit;
+  set suit(newSuit) {
+    this._suit = newSuit;
+  }
+
+  // getters
+
+  get number() {
+    return this._number;
+  }
+
+  get suit() {
+    return this._suit;
   }
 }
 
-export { Playing };
+export { StandardPlayingCard };

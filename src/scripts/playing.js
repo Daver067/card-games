@@ -1,3 +1,5 @@
+/*
+
 const Playing = (instance, number, suit) => {
   // Properties
   number = number;
@@ -210,4 +212,5 @@ const Playing = (instance, number, suit) => {
   };
 };
 
-export { Playing };
+//export { Playing };
+*/

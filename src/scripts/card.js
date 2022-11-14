@@ -1,3 +1,4 @@
+/*
 export { Card };
 
 // Creates card object, and handles DOM instantiation
@@ -60,3 +61,4 @@ const Card = (faceUp) => {
     flipCard,
   };
 };
+*/

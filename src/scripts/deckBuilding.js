@@ -1,5 +1,5 @@
 import { Card } from "./card";
-import { Playing } from "./playingClass";
+import { StandardPlayingCard } from "./playingClass";
 
 // Dictionary of Standard 52 Card deck definitions
 const standardDeck = {
@@ -13,11 +13,8 @@ const standardDeck = {
 };
 
 const makePlayingCard = (number, suit) => {
-  const instance = Card(true);
-  const playing = new Playing(instance, number, suit);
-  const returnObj = { ...instance, ...playing };
-  console.log(returnObj);
-  return returnObj;
+  const newCard = new StandardPlayingCard(number, suit);
+  return newCard;
 };
 
 // Generates a standard deck of 54 cards to a specified target.
@@ -38,7 +35,7 @@ const make54 = () => {
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
       newCard.card.addEventListener("click", () => {
-        newCard.flipCard(newCard);
+        newCard.flipCard();
       });
     }
   }
@@ -52,8 +49,8 @@ const make54 = () => {
     return joker;
   };
 
-  const joker1 = makeJoker();
-  const joker2 = makeJoker();
+  makeJoker();
+  makeJoker();
   return deck;
 };
 
