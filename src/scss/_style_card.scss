@@ -6,19 +6,20 @@
   padding: 0;
   margin: 0;
   font-size: 100%;
+
+    /* Prevents text from being highlighted on cards */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
   }
 
 .card {
-  /* Prevents text from being highlighted on cards */
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  padding: calc(var(--card-size)/6);
 }
 
 .front, .back {
   width: calc(var(--card-size) * 2.5);
   height: calc(var(--card-size) * 3.5);
-
 }
 
 .back {
@@ -42,24 +43,14 @@
 
   transition-property: all;
   transition-duration: 0.1s;
-
-  /* Prevents text from being highlighted on cards */
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
 }
 
-.card:hover, .back:hover{
-  position: relative;
-  transform: scale(1.1) rotate(4deg) translateY(-8%);
-  /* transform: translate(0%, -10%); */
-}
 
 .playing {
 
   font-size: calc(var(--card-size) * 0.4);
   display: grid;
-  grid-template-columns: calc(var(--card-size)/2.75) 5fr calc(var(--card-size)/2.75);
+  grid-template-columns: calc(var(--card-size)/2) 3fr calc(var(--card-size)/2);
   grid-template-rows: 1fr 7fr 1fr;
   
   div[data-suit="♥"],
@@ -76,14 +67,13 @@
     gap: calc(var(--card-size)*0.06);
     justify-content: start;
     align-items: center;
-    font-size: calc(var(--card-size)/2.75);
+    font-size: calc(var(--card-size)/2.5);
   }
 
   .top-left > div,
   .bottom-right > div {
     margin-bottom: calc(var(--card-size) * (-0.1));
   }
-
 
   .top-left {
     grid-column: 1/2;
@@ -102,14 +92,14 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 10% 0 10% 0;
+  padding: 10% 5% 10% 5%;
   grid-column: 2/3;
   grid-row: 1/4;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-self: center;
-  font-size: calc(var(--card-size) * 0.75);
+  font-size: calc(var(--card-size) * 0.70);
   line-height: 70%;
 }
 
@@ -171,6 +161,8 @@
 
 .center-flex[data-number= "10"] {
   justify-content: space-around;
+  gap: calc(var(--card-size)*0.25);
+
 }
 
 .center-flex[data-number= "J"] {
