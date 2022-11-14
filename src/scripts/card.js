@@ -24,14 +24,19 @@ const Card = (faceUp) => {
   })();
 
   const card = (() => {
-    const card = document.createElement("div");
-    card.classList.add('card');
-    if (faceUp === true) {
-      card.appendChild(front);
-    } else {
-      card.appendChild(back);
+    const cardWrapper = document.createElement('div');
+    cardWrapper.classList.add('card-wrapper');
+    const newCard = document.createElement("div");
+    cardWrapper.appendChild(newCard);
+    newCard.classList.add('card');
+    newCard.appendChild(front);
+    newCard.appendChild(back);
+    if(!faceUp){
+      front.classList.toggle('flipped');
+      back.classList.toggle('flipped');
     }
-    return card;
+    
+    return cardWrapper;
   })();
 
   // Functions
@@ -42,15 +47,8 @@ const Card = (faceUp) => {
   const getParent = () => parent;
 
   const flipCard = () => {
-    if (faceUp === true) {
-      card.removeChild(front);
-      card.appendChild(back);
-      faceUp = false;
-    } else {
-      card.removeChild(back);
-      card.appendChild(front);
-      faceUp = true;
-    }
+    front.classList.toggle('flipped');
+    back.classList.toggle('flipped');
   };
 
   return {

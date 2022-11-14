@@ -37,7 +37,7 @@ const make54 = () => {
       deck.push(newCard);
       console.log(newCard);
       newCard.card.addEventListener("click", () => {
-        newCard.flipCard(newCard);
+        newCard.flipCard();
       });
     }
   }
