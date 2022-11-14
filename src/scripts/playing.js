@@ -157,8 +157,6 @@ const Playing = (instance, number, suit) => {
     const makeJoker = () => {
       card.classList.add("back");
       card.classList.remove("playing");
-      card.classList.remove("card");
-      card.removeChild(cardCenter);
       card.removeChild(top_left);
       card.removeChild(bottom_right);
 

@@ -25,6 +25,7 @@ const Card = (faceUp) => {
 
   const card = (() => {
     const card = document.createElement("div");
+    card.classList.add('card');
     if (faceUp === true) {
       card.appendChild(front);
     } else {
