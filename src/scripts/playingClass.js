@@ -7,7 +7,7 @@ class StandardPlayingCard extends Card {
     this.suit = suit;
     this.front = this.#setFaceDom();
     this.back = this.#reverse();
-    this.card = this.makeCard();
+    this.card = this.makeCard(); // have to run this method again because in super front and back are made differently.
   }
 
   // private methods
