@@ -2,6 +2,13 @@ const Playing = (cardInstance, num, Suit) => {
   // Properties
   const number = num;
   const suit = Suit;
+  let color;
+  if (Suit === "♦" || Suit === "♥") {
+    color = "red";
+  }
+  if (Suit === "♠" || Suit === "♣") {
+    color = "black";
+  }
 
   const newFront = () => {
     const card = document.createElement("div");
@@ -200,10 +207,6 @@ const Playing = (cardInstance, num, Suit) => {
     return card;
   };
 
-  //Functions
-  const getNumber = () => number;
-  const getSuit = () => suit;
-
   // I'm sure theres a better way to do this....
   let newCard = { ...cardInstance };
   newCard.front = newFront();
@@ -213,7 +216,18 @@ const Playing = (cardInstance, num, Suit) => {
   newCard.flipCard(newCard.front, newCard.back);
   newCard.flipCard(newCard.front, newCard.back);
 
-  return { ...newCard };
+  return {
+    ...newCard,
+    get number() {
+      return number;
+    },
+    get suit() {
+      return suit;
+    },
+    get color() {
+      return color;
+    },
+  };
 };
 
 export { Playing };
