@@ -4,7 +4,6 @@ import TableDeck from "./scripts/tableDeckClass";
 import { make54 } from "./scripts/deckBuilding";
 
 // Debug Commands
-interfaceUI.showUI();
 
 const Table = new TableDeck();
 Table.deck = make54();
@@ -16,3 +15,5 @@ Table.deck.forEach((card) => {
   testFlop.appendChild(card.card);
   card.setParent(testFlop);
 });
+
+

@@ -15,7 +15,8 @@ const standardDeck = {
 const makePlayingCard = (number, suit) => {
   const cardBase = Card(true); // This creates a new DOM element, a unique one of a kind.
   const cardGraphic = Playing(cardBase, number, suit); // This then takes that unique instance, passes its ID through a new factory, which then creates a card face
-  return (Object.assign({}, cardBase, cardGraphic)); // This returns an object, where those two things are now holding hands. But they both already existed under the parent Card. The return here is simply a box of data.
+  const newCard = (Object.assign({}, cardBase, cardGraphic)); 
+  return newCard;
 };
 
 // Generates a standard deck of 54 cards to a specified target.
@@ -35,7 +36,6 @@ const make54 = () => {
       const cardNumber = standardDeck.members[index2];
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
-      console.log(newCard);
       newCard.card.addEventListener("click", () => {
         newCard.flipCard();
       });

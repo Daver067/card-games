@@ -1,3 +1,5 @@
+import { make54 } from "./deckBuilding";
+
 class TableDeck {
   constructor() {
     this.drawPile = [];
@@ -35,5 +37,6 @@ class TableDeck {
     // deal x amount of cards to y amount of players from this.drawpile
   };
 }
+
 
 export default TableDeck;

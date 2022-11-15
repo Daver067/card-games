@@ -49,6 +49,12 @@ const Card = (faceUp) => {
   const flipCard = () => {
     front.classList.toggle('flipped');
     back.classList.toggle('flipped');
+    const flipStatus = front.classList.contains('flipped');
+    if(flipStatus === false){
+      faceUp = true;
+    } else {
+      faceUp = false;
+    }
   };
 
   return {
