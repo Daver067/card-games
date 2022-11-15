@@ -1,3 +1,4 @@
+/*
 import { Card } from "./cardClass";
 
 class StandardPlayingCard extends Card {
@@ -233,3 +234,4 @@ class StandardPlayingCard extends Card {
 }
 
 export { StandardPlayingCard };
+*/

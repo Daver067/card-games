@@ -1,3 +1,4 @@
+/*
 class Card {
   constructor() {
     this.faceUp = true;
@@ -60,3 +61,4 @@ class Card {
 }
 
 export { Card };
+*/

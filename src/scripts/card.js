@@ -1,36 +1,36 @@
-/*
-export { Card };
-
 // Creates card object, and handles DOM instantiation
-const Card = (faceUp) => {
+const Card = () => {
   //Properties
   let parent; // Describes where in the DOM the card currently resides
+  let faceUp = true;
 
-  const front = (() => {
-    const front = document.createElement("div");
-    front.classList.add("front");
-    front.classList.add("card"); // Generic to all cards
-    front.dataset.number = "front";
-    return front;
-  })();
+  const makeFront = () => {
+    const frontDom = document.createElement("div");
+    frontDom.classList.add("front");
+    frontDom.classList.add("card");
+    frontDom.dataset.number = "front";
+    return frontDom;
+  };
 
-  const back = (() => {
-    const back = document.createElement("div");
-    back.classList.add("back");
-    back.dataset.number = "back";
-    return back;
-  })();
+  const makeBack = () => {
+    const backDom = document.createElement("div");
+    backDom.classList.add("back");
+    backDom.dataset.number = "back";
+    return backDom;
+  };
 
-  const card = (() => {
-    const card = document.createElement("div");
+  const makeCard = () => {
+    const cardDom = document.createElement("div");
     if (faceUp === true) {
-      card.appendChild(front);
+      cardDom.appendChild(front);
     } else {
-      card.appendChild(back);
+      cardDom.appendChild(back);
     }
-    return card;
-  })();
-
+    return cardDom;
+  };
+  let front = makeFront();
+  let back = makeBack();
+  const card = makeCard();
   // Functions
   const setParent = (newParent) => {
     parent = newParent;
@@ -38,27 +38,38 @@ const Card = (faceUp) => {
 
   const getParent = () => parent;
 
-  const flipCard = () => {
+  const flipCard = (up, down) => {
     if (faceUp === true) {
-      card.removeChild(front);
-      card.appendChild(back);
-      faceUp = false;
+      card.removeChild(card.firstElementChild);
+      card.appendChild(down);
     } else {
-      card.removeChild(back);
-      card.appendChild(front);
-      faceUp = true;
+      card.removeChild(card.firstElementChild);
+      card.appendChild(up);
     }
+    faceUp = !faceUp;
   };
 
   return {
     card,
-    front,
     back,
     faceUp,
 
+    set front(newFront) {
+      front = newFront;
+    },
+    get front() {
+      return front;
+    },
+    set back(newBack) {
+      back = newBack;
+    },
+    get back() {
+      return back;
+    },
     setParent,
     getParent,
     flipCard,
   };
 };
-*/
+
+export { Card };

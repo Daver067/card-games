@@ -1,12 +1,13 @@
-/*
-
-const Playing = (instance, number, suit) => {
+const Playing = (cardInstance, num, Suit) => {
   // Properties
-  number = number;
-  suit = suit; // True of False, describes whether card is face up or down // Describes where in the DOM the card currently resides
+  const number = num;
+  const suit = Suit;
 
-  const face = (() => {
-    const card = instance.front;
+  const newFront = () => {
+    const card = document.createElement("div");
+    card.classList.add("front");
+    card.classList.add("card");
+    card.dataset.number = "front";
     const top_left = document.createElement("div");
     const bottom_right = document.createElement("div");
     // Add CSS classes to DOM object
@@ -188,29 +189,31 @@ const Playing = (instance, number, suit) => {
     if (number === "joker") makeJoker();
 
     return card;
-  })();
+  };
 
-  const reverse = (() => {
-    const card = instance.back;
+  const newBack = () => {
+    const card = document.createElement("div");
+    card.classList.add("back");
+    card.dataset.number = "back";
     const symbol = document.createElement("div");
     card.appendChild(symbol);
     return card;
-  })();
+  };
 
   //Functions
   const getNumber = () => number;
   const getSuit = () => suit;
 
-  return {
-    number,
-    suit,
-    face,
-    reverse,
+  // I'm sure theres a better way to do this....
+  let newCard = { ...cardInstance };
+  newCard.front = newFront();
+  newCard.back = newBack();
 
-    getNumber,
-    getSuit,
-  };
+  // the double flipp is just to update the newCard.card, also is a better way
+  newCard.flipCard(newCard.front, newCard.back);
+  newCard.flipCard(newCard.front, newCard.back);
+
+  return { ...newCard };
 };
 
-//export { Playing };
-*/
+export { Playing };
