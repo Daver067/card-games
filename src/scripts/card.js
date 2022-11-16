@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 import "../style.scss";
 import "../scss/_style_card.scss"
 
 export { Card };
 
+=======
+>>>>>>> Daver
 // Creates card object, and handles DOM instantiation
-const Card = (faceUp) => {
+const Card = () => {
   //Properties
   let parent; // Describes where in the DOM the card currently resides
+  let faceUp = true;
 
+<<<<<<< HEAD
 
   const front = (() => {
     const front = document.createElement("div");
@@ -15,14 +20,24 @@ const Card = (faceUp) => {
     front.dataset.number = "front";
     return front;
   })();
+=======
+  const makeFront = () => {
+    const frontDom = document.createElement("div");
+    frontDom.classList.add("front");
+    frontDom.classList.add("card");
+    frontDom.dataset.number = "front";
+    return frontDom;
+  };
+>>>>>>> Daver
 
-  const back = (() => {
-    const back = document.createElement("div");
-    back.classList.add("back");
-    back.dataset.number = "back";
-    return back;
-  })();
+  const makeBack = () => {
+    const backDom = document.createElement("div");
+    backDom.classList.add("back");
+    backDom.dataset.number = "back";
+    return backDom;
+  };
 
+<<<<<<< HEAD
   const card = (() => {
     const cardWrapper = document.createElement('div');
     cardWrapper.classList.add('card-wrapper');
@@ -39,6 +54,20 @@ const Card = (faceUp) => {
     return cardWrapper;
   })();
 
+=======
+  const makeCard = () => {
+    const cardDom = document.createElement("div");
+    if (faceUp === true) {
+      cardDom.appendChild(front);
+    } else {
+      cardDom.appendChild(back);
+    }
+    return cardDom;
+  };
+  let front = makeFront();
+  let back = makeBack();
+  const card = makeCard();
+>>>>>>> Daver
   // Functions
   const setParent = (newParent) => {
     parent = newParent;
@@ -46,6 +75,7 @@ const Card = (faceUp) => {
 
   const getParent = () => parent;
 
+<<<<<<< HEAD
   const flipCard = () => {
     front.classList.toggle('flipped');
     back.classList.toggle('flipped');
@@ -54,17 +84,40 @@ const Card = (faceUp) => {
       faceUp = true;
     } else {
       faceUp = false;
+=======
+  const flipCard = (up, down) => {
+    if (faceUp === true) {
+      card.removeChild(card.firstElementChild);
+      card.appendChild(down);
+    } else {
+      card.removeChild(card.firstElementChild);
+      card.appendChild(up);
+>>>>>>> Daver
     }
+    faceUp = !faceUp;
   };
 
   return {
     card,
-    front,
     back,
     faceUp,
 
+    set front(newFront) {
+      front = newFront;
+    },
+    get front() {
+      return front;
+    },
+    set back(newBack) {
+      back = newBack;
+    },
+    get back() {
+      return back;
+    },
     setParent,
     getParent,
     flipCard,
   };
 };
+
+export { Card };
