@@ -51,6 +51,8 @@ const Card = () => {
       faceUp = true;
     } else {
       faceUp = false;
+      const cardObject = card.getElementsByClassName('card');
+      card.removeChild(cardObject);
     }
     console.log(faceUp);
   };
