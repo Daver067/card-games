@@ -58,7 +58,7 @@ const make54 = () => {
     const joker = makePlayingCard("joker", "joker");
     deck.push(joker);
     joker.card.addEventListener("click", () => {
-      joker.flipCard(joker);
+      joker.flipCard(joker.front, joker.back);
     });
     return joker;
   };
@@ -84,4 +84,34 @@ const make13 = (suit, target) => {
   return cardSpread;
 };
 
-export { make54 };
+const make54BASIC = () => {
+  const deck = [];
+  const suitArray = [
+    standardDeck.suit["diamond"],
+    standardDeck.suit["heart"],
+    standardDeck.suit["club"],
+    standardDeck.suit["spade"],
+  ];
+
+  for (let index = 0; index < suitArray.length; index++) {
+    const suit = suitArray[index];
+    for (let index2 = 0; index2 < standardDeck.members.length; index2++) {
+      const cardNumber = standardDeck.members[index2];
+      const newCard = makePlayingCard(cardNumber, suit);
+      deck.push(newCard);
+    }
+  }
+
+  const makeJoker = () => {
+    const joker = makePlayingCard("joker", "joker");
+    joker.number = "joker";
+    deck.push(joker);
+    return joker;
+  };
+
+  makeJoker();
+  makeJoker();
+  return deck;
+};
+
+export { make54, make54BASIC };
