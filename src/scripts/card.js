@@ -4,11 +4,12 @@ import "../scss/_style_card.scss"
 export { Card };
 
 // Creates card object, and handles DOM instantiation
-const Card = (faceUp) => {
-  //Properties
+const Card = () => {
+  // PROPERTIES
+  let faceUp = 'true';
   let parent; // Describes where in the DOM the card currently resides
 
-
+  // FUNCTIONS 
   const front = (() => {
     const front = document.createElement("div");
     front.classList.add("front"); // Generic to all cards
@@ -23,28 +24,24 @@ const Card = (faceUp) => {
     return back;
   })();
 
+  // - This creates the parent DOM container.
+  // - It contains both the front and the back as children.
+  // - The cardWrapper is necessary because for card flipping to work,
+  //   a parent needs to have position: relative, and the child position absolute.
   const card = (() => {
     const cardWrapper = document.createElement('div');
-    cardWrapper.classList.add('card-wrapper');
     const newCard = document.createElement("div");
+
+    cardWrapper.classList.add('card-wrapper');
     cardWrapper.appendChild(newCard);
+
     newCard.classList.add('card');
     newCard.appendChild(front);
     newCard.appendChild(back);
-    if(!faceUp){
-      front.classList.toggle('flipped');
-      back.classList.toggle('flipped');
-    }
     
     return cardWrapper;
   })();
 
-  // Functions
-  const setParent = (newParent) => {
-    parent = newParent;
-  }; // Set to "front" or "back";
-
-  const getParent = () => parent;
 
   const flipCard = () => {
     front.classList.toggle('flipped');
@@ -55,16 +52,16 @@ const Card = (faceUp) => {
     } else {
       faceUp = false;
     }
+    console.log(faceUp);
   };
 
   return {
     card,
     front,
     back,
+    parent,
     faceUp,
 
-    setParent,
-    getParent,
     flipCard,
   };
 };

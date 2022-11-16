@@ -5,6 +5,8 @@ import { make54 } from "./scripts/deckBuilding";
 
 // Debug Commands
 
+interfaceUI.showUI();
+
 const Table = new TableDeck();
 Table.deck = make54();
 
@@ -13,7 +15,9 @@ const testFlop = makeFlop(target);
 
 Table.deck.forEach((card) => {
   testFlop.appendChild(card.card);
-  card.setParent(testFlop);
+  card.parent = testFlop;
 });
+
+document.body.appendChild(testFlop);
 
 

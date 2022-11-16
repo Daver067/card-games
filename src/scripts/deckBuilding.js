@@ -12,10 +12,11 @@ const standardDeck = {
   members: ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"],
 };
 
+// Creates a DOM instance of a blank playing card
 const makePlayingCard = (number, suit) => {
-  const cardBase = Card(true); // This creates a new DOM element, a unique one of a kind.
-  const cardGraphic = Playing(cardBase, number, suit); // This then takes that unique instance, passes its ID through a new factory, which then creates a card face
-  const newCard = (Object.assign({}, cardBase, cardGraphic)); 
+  const cardBase = Card(); 
+  const cardGraphic = Playing(cardBase, number, suit); 
+  const newCard = (Object.assign({}, cardBase, cardGraphic));
   return newCard;
 };
 
@@ -53,23 +54,9 @@ const make54 = () => {
 
   const joker1 = makeJoker();
   const joker2 = makeJoker();
+  console.log(deck);
   return deck;
 };
 
-// Generates 13 cards of a specified suit, to a specified target
-const make13 = (suit, target) => {
-  const cardSpread = [];
-  for (let index = 0; index < Standard.members.length; index++) {
-    const cardNumber = Standard.members[index];
-    const newCard = Card(cardNumber, suit, true);
-    cardSpread.push(newCard);
-    newCard.setParent(target);
-    newCard.card.addEventListener("click", () => {
-      newCard.flipCard(newCard);
-    });
-    target.appendChild(newCard.card);
-  }
-  return cardSpread;
-};
 
 export { make54 };

@@ -1,18 +1,30 @@
-const Playing = (instance, number, suit) => {
+const Playing = (instance, card_number, card_suit) => {
   // Properties
-  number = number;
-  suit = suit; // True of False, describes whether card is face up or down // Describes where in the DOM the card currently resides
+  const name = (() => {
+    let suitString;
+    switch (card_suit) {
+      case "♦": suitString = "Diamonds";
+      case "♥": suitString = "Hearts";
+      case "♠": suitString = "Spades";
+      case "♣": suitString = "Clubs";
+        break;
+    }
+    return(`${card_number} of ${suitString}`);
+  })();
+
+  const number = card_number;
+  const suit = card_suit; // True of False, describes whether card is face up or down // Describes where in the DOM the card currently resides
 
   const face = (() => {
-    const card = instance.front;
+    const card_front = instance.front;
     const top_left = document.createElement("div");
     const bottom_right = document.createElement("div");
     // Add CSS classes to DOM object
-    card.classList.add("playing"); // Specific to Standard 52 Deck
+    card_front.classList.add("playing"); // Specific to Standard 52 Deck
 
-    card.dataset.suit = suit; // Adds suit as a data attribute to DOM object.
-    card.dataset.number = number;
-    // Adds CSS classes to corners of the card
+    card_front.dataset.suit = suit; 
+    card_front.dataset.number = number;
+
     top_left.classList.add("top-left");
     bottom_right.classList.add("bottom-right");
     // Adds Suit and Number to opposite corners of cards
@@ -29,12 +41,12 @@ const Playing = (instance, number, suit) => {
       node.appendChild(cornerNumber);
       node.appendChild(cornerSuit);
       // Adds both corner elements to parent card
-      card.appendChild(node);
+      card_front.appendChild(node);
     });
     // Adds center div to card with class 'card-center'
     const cardCenter = document.createElement("div");
     cardCenter.classList.add("card-center");
-    card.appendChild(cardCenter);
+    card_front.appendChild(cardCenter);
     cardCenter.dataset.number = number;
     cardCenter.dataset.suit = suit;
 
@@ -155,15 +167,15 @@ const Playing = (instance, number, suit) => {
     };
 
     const makeJoker = () => {
-      card.classList.add("back");
-      card.classList.remove("playing");
-      card.removeChild(top_left);
-      card.removeChild(bottom_right);
+      card_front.classList.add("back");
+      card_front.classList.remove("playing");
+      card_front.removeChild(top_left);
+      card_front.removeChild(bottom_right);
 
       const symbol = document.createElement("div");
-      card.appendChild(symbol);
+      card_front.appendChild(symbol);
 
-      card.dataset.number = "joker";
+      card_front.dataset.number = "joker";
     };
 
     // Determines which of the above functions to run
@@ -183,28 +195,21 @@ const Playing = (instance, number, suit) => {
     if (number === "K") makeKing();
     if (number === "joker") makeJoker();
 
-    return card;
+    return card_front;
   })();
 
   const reverse = (() => {
-    const card = instance.back;
+    const card_back = instance.back;
     const symbol = document.createElement("div");
-    card.appendChild(symbol);
-    return card;
+    card_back.appendChild(symbol);
+    return card_back;
   })();
 
-  //Functions
-  const getNumber = () => number;
-  const getSuit = () => suit;
 
   return {
+    name,
     number,
     suit,
-    face,
-    reverse,
-
-    getNumber,
-    getSuit,
   };
 };
 
