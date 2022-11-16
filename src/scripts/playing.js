@@ -205,15 +205,24 @@ const Playing = (cardInstance, num, Suit) => {
     return card;
   };
 
+  const newCardDom = (front, back) => {
+    const cardWrapper = document.createElement("div");
+    cardWrapper.classList.add("card-wrapper");
+    const newCardDom = document.createElement("div");
+    cardWrapper.appendChild(newCardDom);
+    newCardDom.classList.add("card");
+    newCardDom.appendChild(front);
+    newCardDom.appendChild(back);
+    front.classList.toggle("flipped");
+    back.classList.toggle("flipped");
+    return cardWrapper;
+  };
+
   // I'm sure theres a better way to do this....
   let newCard = { ...cardInstance };
   newCard.front = newFront();
   newCard.back = newBack();
-
-  // the double flipp is just to update the newCard.card, also is a better way
-  newCard.flipCard(newCard.front, newCard.back);
-  newCard.flipCard(newCard.front, newCard.back);
-
+  newCard.card = newCardDom(newCard.front, newCard.back);
   return {
     ...newCard,
     get number() {

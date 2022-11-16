@@ -16,12 +16,7 @@ Table.deck.forEach((cardInDeck) => {
   testFlop.appendChild(cardInDeck.card);
   cardInDeck.parent = testFlop;
 });
-<<<<<<< HEAD
-
-
-=======
 // end
 
 // additional console logs
 // end
->>>>>>> Daver
