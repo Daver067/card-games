@@ -1,8 +1,6 @@
 // Creates card object, and handles DOM instantiation
 const Card = () => {
-  //Properties
-  let parent; // Describes where in the DOM the card currently resides
-  let faceUp = true;
+  // Functions
 
   const makeFront = () => {
     const frontDom = document.createElement("div");
@@ -34,13 +32,7 @@ const Card = () => {
     return cardWrapper;
   };
 
-  let front = makeFront();
-  let back = makeBack();
-  let card = makeCard();
-  // Functions
-
   // Set to "front" or "back";
-
   const flipCard = (front, back) => {
     front.classList.toggle("flipped");
     back.classList.toggle("flipped");
@@ -52,6 +44,13 @@ const Card = () => {
     }
     faceUp = !faceUp;
   };
+
+  // Properties
+
+  let faceUp = true;
+  let front = makeFront();
+  let back = makeBack();
+  let card = makeCard();
 
   return {
     set front(newFront) {

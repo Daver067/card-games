@@ -1,4 +1,4 @@
-const Playing = (cardInstance, num, Suit) => {
+const Playing = (num, Suit) => {
   // Properties
   const number = num;
   const suit = Suit;
@@ -205,7 +205,7 @@ const Playing = (cardInstance, num, Suit) => {
     return card;
   };
 
-  const newCardDom = (front, back) => {
+  const newCard = (front, back) => {
     const cardWrapper = document.createElement("div");
     cardWrapper.classList.add("card-wrapper");
     const newCardDom = document.createElement("div");
@@ -218,13 +218,10 @@ const Playing = (cardInstance, num, Suit) => {
     return cardWrapper;
   };
 
-  // I'm sure theres a better way to do this....
-  let newCard = { ...cardInstance };
-  newCard.front = newFront();
-  newCard.back = newBack();
-  newCard.card = newCardDom(newCard.front, newCard.back);
   return {
-    ...newCard,
+    newFront,
+    newBack,
+    newCard,
     get number() {
       return number;
     },

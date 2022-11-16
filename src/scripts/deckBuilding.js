@@ -13,9 +13,21 @@ const standardDeck = {
 };
 
 const makePlayingCard = (number, suit) => {
-  const cardBase = Card(); // This creates a new DOM element, a unique one of a kind.
-  const cardGraphic = Playing(cardBase, number, suit); // This then takes that unique instance, passes its ID through a new factory, which then creates a card face
-  return cardGraphic; // This returns an object, where those two things are now holding hands. But they both already existed under the parent Card. The return here is simply a box of data.
+  const cardBase = Card(); // Creates the base of card
+  const cardGraphic = Playing(number, suit); // Create a second object
+
+  const cardBaseAndGraphic = { ...cardBase, ...cardGraphic }; // the same as object.assign
+
+  cardBaseAndGraphic.front = cardBaseAndGraphic.newFront(); // applies ink to the front of card
+  cardBaseAndGraphic.back = cardBaseAndGraphic.newBack(); // inks the back
+  // adds the new front and back to the card
+  cardBaseAndGraphic.card = cardBaseAndGraphic.newCard(
+    cardBaseAndGraphic.front,
+    cardBaseAndGraphic.back
+  );
+
+  // returns the combined object, with fresh front/back faces
+  return cardBaseAndGraphic;
 };
 
 // Generates a standard deck of 54 cards to a specified target.
@@ -36,6 +48,7 @@ const make54 = () => {
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
       newCard.card.addEventListener("click", () => {
+        // you must now pass the new front and back to the flip
         newCard.flipCard(newCard.front, newCard.back);
       });
     }
