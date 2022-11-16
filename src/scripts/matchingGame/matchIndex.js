@@ -27,26 +27,30 @@ const matchGame = {
   },
 
   playRound: (deck) => {
-    deck.forEach((card) => {
-      function allowFlip() {
-        card.flipCard(card.front, card.back);
-        if (matchGame.firstChoice === null) {
-          matchGame.firstChoice = { ...card };
-          matchGame.firstChoice.card.removeEventListener("click", allowFlip);
-          return;
-        }
-        matchGame.secondChoice = { ...card };
-
-        setTimeout(compare, 400);
+    function allowFlip(card) {
+      if (
+        card.matched === true ||
+        (matchGame.firstChoice !== null &&
+          matchGame.firstChoice.suit === card.suit &&
+          matchGame.firstChoice.number === card.number)
+      ) {
+        return;
       }
+      card.flipCard(card.front, card.back);
+
+      if (matchGame.firstChoice === null) {
+        matchGame.firstChoice = card;
+        return;
+      }
+      matchGame.secondChoice = card;
+
+      setTimeout(compare, 400);
 
       function compare() {
         if (matchGame.firstChoice.number === matchGame.secondChoice.number) {
-          matchGame.secondChoice.card.removeEventListener("click", allowFlip);
           matchGame.firstChoice.matched = true;
           matchGame.secondChoice.matched = true;
         } else {
-          matchGame.firstChoice.card.addEventListener("click", allowFlip);
           matchGame.firstChoice.flipCard(
             matchGame.firstChoice.front,
             matchGame.firstChoice.back
@@ -63,8 +67,11 @@ const matchGame = {
         matchGame.firstChoice = null;
         matchGame.secondChoice = null;
       }
-
-      card.card.addEventListener("click", allowFlip);
+    }
+    deck.forEach((card) => {
+      card.card.addEventListener("click", () => {
+        allowFlip(card);
+      });
     });
   },
 };
