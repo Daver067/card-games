@@ -28,6 +28,7 @@ const matchGame = {
 
   playRound: (deck) => {
     function allowFlip(card) {
+      console.log(card);
       if (
         card.matched === true ||
         (matchGame.firstChoice !== null &&
@@ -36,7 +37,7 @@ const matchGame = {
       ) {
         return;
       }
-      card.flipCard(card.front, card.back);
+      card.flipCard();
 
       if (matchGame.firstChoice === null) {
         matchGame.firstChoice = card;
@@ -71,6 +72,7 @@ const matchGame = {
     deck.forEach((card) => {
       card.card.addEventListener("click", () => {
         allowFlip(card);
+        console.log(card);
       });
     });
   },

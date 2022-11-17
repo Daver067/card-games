@@ -1,5 +1,7 @@
 // Creates card object, and handles DOM instantiation
 const Card = () => {
+  let faceUp = true;
+
   // Functions
 
   let front = (function () {
@@ -27,10 +29,19 @@ const Card = () => {
 
     return cardWrapper;
   })();
+
+  function flipCard() {
+    front.classList.toggle("flipped");
+    back.classList.toggle("flipped");
+    faceUp = !faceUp;
+  }
+
   return {
     front,
     back,
     card,
+    flipCard,
+    faceUp,
   };
 };
 

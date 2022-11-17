@@ -1,5 +1,6 @@
 import { Card } from "./card";
 import { Playing } from "./playing";
+import { updateFlip } from "./updateFlip";
 
 // Dictionary of Standard 52 Card deck definitions
 const standardDeck = {
@@ -13,26 +14,18 @@ const standardDeck = {
 };
 
 const makePlayingCard = (number, suit) => {
-  const cardBase = Card(); // Creates the base of card
+  // Object.assign, or {...obj1, ...obj2} will both only update the target {} from left to right... card first, then playing.
+  // without updating the flipCard function, flipCard remembers the values of front and back from its creation.
+  const cardBaseAndGraphic = Object.assign({}, Card(), Playing(number, suit));
 
-  // This makes a deep copy of cardBase. cardBase will remain the same.
-  // The catch to this, is JSON cannost parse functions, flipCard has to move to the graphic
-  const cardBaseDeepCopy = JSON.parse(JSON.stringify(cardBase));
+  // This is one option for updating the flip card function
+  cardBaseAndGraphic.flipCard = () => {
+    updateFlip(cardBaseAndGraphic.front, cardBaseAndGraphic.back);
+    cardBaseAndGraphic.faceUp = !cardBaseAndGraphic.faceUp;
+  };
+  // the other option is to have a new flipcard function in the playing file
 
-  const cardGraphic = Playing(number, suit); // Create a second object
-
-  // All 3 of these options work. Dealers choice.
-  const cardBaseAndGraphic = { ...cardBaseDeepCopy, ...cardGraphic };
-  // const cardBaseAndGraphic = Object.assign({}, cardBaseDeepCopy, cardGraphic);
-  // const cardBaseAndGraphic = Object.assign(cardBaseDeepCopy, cardGraphic);
-
-  /* I like this one, dont forget to comment out line 20.
-  const cardBaseAndGraphic = Object.assign(
-    {},
-    JSON.parse(JSON.stringify(cardBase)),
-    cardGraphic
-  );
-  */
+  // i know you are still working more on flip.... so Ill let you play.
 
   return cardBaseAndGraphic;
 };
@@ -65,7 +58,7 @@ const make54 = () => {
     const joker = makePlayingCard("joker", "joker");
     deck.push(joker);
     joker.card.addEventListener("click", () => {
-      joker.flipCard(joker.front, joker.back);
+      joker.flipCard();
     });
     return joker;
   };

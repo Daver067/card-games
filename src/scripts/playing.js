@@ -1,6 +1,5 @@
 const Playing = (num, Suit) => {
   // Properties
-  let faceUp = true;
 
   const number = num;
   const suit = Suit;
@@ -198,6 +197,7 @@ const Playing = (num, Suit) => {
     return card;
   })();
 
+  // makes the new card back
   const back = (function () {
     const card = document.createElement("div");
     card.classList.add("back");
@@ -207,6 +207,7 @@ const Playing = (num, Suit) => {
     return card;
   })();
 
+  // makes a new card
   const card = (function () {
     const cardWrapper = document.createElement("div");
     cardWrapper.classList.add("card-wrapper");
@@ -220,20 +221,11 @@ const Playing = (num, Suit) => {
     return cardWrapper;
   })();
 
-  function flipCard() {
-    console.log(front);
-    front.classList.toggle("flipped");
-    back.classList.toggle("flipped");
-    faceUp = !faceUp;
-  }
-  // Set to "front" or "back";
-
   return {
     front,
     back,
     card,
-    faceUp,
-    flipCard,
+    color,
   };
 };
 
