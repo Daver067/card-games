@@ -14,19 +14,26 @@ const standardDeck = {
 
 const makePlayingCard = (number, suit) => {
   const cardBase = Card(); // Creates the base of card
+
+  // This makes a deep copy of cardBase. cardBase will remain the same.
+  // The catch to this, is JSON cannost parse functions, flipCard has to move to the graphic
+  const cardBaseDeepCopy = JSON.parse(JSON.stringify(cardBase));
+
   const cardGraphic = Playing(number, suit); // Create a second object
 
-  const cardBaseAndGraphic = { ...cardBase, ...cardGraphic }; // the same as object.assign
+  // All 3 of these options work. Dealers choice.
+  const cardBaseAndGraphic = { ...cardBaseDeepCopy, ...cardGraphic };
+  // const cardBaseAndGraphic = Object.assign({}, cardBaseDeepCopy, cardGraphic);
+  // const cardBaseAndGraphic = Object.assign(cardBaseDeepCopy, cardGraphic);
 
-  cardBaseAndGraphic.front = cardBaseAndGraphic.newFront(); // applies ink to the front of card
-  cardBaseAndGraphic.back = cardBaseAndGraphic.newBack(); // inks the back
-  // adds the new front and back to the card
-  cardBaseAndGraphic.card = cardBaseAndGraphic.newCard(
-    cardBaseAndGraphic.front,
-    cardBaseAndGraphic.back
+  /* I like this one, dont forget to comment out line 20.
+  const cardBaseAndGraphic = Object.assign(
+    {},
+    JSON.parse(JSON.stringify(cardBase)),
+    cardGraphic
   );
+  */
 
-  // returns the combined object, with fresh front/back faces
   return cardBaseAndGraphic;
 };
 
@@ -49,7 +56,7 @@ const make54 = () => {
       deck.push(newCard);
       newCard.card.addEventListener("click", () => {
         // you must now pass the new front and back to the flip
-        newCard.flipCard(newCard.front, newCard.back);
+        newCard.flipCard();
       });
     }
   }

@@ -1,5 +1,7 @@
 const Playing = (num, Suit) => {
   // Properties
+  let faceUp = true;
+
   const number = num;
   const suit = Suit;
   let color;
@@ -10,7 +12,7 @@ const Playing = (num, Suit) => {
     color = "black";
   }
 
-  const newFront = () => {
+  const front = (function () {
     const card = document.createElement("div");
     card.classList.add("front");
     card.classList.add("card");
@@ -194,18 +196,18 @@ const Playing = (num, Suit) => {
     if (number === "joker") makeJoker();
 
     return card;
-  };
+  })();
 
-  const newBack = () => {
+  const back = (function () {
     const card = document.createElement("div");
     card.classList.add("back");
     card.dataset.number = "back";
     const symbol = document.createElement("div");
     card.appendChild(symbol);
     return card;
-  };
+  })();
 
-  const newCard = (front, back) => {
+  const card = (function () {
     const cardWrapper = document.createElement("div");
     cardWrapper.classList.add("card-wrapper");
     const newCardDom = document.createElement("div");
@@ -216,21 +218,22 @@ const Playing = (num, Suit) => {
     front.classList.toggle("flipped");
     back.classList.toggle("flipped");
     return cardWrapper;
-  };
+  })();
+
+  function flipCard() {
+    console.log(front);
+    front.classList.toggle("flipped");
+    back.classList.toggle("flipped");
+    faceUp = !faceUp;
+  }
+  // Set to "front" or "back";
 
   return {
-    newFront,
-    newBack,
-    newCard,
-    get number() {
-      return number;
-    },
-    get suit() {
-      return suit;
-    },
-    get color() {
-      return color;
-    },
+    front,
+    back,
+    card,
+    faceUp,
+    flipCard,
   };
 };
 
