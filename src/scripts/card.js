@@ -6,7 +6,8 @@ export { Card };
 // Creates card object, and handles DOM instantiation
 const Card = () => {
   // PROPERTIES
-  let faceUp = 'true';
+  let faceUp = true;
+  let flipEnabled = true
   let parent; // Describes where in the DOM the card currently resides
 
   // FUNCTIONS 
@@ -43,18 +44,37 @@ const Card = () => {
   })();
 
 
-  const flipCard = () => {
-    front.classList.toggle('flipped');
-    back.classList.toggle('flipped');
-    const flipStatus = front.classList.contains('flipped');
-    if(flipStatus === false){
-      faceUp = true;
-    } else {
-      faceUp = false;
-      const cardObject = card.getElementsByClassName('card');
-      card.removeChild(cardObject);
+  const flipCard = () => { 
+    const cardParent = card.getElementsByClassName('card')[0];
+
+    if(flipEnabled === true) {
+      flipEnabled = false;
+      if(faceUp) {
+        front.classList.toggle('flipped');
+        back.classList.toggle('flipped');       
+      } else {
+        cardParent.insertBefore(front, cardParent.firstChild);
+        back.classList.toggle('flipped'); 
+        front.classList.remove('flipped');
+      }
+      const flipStatus = front.classList.contains('flipped');
+      if(flipStatus === false){
+        faceUp = true;
+        const waitForFlip = () => {
+          flipEnabled = true;
+        }
+        card.addEventListener('transitionend', waitForFlip)
+      } else {
+        const removeFront = () => {
+          card.removeEventListener('transitionend', removeFront)
+          const cardFront = card.getElementsByClassName('front')[0];
+          cardParent.removeChild(cardFront);
+          faceUp = false;
+          flipEnabled = true;
+        }
+        card.addEventListener('transitionend', removeFront)
+      }
     }
-    console.log(faceUp);
   };
 
   return {
