@@ -226,6 +226,8 @@ const Playing = (num, Suit) => {
     back,
     card,
     color,
+    number,
+    suit,
   };
 };
 
