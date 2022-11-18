@@ -51,26 +51,30 @@ const Card = () => {
     });
   }
 
-  const flipCard = () => { 
+  const flipCard = () => {
     const cardParent = card.getElementsByClassName('card')[0];
 
+    // flipEnabled stops the user from flipping a card rapidly over and over.
     if(flipEnabled === true) {
       flipEnabled = false;
-      if(faceUp) {
-        front.classList.toggle('flipped');
-        back.classList.toggle('flipped');       
-      } else {
-        cardParent.insertBefore(front, cardParent.firstChild);
-        back.classList.toggle('flipped'); 
-        front.classList.remove('flipped');
+
+      if(faceUp === false){
+        cardParent.appendChild(front);
       }
-      const flipStatus = front.classList.contains('flipped');
-      if(flipStatus === false){
+
+      setTimeout(() => {
+        front.classList.toggle('flipped');
+      }, 1);
+      back.classList.toggle('flipped');
+
+      if(faceUp === false){
         faceUp = true;
         const waitForFlip = () => {
           flipEnabled = true;
+          card.removeEventListener('transitionend', waitForFlip);
         }
-        card.addEventListener('transitionend', waitForFlip)
+        card.addEventListener('transitionend', waitForFlip);
+        
       } else {
         const removeFront = () => {
           card.removeEventListener('transitionend', removeFront)
@@ -79,9 +83,10 @@ const Card = () => {
           faceUp = false;
           flipEnabled = true;
         }
-        card.addEventListener('transitionend', removeFront)
+        card.addEventListener('transitionend', removeFront);
       }
     }
+    
   };
 
   return {

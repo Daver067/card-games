@@ -31,7 +31,6 @@ const makePlayingCard = (number, suit) => {
   delete newCard.printCard;
   delete newCard.printFace;
   delete newCard.printReverse;
-  console.log(newCard);
   return newCard;
 };
 
@@ -69,7 +68,6 @@ const make54 = () => {
 
   const joker1 = makeJoker();
   const joker2 = makeJoker();
-  console.log(deck);
   return deck;
 };
 
