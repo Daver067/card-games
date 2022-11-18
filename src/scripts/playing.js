@@ -43,10 +43,10 @@ const Playing = (num, Suit) => {
     const top_left = document.createElement("div");
     const bottom_right = document.createElement("div");
     // Add CSS classes to DOM object
-    card_front.classList.add("playing"); // Specific to Standard 52 Deck
+    card.classList.add("playing"); // Specific to Standard 52 Deck
 
-    card_front.dataset.suit = suit;
-    card_front.dataset.number = number;
+    card.dataset.suit = suit;
+    card.dataset.number = number;
 
     top_left.classList.add("top-left");
     bottom_right.classList.add("bottom-right");
@@ -64,12 +64,12 @@ const Playing = (num, Suit) => {
       node.appendChild(cornerNumber);
       node.appendChild(cornerSuit);
       // Adds both corner elements to parent card
-      card_front.appendChild(node);
+      card.appendChild(node);
     });
     // Adds center div to card with class 'card-center'
     const cardCenter = document.createElement("div");
     cardCenter.classList.add("card-center");
-    card_front.appendChild(cardCenter);
+    card.appendChild(cardCenter);
     cardCenter.dataset.number = number;
     cardCenter.dataset.suit = suit;
 
@@ -190,15 +190,15 @@ const Playing = (num, Suit) => {
     };
 
     const makeJoker = () => {
-      card_front.classList.add("back");
-      card_front.classList.remove("playing");
-      card_front.removeChild(top_left);
-      card_front.removeChild(bottom_right);
+      card.classList.add("back");
+      card.classList.remove("playing");
+      card.removeChild(top_left);
+      card.removeChild(bottom_right);
 
       const symbol = document.createElement("div");
-      card_front.appendChild(symbol);
+      card.appendChild(symbol);
 
-      card_front.dataset.number = "joker";
+      card.dataset.number = "joker";
     };
 
     // Determines which of the above functions to run
@@ -218,7 +218,7 @@ const Playing = (num, Suit) => {
     if (number === "K") makeKing();
     if (number === "joker") makeJoker();
 
-    return card_front;
+    return card;
   })();
 
   // makes the new card back
@@ -227,8 +227,8 @@ const Playing = (num, Suit) => {
     card.classList.add("back");
     card.dataset.number = "back";
     const symbol = document.createElement("div");
-    card_back.appendChild(symbol);
-    return card_back;
+    card.appendChild(symbol);
+    return card;
   })();
 
   // makes a new card
