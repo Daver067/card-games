@@ -4,10 +4,9 @@ import { makeFlop } from "./scripts/showUI";
 import TableDeck from "./scripts/tableDeckClass";
 import "./style.scss";
 
-matchGame.initiateGame();
+//matchGame.initiateGame(); // uncomment this to play match... its broken for now from the merge.
 
-/*
-// Debug Commands
+// /* comment all this to play match
 const Table = new TableDeck();
 Table.deck = make54();
 
@@ -17,4 +16,4 @@ const testFlop = makeFlop(target);
 Table.deck.forEach((card) => {
   testFlop.appendChild(card.card);
 });
-*/
+// end uncomment here */
