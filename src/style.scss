@@ -1,1 +1,58 @@
 @import "./scss/style_card";
+
+body {
+  background-color: #1c1c1c;
+  background-image: url(/assets/images/45-degree-fabric-light.png);
+  padding: 2rem;
+}
+
+.flop {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(calc(var(--card-size) * 2.5), 1fr)
+  );
+  grid-template-rows: repeat(
+    auto-fit,
+    minmax(calc(var(--card-size) * 3.5), 1fr)
+  );
+  grid-auto-flow: row;
+  gap: 1rem;
+}
+
+.interface {
+  padding: 1rem;
+  margin: 1rem 0 1rem 0;
+  display: flex;
+  flex-direction: row;
+
+  background-color: rgba(95, 158, 160, 0.311);
+  border-radius: 1rem;
+}
+
+.interface-form {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background-color: rgba(255, 228, 196, 0.742);
+  border-radius: 1rem;
+}
+
+.card-size-label {
+  padding-right: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.card-size-input {
+  padding: 0.2rem;
+  max-width: 80px;
+  height: 100%;
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  text-align: center;
+}

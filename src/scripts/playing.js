@@ -1,16 +1,41 @@
-const Playing = (cardInstance, num, Suit) => {
+const Playing = (num, Suit) => {
   // Properties
+
   const number = num;
   const suit = Suit;
-  let color;
-  if (Suit === "♦" || Suit === "♥") {
-    color = "red";
-  }
-  if (Suit === "♠" || Suit === "♣") {
-    color = "black";
-  }
+  const color = (() => {
+    let cardColor;
+    if (Suit === "♦" || Suit === "♥") {
+      cardColor = "red";
+    }
+    if (Suit === "♠" || Suit === "♣") {
+      cardColor = "black";
+    }
+    return cardColor;
+  })();
+  const name = (() => {
+    let suitString;
+    switch (Suit) {
+      case "♦":
+        suitString = "Diamonds";
+        break;
+      case "♥":
+        suitString = "Hearts";
+        break;
+      case "♠":
+        suitString = "Spades";
+        break;
+      case "♣":
+        suitString = "Clubs";
+        break;
+      default:
+        suitString = "Joker";
+        return `Joker`;
+    }
+    return `${num} of ${suitString}`;
+  })();
 
-  const newFront = () => {
+  const front = (function () {
     const card = document.createElement("div");
     card.classList.add("front");
     card.classList.add("card");
@@ -20,9 +45,9 @@ const Playing = (cardInstance, num, Suit) => {
     // Add CSS classes to DOM object
     card.classList.add("playing"); // Specific to Standard 52 Deck
 
-    card.dataset.suit = suit; // Adds suit as a data attribute to DOM object.
+    card.dataset.suit = suit;
     card.dataset.number = number;
-    // Adds CSS classes to corners of the card
+
     top_left.classList.add("top-left");
     bottom_right.classList.add("bottom-right");
     // Adds Suit and Number to opposite corners of cards
@@ -167,8 +192,6 @@ const Playing = (cardInstance, num, Suit) => {
     const makeJoker = () => {
       card.classList.add("back");
       card.classList.remove("playing");
-      card.classList.remove("card");
-      card.removeChild(cardCenter);
       card.removeChild(top_left);
       card.removeChild(bottom_right);
 
@@ -196,37 +219,40 @@ const Playing = (cardInstance, num, Suit) => {
     if (number === "joker") makeJoker();
 
     return card;
-  };
+  })();
 
-  const newBack = () => {
+  // makes the new card back
+  const back = (function () {
     const card = document.createElement("div");
     card.classList.add("back");
     card.dataset.number = "back";
     const symbol = document.createElement("div");
     card.appendChild(symbol);
     return card;
-  };
+  })();
 
-  // I'm sure theres a better way to do this....
-  let newCard = { ...cardInstance };
-  newCard.front = newFront();
-  newCard.back = newBack();
-
-  // the double flipp is just to update the newCard.card, also is a better way
-  newCard.flipCard(newCard.front, newCard.back);
-  newCard.flipCard(newCard.front, newCard.back);
+  // makes a new card
+  const card = (function () {
+    const cardWrapper = document.createElement("div");
+    cardWrapper.classList.add("card-wrapper");
+    const newCardDom = document.createElement("div");
+    cardWrapper.appendChild(newCardDom);
+    newCardDom.classList.add("card");
+    newCardDom.appendChild(front);
+    newCardDom.appendChild(back);
+    front.classList.toggle("flipped");
+    back.classList.toggle("flipped");
+    return cardWrapper;
+  })();
 
   return {
-    ...newCard,
-    get number() {
-      return number;
-    },
-    get suit() {
-      return suit;
-    },
-    get color() {
-      return color;
-    },
+    front,
+    back,
+    card,
+    color,
+    number,
+    suit,
+    name,
   };
 };
 

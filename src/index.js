@@ -1,23 +1,19 @@
-import "./style.scss";
-import { interfaceUI, makeFlop } from "./scripts/showUI";
-import TableDeck from "./scripts/tableDeckClass";
 import { make54 } from "./scripts/deckBuilding";
+import { matchGame } from "./scripts/matchingGame/matchIndex";
+import { makeFlop } from "./scripts/showUI";
+import TableDeck from "./scripts/tableDeckClass";
+import "./style.scss";
 
-// Debug Commands
-interfaceUI.showUI();
+//matchGame.initiateGame(); // uncomment this to play match... its broken for now from the merge.
 
-// tester appending a deck to the page
+// /* comment all this to play match
 const Table = new TableDeck();
 Table.deck = make54();
 
 const target = document.body;
 const testFlop = makeFlop(target);
 
-Table.deck.forEach((cardInDeck) => {
-  testFlop.appendChild(cardInDeck.card);
-  cardInDeck.parent = testFlop;
+Table.deck.forEach((card) => {
+  testFlop.appendChild(card.card);
 });
-// end
-
-// additional console logs
-// end
+// end uncomment here */
