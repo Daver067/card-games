@@ -40,6 +40,7 @@
   border-radius: calc(0.1 * var(--card-size));
   border: calc(var(--card-size)/5) rgb(0, 0, 0) solid;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  background-color: #436180;
 
   transform: perspective(1000px) rotateY(-180deg);
 }

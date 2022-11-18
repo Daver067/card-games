@@ -5,10 +5,9 @@ export { Card };
 
 // Creates card object, and handles DOM instantiation
 const Card = () => {
-  // PROPERTIES
+  let printables = []; // Stores all the card layers to be printed in printCard();
   let faceUp = true;
   let flipEnabled = true
-  let parent; // Describes where in the DOM the card currently resides
 
   // FUNCTIONS 
   const front = (() => {
@@ -43,6 +42,14 @@ const Card = () => {
     return cardWrapper;
   })();
 
+  // Generates the graphical portion of the card. Without this,
+  // Cards will be blank white cards. 
+  const printCard = () => {
+    printables.forEach(layer => {
+      layer.printFace(front);
+      layer.printReverse(back);
+    });
+  }
 
   const flipCard = () => { 
     const cardParent = card.getElementsByClassName('card')[0];
@@ -81,9 +88,10 @@ const Card = () => {
     card,
     front,
     back,
-    parent,
     faceUp,
+    printables,
 
     flipCard,
+    printCard,
   };
 };

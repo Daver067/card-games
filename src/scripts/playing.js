@@ -15,8 +15,8 @@ const Playing = (instance, card_number, card_suit) => {
   const number = card_number;
   const suit = card_suit; // True of False, describes whether card is face up or down // Describes where in the DOM the card currently resides
 
-  const face = (() => {
-    const card_front = instance.front;
+  const printFace = (cardObject) => {
+    const card_front = cardObject;
     const top_left = document.createElement("div");
     const bottom_right = document.createElement("div");
     // Add CSS classes to DOM object
@@ -196,20 +196,23 @@ const Playing = (instance, card_number, card_suit) => {
     if (number === "joker") makeJoker();
 
     return card_front;
-  })();
+  };
 
-  const reverse = (() => {
-    const card_back = instance.back;
+  const printReverse = (cardObject) => {
+    const card_back = cardObject;
     const symbol = document.createElement("div");
     card_back.appendChild(symbol);
     return card_back;
-  })();
+  };
 
 
   return {
     name,
     number,
     suit,
+
+    printFace,
+    printReverse,
   };
 };
 

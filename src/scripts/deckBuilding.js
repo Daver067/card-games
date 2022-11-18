@@ -14,9 +14,24 @@ const standardDeck = {
 
 // Creates a DOM instance of a blank playing card
 const makePlayingCard = (number, suit) => {
-  const cardBase = Card(); 
-  const cardGraphic = Playing(cardBase, number, suit); 
-  const newCard = (Object.assign({}, cardBase, cardGraphic));
+  const card = Card(); 
+  const playing = Playing(card, number, suit); 
+  const newCard = (Object.assign({}, card, playing));
+
+  // Add things to a printable list, then print everything on that list.
+  // By having this seperate, you can choose if you want an object to be
+  // graphical or hidden.
+  newCard.printables.push(playing);
+  newCard.printCard();
+  
+
+  // Cleans some variables out of the objects that are no longer needed
+  // after instantiation.
+  delete newCard.printables;
+  delete newCard.printCard;
+  delete newCard.printFace;
+  delete newCard.printReverse;
+  console.log(newCard);
   return newCard;
 };
 
