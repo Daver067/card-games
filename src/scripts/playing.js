@@ -3,13 +3,37 @@ const Playing = (num, Suit) => {
 
   const number = num;
   const suit = Suit;
-  let color;
-  if (Suit === "♦" || Suit === "♥") {
-    color = "red";
-  }
-  if (Suit === "♠" || Suit === "♣") {
-    color = "black";
-  }
+  const color = (() => {
+    let cardColor;
+    if (Suit === "♦" || Suit === "♥") {
+      cardColor = "red";
+    }
+    if (Suit === "♠" || Suit === "♣") {
+      cardColor = "black";
+    }
+    return cardColor;
+  })();
+  const name = (() => {
+    let suitString;
+    switch (Suit) {
+      case "♦":
+        suitString = "Diamonds";
+        break;
+      case "♥":
+        suitString = "Hearts";
+        break;
+      case "♠":
+        suitString = "Spades";
+        break;
+      case "♣":
+        suitString = "Clubs";
+        break;
+      default:
+        suitString = "Joker";
+        return `Joker`;
+    }
+    return `${num} of ${suitString}`;
+  })();
 
   const front = (function () {
     const card = document.createElement("div");
@@ -228,6 +252,7 @@ const Playing = (num, Suit) => {
     color,
     number,
     suit,
+    name,
   };
 };
 

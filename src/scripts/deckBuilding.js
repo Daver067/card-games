@@ -1,6 +1,5 @@
 import { Card } from "./card";
 import { Playing } from "./playing";
-import { updateFlip } from "./updateFlip";
 
 // Dictionary of Standard 52 Card deck definitions
 const standardDeck = {
@@ -17,15 +16,6 @@ const makePlayingCard = (number, suit) => {
   // Object.assign, or {...obj1, ...obj2} will both only update the target {} from left to right... card first, then playing.
   // without updating the flipCard function, flipCard remembers the values of front and back from its creation.
   const cardBaseAndGraphic = Object.assign({}, Card(), Playing(number, suit));
-
-  // This is one option for updating the flip card function
-  cardBaseAndGraphic.flipCard = () => {
-    updateFlip(cardBaseAndGraphic.front, cardBaseAndGraphic.back);
-    cardBaseAndGraphic.faceUp = !cardBaseAndGraphic.faceUp;
-  };
-  // the other option is to have a new flipcard function in the playing file
-
-  // i know you are still working more on flip.... so Ill let you play.
 
   return cardBaseAndGraphic;
 };
