@@ -1,12 +1,12 @@
-import "./style.scss";
-import { interfaceUI, makeFlop } from "./scripts/showUI";
-import TableDeck from "./scripts/tableDeckClass";
 import { make54 } from "./scripts/deckBuilding";
+import { matchGame } from "./scripts/matchingGame/matchIndex";
+import { makeFlop } from "./scripts/showUI";
+import TableDeck from "./scripts/tableDeckClass";
+import "./style.scss";
+
+//matchGame.initiateGame();
 
 // Debug Commands
-
-interfaceUI.showUI();
-
 const Table = new TableDeck();
 Table.deck = make54();
 
@@ -15,9 +15,4 @@ const testFlop = makeFlop(target);
 
 Table.deck.forEach((card) => {
   testFlop.appendChild(card.card);
-  card.parent = testFlop;
 });
-
-document.body.appendChild(testFlop);
-
-
