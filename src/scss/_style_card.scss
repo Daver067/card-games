@@ -1,5 +1,6 @@
 :root {
   --card-size: 70px;
+  --card-flip-speed: 0.2s;
 }
 
 * {
@@ -29,7 +30,7 @@
 .front, .back {
   width: calc(var(--card-size) * 2.5);
   height: calc(var(--card-size) * 3.5);
-  transition: transform 0.3s ease;
+  transition: transform var(--card-flip-speed) ease;
   position: absolute;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;

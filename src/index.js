@@ -6,11 +6,14 @@ import "./style.scss";
 
 //matchGame.initiateGame(); // uncomment this to play match... its broken for now from the merge.
 
+const States = ["idle", "busy"];
+
 interfaceUI.showUI();
 
 // /* comment all this to play match
 const Table = new TableDeck();
 Table.deck = make54();
+Table.state = "idle";
 
 const target = document.body;
 const testFlop = makeFlop(target);
@@ -25,5 +28,8 @@ Table.deck.forEach((card) => {
 
 const flipButton = interfaceUI.flipAllButton;
 flipButton.addEventListener('click', () => {
-  Table.flipBatchDuration(Table.deck, 1000);
+  if(Table.state === "idle"){
+    Table.state = "busy";
+    Table.flipBatchDuration(Table.deck, 2000);
+  };
 });
