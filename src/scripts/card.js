@@ -44,6 +44,10 @@ const Card = () => {
     parent,
     faceUp,
     flipEnabled,
+    basicFlip() {
+      flipHandler.call(this);
+      this.faceUp = true ? (this.faceUp = false) : (this.faceUp = true);
+    },
     blindFlip() {
       const cardParent = this.card.firstElementChild;
 
