@@ -44,6 +44,7 @@ const Card = () => {
     parent,
     faceUp,
     flipEnabled,
+
     blindFlip() {
       const cardParent = this.card.firstElementChild;
 
@@ -66,11 +67,12 @@ const Card = () => {
 
       this.front.classList.toggle("flipped");
     },
+
     flipCard() {
       const cardParent = this.card.firstElementChild;
-
+      
       // flipEnabled stops the user from flipping a card rapidly over and over.
-
+      
       if (this.flipEnabled === true) {
         this.flipEnabled = false;
 
@@ -100,6 +102,23 @@ const Card = () => {
         setTimeout(() => {
           this.front.classList.toggle("flipped");
         }, 1);
+      }
+    },
+
+    // Flips an array of cards with a total time equal to duration
+    flipBatchDuration(cardArray, duration) {
+      const flipDelay = (duration/cardArray.lenght);
+      for (let i = 0; card < cardArray.length; i++) {
+        const element = cardArray[i];
+        setTimeout(this.flipCard, flipDelay);
+      }
+    },
+
+    // Flips an array of cards with a set delay between each flip
+    flipBatchIncrement(cardArray, delay) {
+      for (let i = 0; card < cardArray.length; i++) {
+        const element = cardArray[i];
+        setTimeout(this.flipCard, delay);
       }
     },
   };

@@ -66,6 +66,27 @@ class TableDeck {
   dealCards = () => {
     // deal x amount of cards to y amount of players from this.drawpile
   };
+
+  // Flips an array of cards with a total time equal to duration
+  flipBatchDuration = (cardArray, duration) => {
+    const flipDelay = (duration/cardArray.length);
+    for (let i = 0; i < cardArray.length; i++) {
+      const timeDelay = (flipDelay*i);
+      const element = cardArray[i];
+      setTimeout(function(){element.flipCard()}, timeDelay);
+    }
+  };
+
+  // Flips an array of cards with a set delay between each flip
+  flipBatchIncrement = (cardArray, delay) => {
+    for (let i = 0; i < cardArray.length; i++) {
+      let timeDelay = (delay * i);
+      const element = cardArray[i];
+      console.log(`Time Delay: ${timeDelay}, i = ${i}`)
+      setTimeout(function(){element.flipCard()}, timeDelay);
+    }
+  };
+
 }
 
 export default TableDeck;
