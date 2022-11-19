@@ -1,7 +1,7 @@
 // Creates card object, and handles DOM instantiation
 const Card = () => {
   // PROPERTIES
-  const faceUp = true;
+  const faceUp = false;
   const flipEnabled = true;
   let parent; // Describes where in the DOM the card currently resides
 
@@ -49,32 +49,35 @@ const Card = () => {
     flipCard() {
       const cardParent = this.card.getElementsByClassName("card")[0];
 
+      // flipEnabled stops the user from flipping a card rapidly over and over.
       if (this.flipEnabled === true) {
         this.flipEnabled = false;
-        if (this.faceUp) {
-          this.front.classList.toggle("flipped");
-          this.back.classList.toggle("flipped");
-        } else {
-          cardParent.insertBefore(this.front, cardParent.firstChild);
-          this.back.classList.toggle("flipped");
-          this.front.classList.remove("flipped");
+
+        if (this.faceUp === false) {
+          cardParent.appendChild(this.front);
         }
-        const flipStatus = this.front.classList.contains("flipped");
-        if (flipStatus === false) {
+
+        setTimeout(() => {
+          this.front.classList.toggle("flipped");
+        }, 1);
+        this.back.classList.toggle("flipped");
+
+        if (this.faceUp === false) {
           this.faceUp = true;
           const waitForFlip = () => {
             this.flipEnabled = true;
+            this.card.removeEventListener("transitionend", waitForFlip);
           };
           this.card.addEventListener("transitionend", waitForFlip);
         } else {
           const removeFront = () => {
-            this.backcard.removeEventListener("transitionend", removeFront);
-            const cardFront = card.getElementsByClassName("front")[0];
+            this.card.removeEventListener("transitionend", removeFront);
+            const cardFront = this.card.getElementsByClassName("front")[0];
             cardParent.removeChild(cardFront);
             this.faceUp = false;
             this.flipEnabled = true;
           };
-          card.addEventListener("transitionend", removeFront);
+          this.card.addEventListener("transitionend", removeFront);
         }
       }
     },
