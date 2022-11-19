@@ -32,7 +32,6 @@ const Card = () => {
     cardWrapper.appendChild(newCard);
 
     newCard.classList.add("card");
-    newCard.appendChild(front);
     newCard.appendChild(back);
 
     return cardWrapper;
@@ -45,11 +44,33 @@ const Card = () => {
     parent,
     faceUp,
     flipEnabled,
-
-    flipCard() {
-      const cardParent = this.card.getElementsByClassName("card")[0];
+    blindFlip() {
+      const cardParent = this.card.firstElementChild;
 
       // flipEnabled stops the user from flipping a card rapidly over and over.
+
+      if (this.faceUp === false) {
+        cardParent.appendChild(this.front);
+      }
+
+      this.back.classList.toggle("flipped");
+
+      if (this.faceUp === false) {
+        this.faceUp = true;
+        this.flipEnabled = true;
+      } else {
+        cardParent.removeChild(this.front);
+        this.faceUp = false;
+        this.flipEnabled = true;
+      }
+
+      this.front.classList.toggle("flipped");
+    },
+    flipCard() {
+      const cardParent = this.card.firstElementChild;
+
+      // flipEnabled stops the user from flipping a card rapidly over and over.
+
       if (this.flipEnabled === true) {
         this.flipEnabled = false;
 
@@ -57,9 +78,6 @@ const Card = () => {
           cardParent.appendChild(this.front);
         }
 
-        setTimeout(() => {
-          this.front.classList.toggle("flipped");
-        }, 1);
         this.back.classList.toggle("flipped");
 
         if (this.faceUp === false) {
@@ -72,13 +90,16 @@ const Card = () => {
         } else {
           const removeFront = () => {
             this.card.removeEventListener("transitionend", removeFront);
-            const cardFront = this.card.getElementsByClassName("front")[0];
-            cardParent.removeChild(cardFront);
+            cardParent.removeChild(this.front);
             this.faceUp = false;
             this.flipEnabled = true;
           };
           this.card.addEventListener("transitionend", removeFront);
         }
+
+        setTimeout(() => {
+          this.front.classList.toggle("flipped");
+        }, 1);
       }
     },
   };

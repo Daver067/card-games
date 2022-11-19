@@ -238,7 +238,6 @@ const Playing = (num, Suit) => {
     const newCardDom = document.createElement("div");
     cardWrapper.appendChild(newCardDom);
     newCardDom.classList.add("card");
-    newCardDom.appendChild(front);
     newCardDom.appendChild(back);
     front.classList.toggle("flipped");
     back.classList.toggle("flipped");

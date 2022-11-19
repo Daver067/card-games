@@ -12,6 +12,9 @@ Table.deck = make54();
 
 const target = document.body;
 const testFlop = makeFlop(target);
+Table.deck.forEach((card) => {
+  card.blindFlip();
+});
 
 Table.deck.forEach((card) => {
   testFlop.appendChild(card.card);
