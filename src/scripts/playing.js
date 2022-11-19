@@ -1,29 +1,52 @@
-const Playing = (instance, card_number, card_suit) => {
+const Playing = (num, Suit) => {
   // Properties
+
+  const number = num;
+  const suit = Suit;
+  const color = (() => {
+    let cardColor;
+    if (Suit === "♦" || Suit === "♥") {
+      cardColor = "red";
+    }
+    if (Suit === "♠" || Suit === "♣") {
+      cardColor = "black";
+    }
+    return cardColor;
+  })();
   const name = (() => {
     let suitString;
-    switch (card_suit) {
-      case "♦": suitString = "Diamonds";
-      case "♥": suitString = "Hearts";
-      case "♠": suitString = "Spades";
-      case "♣": suitString = "Clubs";
+    switch (Suit) {
+      case "♦":
+        suitString = "Diamonds";
         break;
+      case "♥":
+        suitString = "Hearts";
+        break;
+      case "♠":
+        suitString = "Spades";
+        break;
+      case "♣":
+        suitString = "Clubs";
+        break;
+      default:
+        suitString = "Joker";
+        return `Joker`;
     }
-    return(`${card_number} of ${suitString}`);
+    return `${num} of ${suitString}`;
   })();
 
-  const number = card_number;
-  const suit = card_suit; // True of False, describes whether card is face up or down // Describes where in the DOM the card currently resides
-
-  const printFace = (cardObject) => {
-    const card_front = cardObject;
+  const front = (function () {
+    const card = document.createElement("div");
+    card.classList.add("front");
+    card.classList.add("card");
+    card.dataset.number = "front";
     const top_left = document.createElement("div");
     const bottom_right = document.createElement("div");
     // Add CSS classes to DOM object
-    card_front.classList.add("playing"); // Specific to Standard 52 Deck
+    card.classList.add("playing"); // Specific to Standard 52 Deck
 
-    card_front.dataset.suit = suit; 
-    card_front.dataset.number = number;
+    card.dataset.suit = suit;
+    card.dataset.number = number;
 
     top_left.classList.add("top-left");
     bottom_right.classList.add("bottom-right");
@@ -41,12 +64,12 @@ const Playing = (instance, card_number, card_suit) => {
       node.appendChild(cornerNumber);
       node.appendChild(cornerSuit);
       // Adds both corner elements to parent card
-      card_front.appendChild(node);
+      card.appendChild(node);
     });
     // Adds center div to card with class 'card-center'
     const cardCenter = document.createElement("div");
     cardCenter.classList.add("card-center");
-    card_front.appendChild(cardCenter);
+    card.appendChild(cardCenter);
     cardCenter.dataset.number = number;
     cardCenter.dataset.suit = suit;
 
@@ -167,15 +190,15 @@ const Playing = (instance, card_number, card_suit) => {
     };
 
     const makeJoker = () => {
-      card_front.classList.add("back");
-      card_front.classList.remove("playing");
-      card_front.removeChild(top_left);
-      card_front.removeChild(bottom_right);
+      card.classList.add("back");
+      card.classList.remove("playing");
+      card.removeChild(top_left);
+      card.removeChild(bottom_right);
 
       const symbol = document.createElement("div");
-      card_front.appendChild(symbol);
+      card.appendChild(symbol);
 
-      card_front.dataset.number = "joker";
+      card.dataset.number = "joker";
     };
 
     // Determines which of the above functions to run
@@ -195,24 +218,40 @@ const Playing = (instance, card_number, card_suit) => {
     if (number === "K") makeKing();
     if (number === "joker") makeJoker();
 
-    return card_front;
-  };
+    return card;
+  })();
 
-  const printReverse = (cardObject) => {
-    const card_back = cardObject;
+  // makes the new card back
+  const back = (function () {
+    const card = document.createElement("div");
+    card.classList.add("back");
+    card.dataset.number = "back";
     const symbol = document.createElement("div");
-    card_back.appendChild(symbol);
-    return card_back;
-  };
+    card.appendChild(symbol);
+    return card;
+  })();
 
+  // makes a new card
+  const card = (function () {
+    const cardWrapper = document.createElement("div");
+    cardWrapper.classList.add("card-wrapper");
+    const newCardDom = document.createElement("div");
+    cardWrapper.appendChild(newCardDom);
+    newCardDom.classList.add("card");
+    newCardDom.appendChild(back);
+    front.classList.toggle("flipped");
+    back.classList.toggle("flipped");
+    return cardWrapper;
+  })();
 
   return {
-    name,
+    front,
+    back,
+    card,
+    color,
     number,
     suit,
-
-    printFace,
-    printReverse,
+    name,
   };
 };
 

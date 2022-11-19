@@ -14,24 +14,11 @@ const standardDeck = {
 
 // Creates a DOM instance of a blank playing card
 const makePlayingCard = (number, suit) => {
-  const card = Card(); 
-  const playing = Playing(card, number, suit); 
-  const newCard = (Object.assign({}, card, playing));
+  // Object.assign, or {...obj1, ...obj2} will both only update the target {} from left to right... card first, then playing.
+  // without updating the flipCard function, flipCard remembers the values of front and back from its creation.
+  const cardBaseAndGraphic = Object.assign({}, Card(), Playing(number, suit));
 
-  // Add things to a printable list, then print everything on that list.
-  // By having this seperate, you can choose if you want an object to be
-  // graphical or hidden.
-  newCard.printables.push(playing);
-  newCard.printCard();
-  
-
-  // Cleans some variables out of the objects that are no longer needed
-  // after instantiation.
-  delete newCard.printables;
-  delete newCard.printCard;
-  delete newCard.printFace;
-  delete newCard.printReverse;
-  return newCard;
+  return cardBaseAndGraphic;
 };
 
 // Generates a standard deck of 54 cards to a specified target.
@@ -52,6 +39,7 @@ const make54 = () => {
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
       newCard.card.addEventListener("click", () => {
+        // you must now pass the new front and back to the flip
         newCard.flipCard();
       });
     }
@@ -61,15 +49,44 @@ const make54 = () => {
     const joker = makePlayingCard("joker", "joker");
     deck.push(joker);
     joker.card.addEventListener("click", () => {
-      joker.flipCard(joker);
+      joker.flipCard();
     });
     return joker;
   };
 
-  const joker1 = makeJoker();
-  const joker2 = makeJoker();
+  makeJoker();
+  makeJoker();
   return deck;
 };
 
+const make54BASIC = () => {
+  const deck = [];
+  const suitArray = [
+    standardDeck.suit["diamond"],
+    standardDeck.suit["heart"],
+    standardDeck.suit["club"],
+    standardDeck.suit["spade"],
+  ];
 
-export { make54 };
+  for (let index = 0; index < suitArray.length; index++) {
+    const suit = suitArray[index];
+    for (let index2 = 0; index2 < standardDeck.members.length; index2++) {
+      const cardNumber = standardDeck.members[index2];
+      const newCard = makePlayingCard(cardNumber, suit);
+      deck.push(newCard);
+    }
+  }
+
+  const makeJoker = () => {
+    const joker = makePlayingCard("joker", "joker");
+    joker.number = "joker";
+    deck.push(joker);
+    return joker;
+  };
+
+  makeJoker();
+  makeJoker();
+  return deck;
+};
+
+export { make54, make54BASIC };
