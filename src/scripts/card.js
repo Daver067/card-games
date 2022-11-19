@@ -64,7 +64,7 @@ const Card = () => {
 
       setTimeout(() => {
         front.classList.toggle('flipped');
-      }, 1);
+      }, 0);
       back.classList.toggle('flipped');
 
       if(faceUp === false){
