@@ -11,6 +11,7 @@ const initializeGame = () => {
     const surface = buildSurface();
     const stock = buildDraw(surface)
     let deck = buildDeck();
+    console.log(deck);
     deck = shuffle(deck);
     deck = shuffle(deck);
     deck = shuffle(deck);
@@ -26,7 +27,7 @@ const initializeGame = () => {
     return {
         surface,
         deck,
-        draw,
+        stock,
     }
 }
 
@@ -76,12 +77,10 @@ const drawPile = () => {
 
 const shuffle = (deck) => {
     const shuffledDeck = [];
-    const randomize = () => {
-        for (let i = 0; i < deck.length; i++) {
-            const card = deck[i];
-            const randomNum = Math.floor(Math.random() * deck.length);
-            shuffledDeck.splice(randomNum, 0, card);
-        }
+    for (let i = 0; i < deck.length; i++) {
+        const card = deck[i];
+        const randomNum = Math.floor(Math.random() * deck.length);
+        shuffledDeck.splice(randomNum, 0, card);
     }
     return shuffledDeck;
 }
