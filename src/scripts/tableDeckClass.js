@@ -79,7 +79,7 @@ class TableDeck {
     const flipSpeed = cardArray[0].getFlipSpeed();
     const totalDuration = (parseFloat(flipSpeed)*1000)+duration;
     setTimeout(() => {
-      this.state = "idle";
+      this.deck.state = "idle";
     }, totalDuration);
   };
 
@@ -95,7 +95,7 @@ class TableDeck {
     const flipSpeed = cardArray[0].getFlipSpeed();
     const totalDuration = (parseFloat(flipSpeed)*1000)+((cardArray.length+1) * delay);
     setTimeout(() => {
-      this.state = "idle";
+      this.deck.state = "idle";
     }, totalDuration);
   };
 

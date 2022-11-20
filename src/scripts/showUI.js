@@ -52,8 +52,8 @@ const interfaceUI = (function () {
   interfaceDiv.appendChild(flipAllButton);
 
   // Adds UI to document body. Add to top of page
-  const showUI = () => {
-    document.body.appendChild(interfaceDiv);
+  const showUI = (target) => {
+    target.appendChild(interfaceDiv);
   };
 
   cardSizeInput();

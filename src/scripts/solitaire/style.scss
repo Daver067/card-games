@@ -1,20 +1,51 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 100%;
 }
 
 body {
-    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);        
-    background-image: url(/assets/images/45-degree-fabric-light.png);
-}
-
-.board {
     width: 100vw;
     height: 100vh;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);        
+    background-image: url(/assets/images/45-degree-fabric-light.png);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.surface {
+    padding: 2rem 2rem 2rem 6rem;
+    width: 100%;
+    height: 100%;
     background: rgb(107, 33, 33);
     background: url(/assets/images/45-degree-fabric-light.png),
-    radial-gradient( circle farthest-corner at 50.4% 50.5%,  rgb(214, 28, 75) 0%, rgb(40, 0, 10) 90% );;
+    radial-gradient( circle farthest-corner at 50.4% 50.5%,  rgb(214, 28, 75) 0%, rgb(40, 0, 10) 90% );
+
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(calc(var(--card-size) * 2.5), 1fr)
+    );
+    grid-template-rows: repeat(
+      auto-fit,
+      minmax(calc(var(--card-size) * 3.5), 1fr)
+    );
+    grid-auto-flow: row;
+    gap: 1rem;
     
+}
+
+.draw {
+    max-width: calc(var(--card-size) * 2.5);
+    max-height: fit-content;
+    display: grid;
+    grid-template-columns: calc(var(--card-size) * 2.5);
+    grid-auto-rows: 1px;
+    grid-auto-flow: row;
+}
+
+.draw > .card-wrapper > .card {
+    box-shadow: none;
 }

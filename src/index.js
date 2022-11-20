@@ -8,12 +8,10 @@ import "./style.scss";
 
 const States = ["idle", "busy"];
 
-interfaceUI.showUI();
-
 // /* comment all this to play match
 const Table = new TableDeck();
 Table.deck = make54();
-Table.state = "idle";
+Table.deck.state = "idle";
 
 const target = document.body;
 const testFlop = makeFlop(target);
@@ -28,8 +26,10 @@ Table.deck.forEach((card) => {
 
 const flipButton = interfaceUI.flipAllButton;
 flipButton.addEventListener('click', () => {
-  if(Table.state === "idle"){
-    Table.state = "busy";
+  if(Table.deck.state === "idle"){
+    Table.deck.state = "busy";
     Table.flipBatchIncrement(Table.deck, 40);
   };
 });
+
+interfaceUI.showUI(document.body);
