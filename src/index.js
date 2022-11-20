@@ -30,6 +30,6 @@ const flipButton = interfaceUI.flipAllButton;
 flipButton.addEventListener('click', () => {
   if(Table.state === "idle"){
     Table.state = "busy";
-    Table.flipBatchDuration(Table.deck, 2000);
+    Table.flipBatchIncrement(Table.deck, 40);
   };
 });

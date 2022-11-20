@@ -70,6 +70,7 @@ class TableDeck {
   // Flips an array of cards with a total time equal to duration
   flipBatchDuration = (cardArray, duration) => {
     const flipDelay = (duration/cardArray.length);
+    
     for (let i = 0; i < cardArray.length; i++) {
       const timeDelay = (flipDelay*i);
       const element = cardArray[i];
