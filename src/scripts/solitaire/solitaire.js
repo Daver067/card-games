@@ -13,13 +13,10 @@ const initializeGame = () => {
     let deck = buildDeck();
     console.log(deck);
     deck = shuffle(deck);
-    deck = shuffle(deck);
-    deck = shuffle(deck);
-    deck = shuffle(deck);
-    deck = shuffle(deck);
     console.log(deck);
     for (let index = 0; index < deck.length; index++) {
         const card = deck[index];
+        //card.blindFlip();
         stock.stack.appendChild(card.card);
     }
     stock.reverseZ();
@@ -52,6 +49,7 @@ const buildDeck = () => {
 const buildDraw = (target) => {
     const stack = document.createElement('div');
     stack.classList.add('draw');
+    stack.classList.add('shadow');
     target.appendChild(stack);
 
     const reverseZ = () => {
@@ -83,6 +81,13 @@ const shuffle = (deck) => {
         shuffledDeck.splice(randomNum, 0, card);
     }
     return shuffledDeck;
+}
+
+const strongShuffle = (deck, quantity) => {
+    for (let index = 0; index < quantity; index++) {
+        deck = shuffle(deck);
+    }
+    return deck
 }
 
 const game = initializeGame();

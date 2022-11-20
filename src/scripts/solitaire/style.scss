@@ -39,7 +39,7 @@ body {
 
 .draw {
     max-width: calc(var(--card-size) * 2.5);
-    max-height: fit-content;
+    max-height: 294px;
     display: grid;
     grid-template-columns: calc(var(--card-size) * 2.5);
     grid-auto-rows: 1px;
