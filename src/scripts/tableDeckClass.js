@@ -44,13 +44,14 @@ class TableDeck {
   // methods
 
   shuffleDeck = () => {
-    const copiedDeck = [...this.deck];
-    const shuffledDeck = [];
+    const copiedDeck = [...this.deck]; // makes a copy of the original deck, to help not confuse loop using this.deck.length
+    const shuffledDeck = []; // where the shuffled cards get pushed to
     for (let i = 0; i < this.deck.length; i++) {
-      const randomNum = Math.floor(Math.random() * copiedDeck.length);
-      shuffledDeck.push(copiedDeck.splice(randomNum, 1)[0]);
+      // loops this once for each card in deck
+      const randomNum = Math.floor(Math.random() * copiedDeck.length); // makes a random number from 0 - (copied deck length -1) to use as an index
+      shuffledDeck.push(copiedDeck.splice(randomNum, 1)[0]); // copiedDeck.splice returns an array with a random card in it. shuffledDeck.push()[0] adds only the value of the array to shuffled deck
     }
-    this.deck = shuffledDeck;
+    this.deck = shuffledDeck; // refresh this.deck with the shuffled version
   };
 
   /* THIS IS NOW DONE BY THE CARD ITSELF... PROBABLY CAN DELETE. 
