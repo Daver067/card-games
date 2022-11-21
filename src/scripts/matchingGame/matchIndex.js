@@ -29,15 +29,17 @@ const matchGame = {
 
   addflip(card) {
     function flipAndStopFlip() {
+      if (matchGame.firstChoice !== null && matchGame.secondChoice !== null) {
+        return;
+      }
       // the handler so I can add/remove the listener
       card.flipCard(); // flips it
       card.card.removeEventListener("click", flipAndStopFlip); // stops the card from being flipped back over
+      matchGame.deck.forEach((cardInDeck) => {
+        cardInDeck.card.removeEventListener("click", flipAndStopFlip);
+      });
       if (matchGame.firstChoice === null) {
         matchGame.firstChoice = card; // first card flipped goes to this variable
-        matchGame.deck.forEach((cardInDeck) => {
-          // this is my just trying to remove all the card listeners... I would like to put this function below
-          cardInDeck.card.removeEventListener("click", flipAndStopFlip);
-        });
         return;
       }
       if (matchGame.secondChoice === null) {
@@ -50,6 +52,12 @@ const matchGame = {
         matchGame.secondChoice.matched = true;
         matchGame.firstChoice = null;
         matchGame.secondChoice = null;
+        if (checkWin() === true) {
+          setTimeout(() => {
+            alert("you win!");
+            // clear screen, restart game
+          }, 1001);
+        }
         return;
       }
       // if theres not a match, I want to put the remove event listeners here
@@ -64,15 +72,14 @@ const matchGame = {
 
         matchGame.firstChoice = null;
         matchGame.secondChoice = null;
-
-        // I would like the Set timeout to re-instate the event listeners
-        /*
-        matchGame.deck.forEach((cardInDeck) => {
-          // this is my just trying to remove all the card listeners... I would like to put this function below
-          cardInDeck.card.addEventListener("click", flipAndStopFlip);
-        });
-        */
       }, 1000);
+      function checkWin() {
+        let allMatched = true;
+        matchGame.deck.forEach((cardd) => {
+          if (cardd.matched === false) allMatched = false;
+        });
+        return allMatched;
+      }
     }
     if (card.matched === false) {
       card.card.addEventListener("click", flipAndStopFlip);
