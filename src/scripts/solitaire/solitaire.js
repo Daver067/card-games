@@ -5,17 +5,21 @@ import TableDeck from "../../scripts/tableDeckClass";
 import { make54 } from "../deckBuilding";
 
 const Table = new TableDeck();
+Table.deck = make54();
+Table.deck.state = "idle";
+Table.deck.forEach((card) => {
+    card.blindFlip();
+  });
 
 
 const initializeGame = () => {
     const surface = buildSurface();
     const stock = buildDraw(surface)
-    let deck = buildDeck();
-    console.log(deck);
-    deck = shuffle(deck);
-    console.log(deck);
-    for (let index = 0; index < deck.length; index++) {
-        const card = deck[index];
+    console.log(Table.deck);
+    Table.shuffleDeck();
+    console.log(Table.deck);
+    for (let index = 0; index < Table.deck.length; index++) {
+        const card = Table.deck[index];
         //card.blindFlip();
         stock.stack.appendChild(card.card);
     }
@@ -38,12 +42,11 @@ const buildSurface = () => {
 const buildDeck = () => {
     const Table = new TableDeck();
     Table.deck = make54();
-    const deck = Table.deck;
-    deck.state = "idle";
-    deck.forEach((card) => {
+    Table.deck.state = "idle";
+    Table.deck.forEach((card) => {
         card.blindFlip();
       });
-    return deck
+    return Table.deck;
 }
 
 const buildDraw = (target) => {
