@@ -37,15 +37,5 @@ body {
     
 }
 
-.draw {
-    max-width: calc(var(--card-size) * 2.5);
-    max-height: 294px;
-    display: grid;
-    grid-template-columns: calc(var(--card-size) * 2.5);
-    grid-auto-rows: 1px;
-    grid-auto-flow: row;
-}
 
-.draw > .card-wrapper > .card {
-    box-shadow: none;
-}
+

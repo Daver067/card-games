@@ -31,6 +31,16 @@ button {
   gap: 1rem;
 }
 
+.stack {
+  max-width: calc(var(--card-size) * 2.5);
+  height: fit-content;
+  border-radius: calc(0.15 * var(--card-size));
+  display: grid;
+  grid-template-columns: calc(var(--card-size) * 2.5);
+  grid-auto-rows: 1px;
+  grid-auto-flow: row;
+}
+
 .interface {
   padding: 1rem;
   margin: 1rem 0 1rem 0;

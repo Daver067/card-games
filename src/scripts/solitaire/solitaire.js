@@ -5,25 +5,15 @@ import TableDeck from "../../scripts/tableDeckClass";
 import { make54 } from "../deckBuilding";
 
 const Table = new TableDeck();
-Table.deck = make54();
-Table.deck.state = "idle";
-Table.deck.forEach((card) => {
-    card.blindFlip();
-  });
 
 
 const initializeGame = () => {
     const surface = buildSurface();
-    const stock = buildDraw(surface)
-    console.log(Table.deck);
-    Table.shuffleDeck();
-    console.log(Table.deck);
-    for (let index = 0; index < Table.deck.length; index++) {
-        const card = Table.deck[index];
-        //card.blindFlip();
-        stock.stack.appendChild(card.card);
-    }
-    stock.reverseZ();
+
+    let deck = buildDeck();
+    deck = Table.shuffleDeck(deck);
+
+    const stock = Table.buildStack(deck, surface)
 
     return {
         surface,
@@ -40,7 +30,6 @@ const buildSurface = () => {
 }
 
 const buildDeck = () => {
-    const Table = new TableDeck();
     Table.deck = make54();
     Table.deck.state = "idle";
     Table.deck.forEach((card) => {
@@ -49,42 +38,12 @@ const buildDeck = () => {
     return Table.deck;
 }
 
-const buildDraw = (target) => {
-    const stack = document.createElement('div');
-    stack.classList.add('draw');
-    stack.classList.add('shadow');
-    target.appendChild(stack);
-
-    const reverseZ = () => {
-        const children = stack.children;
-        for (let index = 0; index < children.length; index++) {
-            const card = children[index];
-            card.style.zIndex = (children.length-index);
-        }
-    }
-
-    return {
-    stack,
-    reverseZ,
-
-    };
-}
-
 const drawPile = () => {
     const pile = document.createElement('div');
     pile.classList.add('draw-pile');
     return(pile);
 };
 
-const shuffle = (deck) => {
-    const shuffledDeck = [];
-    for (let i = 0; i < deck.length; i++) {
-        const card = deck[i];
-        const randomNum = Math.floor(Math.random() * deck.length);
-        shuffledDeck.splice(randomNum, 0, card);
-    }
-    return shuffledDeck;
-}
 
 const strongShuffle = (deck, quantity) => {
     for (let index = 0; index < quantity; index++) {
