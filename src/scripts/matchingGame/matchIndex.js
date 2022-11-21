@@ -8,7 +8,7 @@ const matchGame = {
   deck: null,
 
   // sets up the game
-  initiateGame: () => {
+  initiateGame() {
     // Debug Commands.. adds resizing of cards
     interfaceUI.showUI();
 
@@ -17,13 +17,27 @@ const matchGame = {
     Table.deck = make54BASIC();
     const target = document.body;
     const testFlop = makeFlop(target);
-    Table.shuffleDeck();
+    Table.deck = Table.shuffleAnyDeck(Table.deck);
     Table.deck.forEach((cardInDeck) => {
       cardInDeck.matched = false;
       testFlop.appendChild(cardInDeck.card);
     });
     matchGame.deck = Table.deck;
-    matchGame.playRound(matchGame.deck);
+    this.addListeners(matchGame.deck);
+    matchGame.playRounds(matchGame.deck);
+  },
+  playRounds: (deck) => {
+    //getFirstPick();
+    //getSecondPick();
+    //comparePics();
+    //allMatched();
+    //playRound2();
+  },
+
+  addListeners(deck) {
+    deck.forEach((card) => {
+      card.card.addEventListener("click", () => card.flipCard());
+    });
   },
 
   playRound: (deck) => {
