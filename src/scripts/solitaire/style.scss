@@ -35,6 +35,10 @@ body {
   grid-row: 1/2;
 }
 
+.stock:last-child > div {
+
+}
+
 .talon {
   grid-column: 2/3;
   grid-row: 1/2;
