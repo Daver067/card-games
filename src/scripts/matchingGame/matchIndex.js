@@ -18,76 +18,65 @@ const matchGame = {
     const target = document.body;
     const testFlop = makeFlop(target);
     Table.deck = Table.shuffleAnyDeck(Table.deck);
-    Table.deck.forEach((cardInDeck) => {
+    matchGame.deck = Table.deck;
+
+    matchGame.deck.forEach((cardInDeck) => {
       cardInDeck.matched = false;
+      matchGame.addflip(cardInDeck);
       testFlop.appendChild(cardInDeck.card);
     });
-    matchGame.deck = Table.deck;
-    this.addListeners(matchGame.deck);
-    matchGame.playRounds(matchGame.deck);
-  },
-  playRounds: (deck) => {
-    //getFirstPick();
-    //getSecondPick();
-    //comparePics();
-    //allMatched();
-    //playRound2();
   },
 
-  addListeners(deck) {
-    deck.forEach((card) => {
-      card.card.addEventListener("click", () => card.flipCard());
-    });
-  },
-
-  playRound: (deck) => {
-    function allowFlip(card) {
-      if (
-        card.matched === true ||
-        (matchGame.firstChoice !== null &&
-          matchGame.firstChoice.suit === card.suit &&
-          matchGame.firstChoice.number === card.number)
-      ) {
-        return;
-      }
-      card.flipCard();
-
+  addflip(card) {
+    function flipAndStopFlip() {
+      // the handler so I can add/remove the listener
+      card.flipCard(); // flips it
+      card.card.removeEventListener("click", flipAndStopFlip); // stops the card from being flipped back over
       if (matchGame.firstChoice === null) {
-        matchGame.firstChoice = card;
-        console.log(matchGame);
+        matchGame.firstChoice = card; // first card flipped goes to this variable
+        matchGame.deck.forEach((cardInDeck) => {
+          // this is my just trying to remove all the card listeners... I would like to put this function below
+          cardInDeck.card.removeEventListener("click", flipAndStopFlip);
+        });
         return;
       }
-      matchGame.secondChoice = card;
-
-      setTimeout(compare, 400);
-
-      function compare() {
-        if (matchGame.firstChoice.number === matchGame.secondChoice.number) {
-          matchGame.firstChoice.matched = true;
-          matchGame.secondChoice.matched = true;
-        } else {
-          matchGame.firstChoice.flipCard(
-            matchGame.firstChoice.front,
-            matchGame.firstChoice.back
-          );
-          matchGame.secondChoice.flipCard(
-            matchGame.secondChoice.front,
-            matchGame.secondChoice.back
-          );
-        }
-        reset();
+      if (matchGame.secondChoice === null) {
+        // second card flipped goes to this variable
+        matchGame.secondChoice = card;
       }
-
-      function reset() {
+      if (matchGame.firstChoice.number === matchGame.secondChoice.number) {
+        // if theres a match, clear the variables
+        matchGame.firstChoice.matched = true;
+        matchGame.secondChoice.matched = true;
         matchGame.firstChoice = null;
         matchGame.secondChoice = null;
+        return;
       }
+      // if theres not a match, I want to put the remove event listeners here
+      // theres a 1 second delay to show what the second card is, before they are
+
+      setTimeout(() => {
+        matchGame.firstChoice.flipCard.call(matchGame.firstChoice); // fixes my binding problem
+        matchGame.secondChoice.flipCard.call(matchGame.secondChoice); // fixes my binding problem
+
+        matchGame.addflip(matchGame.firstChoice); // if i can get the function to add them all back i can remove these
+        matchGame.addflip(matchGame.secondChoice);
+
+        matchGame.firstChoice = null;
+        matchGame.secondChoice = null;
+
+        // I would like the Set timeout to re-instate the event listeners
+        /*
+        matchGame.deck.forEach((cardInDeck) => {
+          // this is my just trying to remove all the card listeners... I would like to put this function below
+          cardInDeck.card.addEventListener("click", flipAndStopFlip);
+        });
+        */
+      }, 1000);
     }
-    deck.forEach((card) => {
-      card.card.addEventListener("click", () => {
-        allowFlip(card);
-      });
-    });
+    if (card.matched === false) {
+      card.card.addEventListener("click", flipAndStopFlip);
+    }
   },
 };
 

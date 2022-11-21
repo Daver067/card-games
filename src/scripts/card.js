@@ -44,10 +44,14 @@ const Card = () => {
     parent,
     faceUp,
     flipEnabled,
-    basicFlip() {
-      flipHandler.call(this);
-      this.faceUp = true ? (this.faceUp = false) : (this.faceUp = true);
+
+    getFlipSpeed() {
+      const styles = window.getComputedStyle(document.body);
+      const speed = styles.getPropertyValue("--card-flip-speed");
+      console.log(speed);
+      return speed;
     },
+
     blindFlip() {
       const cardParent = this.card.firstElementChild;
 
@@ -70,7 +74,8 @@ const Card = () => {
 
       this.front.classList.toggle("flipped");
     },
-    flipCard() {
+
+    flipCard(delay = 0) {
       const cardParent = this.card.firstElementChild;
 
       // flipEnabled stops the user from flipping a card rapidly over and over.
@@ -82,7 +87,10 @@ const Card = () => {
           cardParent.appendChild(this.front);
         }
 
-        this.back.classList.toggle("flipped");
+        setTimeout(() => {
+          this.front.classList.toggle("flipped");
+          this.back.classList.toggle("flipped");
+        }, delay);
 
         if (this.faceUp === false) {
           this.faceUp = true;
@@ -100,10 +108,6 @@ const Card = () => {
           };
           this.card.addEventListener("transitionend", removeFront);
         }
-
-        setTimeout(() => {
-          this.front.classList.toggle("flipped");
-        }, 1);
       }
     },
   };
