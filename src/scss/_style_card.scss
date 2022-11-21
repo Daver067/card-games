@@ -1,5 +1,5 @@
 :root {
-  --card-size: 70px;
+  --card-size: 65px;
   --card-flip-speed: 0.3s;
 }
 
@@ -26,6 +26,7 @@
   width: calc(var(--card-size) * 2.5);
   height: calc(var(--card-size) * 3.5);
   display: grid;
+  /*box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;*/
 }
 
 .front, .back {
@@ -201,8 +202,4 @@
 .center-flex[data-number= "K"] {
   justify-content: center;
   font-size: calc(var(--card-size) * 2);
-}
-
-.shadow {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }

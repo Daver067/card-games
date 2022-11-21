@@ -102,10 +102,9 @@ class TableDeck {
     }, totalDuration);
   };
 
-   buildStack = (deck, target) => {
+     buildStack = (deck, target, cascade = false) => {
     const stack = document.createElement('div');
     stack.classList.add('stack');
-    stack.classList.add('shadow');
     target.appendChild(stack);
 
     for (let index = 0; index < deck.length; index++) {
@@ -136,7 +135,9 @@ class TableDeck {
         }
     }
 
-    reverseZ();
+    if(!cascade){
+      reverseZ();
+    };
     updateStyle();
 
     return stack

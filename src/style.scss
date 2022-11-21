@@ -32,13 +32,16 @@ button {
 }
 
 .stack {
-  max-width: calc(var(--card-size) * 2.5);
-  height: fit-content;
+  max-width: calc(var(--card-size) * 2.5);;
   border-radius: calc(0.15 * var(--card-size));
   display: grid;
   grid-template-columns: calc(var(--card-size) * 2.5);
-  grid-auto-rows: 1px;
+  grid-auto-rows: calc(var(--card-size)/100);
   grid-auto-flow: row;
+}
+
+.stack > div > div {
+  box-shadow: none;
 }
 
 .interface {
