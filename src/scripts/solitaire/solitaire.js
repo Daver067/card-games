@@ -38,7 +38,8 @@ const Solitaire = () => {
     let tableau4Cards = [deck[10], deck[9], deck[8], deck[7]];
     let tableau5Cards = [deck[16], deck[15], deck[14], deck[12], deck[11]];
     let tableau6Cards = [deck[22], deck[21], deck[20], deck[19], deck[18], deck[17]];
-    let tableau7Cards = [deck[30], deck[29], deck[28], deck[27], deck[25], deck[24], deck[23]];
+    let tableau7Cards = [deck[30], deck[29], deck[28], deck[27], deck[25], deck[24], deck[23], 
+    deck[31], deck[32], deck[33], deck[34], deck[35], deck[36],];
   
     const tableau1 = Table.buildStack(tableau1Cards, surface, true);
     tableau1.classList.add("tableau-1");
