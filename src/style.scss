@@ -1,6 +1,7 @@
 @use "./scss/style_card";
 
 body {
+  width: 100vw;
   background-color: #1c1c1c;
   background-image: url(/assets/images/45-degree-fabric-light.png);
 }
@@ -45,6 +46,10 @@ button {
 
 .stack > div:last-child > div > div {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.cascade {
+  grid-auto-rows: calc(var(--card-size) / 2);
 }
 
 .interface {

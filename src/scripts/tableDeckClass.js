@@ -105,28 +105,12 @@ class TableDeck {
     const stack = document.createElement("div");
     stack.classList.add("stack");
     target.appendChild(stack);
-
+    
     for (let index = 0; index < deck.length; index++) {
       const card = deck[index];
       stack.appendChild(card.card);
     }
-
-    const updateStyle = () => {
-      const style = getComputedStyle(stack);
-      const gridSpace = style.gridAutoRows;
-      const arraySize = deck.length;
-
-      const cardStyle = getComputedStyle(deck[0].card);
-      const cardSize = cardStyle.height;
-
-      const totalSize =
-        arraySize * parseInt(gridSpace) + parseInt(cardSize) - 3;
-      const string = String(totalSize) + "px";
-      console.log(string);
-      stack.style.height = string;
-      //const containerHeight
-    };
-
+    
     const reverseZ = () => {
       const children = stack.children;
       for (let index = 0; index < children.length; index++) {
@@ -135,10 +119,21 @@ class TableDeck {
       }
     };
 
+    const sortZ = () => {
+      const children = stack.children;
+      for (let index = 0; index < children.length; index++) {
+        const card = children[index];
+        card.style.zIndex = index;
+      }
+    };
+    
+    if(cascade) {
+      stack.classList.add('cascade');
+      sortZ();
+    }
     if (!cascade) {
       reverseZ();
-    }
-    updateStyle();
+    } 
 
     return stack;
   };
