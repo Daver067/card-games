@@ -43,7 +43,7 @@ class TableDeck {
 
   // methods
 
-  shuffleAnyDeck = (deck) => {
+  shuffleDeck = (deck) => {
     const copiedDeck = [...deck]; // makes a copy of the original deck, to help not confuse loop using this.deck.length
     const shuffledDeck = []; // where the shuffled cards get pushed to
     for (let i = 0; i < deck.length; i++) {
@@ -66,6 +66,81 @@ class TableDeck {
 
   dealCards = () => {
     // deal x amount of cards to y amount of players from this.drawpile
+  };
+
+  // Flips an array of cards with a total time equal to duration
+  flipBatchDuration = (cardArray, duration) => {
+    const flipDelay = duration / cardArray.length;
+
+    for (let i = 0; i < cardArray.length; i++) {
+      const timeDelay = flipDelay * i;
+      const element = cardArray[i];
+      element.flipCard(timeDelay);
+    }
+    const flipSpeed = cardArray[0].getFlipSpeed();
+    const totalDuration = parseFloat(flipSpeed) * 1000 + duration;
+    setTimeout(() => {
+      this.deck.state = "idle";
+    }, totalDuration);
+  };
+
+  // Flips an array of cards with a set delay between each flip
+  flipBatchIncrement = (cardArray, delay) => {
+    // For each card, flip it after an incrementing delay
+    for (let i = 0; i < cardArray.length; i++) {
+      let timeDelay = delay * i;
+      const element = cardArray[i];
+      element.flipCard(timeDelay);
+    }
+    // Calculate total duration of operation, the change deck state back to idle.
+    const flipSpeed = cardArray[0].getFlipSpeed();
+    const totalDuration =
+      parseFloat(flipSpeed) * 1000 + (cardArray.length + 1) * delay;
+    setTimeout(() => {
+      this.deck.state = "idle";
+    }, totalDuration);
+  };
+
+  buildStack = (deck, target, cascade = false) => {
+    const stack = document.createElement("div");
+    stack.classList.add("stack");
+    target.appendChild(stack);
+
+    for (let index = 0; index < deck.length; index++) {
+      const card = deck[index];
+      stack.appendChild(card.card);
+    }
+
+    const updateStyle = () => {
+      const style = getComputedStyle(stack);
+      const gridSpace = style.gridAutoRows;
+      const arraySize = deck.length;
+
+      const cardStyle = getComputedStyle(deck[0].card);
+      const cardSize = cardStyle.height;
+
+      const totalSize =
+        arraySize * parseInt(gridSpace) + parseInt(cardSize) - 3;
+      const string = String(totalSize) + "px";
+      console.log(string);
+      stack.style.height = string;
+      //const containerHeight
+    };
+
+    const reverseZ = () => {
+      const children = stack.children;
+      for (let index = 0; index < children.length; index++) {
+        const card = children[index];
+        card.style.zIndex = children.length - index;
+      }
+    };
+
+    if (!cascade) {
+      reverseZ();
+    }
+    updateStyle();
+
+    return stack;
   };
 }
 

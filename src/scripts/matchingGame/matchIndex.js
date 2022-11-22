@@ -17,7 +17,7 @@ const matchGame = {
     Table.deck = make54BASIC();
     const target = document.body;
     const testFlop = makeFlop(target);
-    Table.deck = Table.shuffleAnyDeck(Table.deck);
+    Table.deck = Table.shuffleDeck(Table.deck);
     matchGame.deck = Table.deck;
 
     matchGame.deck.forEach((cardInDeck) => {

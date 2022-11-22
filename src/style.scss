@@ -3,7 +3,18 @@
 body {
   background-color: #1c1c1c;
   background-image: url(/assets/images/45-degree-fabric-light.png);
-  padding: 2rem;
+}
+
+button {
+  padding: 0.5rem;
+  height: auto;
+  width: 20%;
+  background-color: rgba(255, 228, 196, 0.742);
+  border-radius: 1rem;
+  border: none;
+  font-size: 2rem;
+  font-weight: 900;
+
 }
 
 .flop {
@@ -20,11 +31,25 @@ body {
   gap: 1rem;
 }
 
+.stack {
+  max-width: calc(var(--card-size) * 2.5);;
+  border-radius: calc(0.15 * var(--card-size));
+  display: grid;
+  grid-template-columns: calc(var(--card-size) * 2.5);
+  grid-auto-rows: calc(var(--card-size)/100);
+  grid-auto-flow: row;
+}
+
+.stack > div > div {
+  box-shadow: none;
+}
+
 .interface {
   padding: 1rem;
   margin: 1rem 0 1rem 0;
   display: flex;
   flex-direction: row;
+  gap: 1rem;
 
   background-color: rgba(95, 158, 160, 0.311);
   border-radius: 1rem;
