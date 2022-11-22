@@ -47,7 +47,7 @@ const Card = () => {
 
     getFlipSpeed() {
       const styles = window.getComputedStyle(document.body);
-      const speed = styles.getPropertyValue('--card-flip-speed');
+      const speed = styles.getPropertyValue("--card-flip-speed");
       console.log(speed);
       return speed;
     },
@@ -77,9 +77,9 @@ const Card = () => {
 
     flipCard(delay = 0) {
       const cardParent = this.card.firstElementChild;
-      
+
       // flipEnabled stops the user from flipping a card rapidly over and over.
-      
+
       if (this.flipEnabled === true) {
         this.flipEnabled = false;
 
@@ -108,8 +108,6 @@ const Card = () => {
           };
           this.card.addEventListener("transitionend", removeFront);
         }
-
-        
       }
     },
   };
