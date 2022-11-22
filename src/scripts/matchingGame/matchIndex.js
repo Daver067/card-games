@@ -10,7 +10,7 @@ const matchGame = {
   // sets up the game
   initiateGame() {
     // Debug Commands.. adds resizing of cards
-    interfaceUI.showUI();
+    interfaceUI.showUI(document.body);
 
     // creates a deck, and appends it to the table
     const Table = new TableDeck();
