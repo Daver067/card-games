@@ -7,8 +7,8 @@ import "./style.scss";
 
 //matchGame.initiateGame(); // uncomment this to play match... its broken for now from the merge.
 
- const game = Solitaire.initializeGame();
- //uncomment to play solitaire
+document.body.appendChild(Solitaire.initializeGame());
+//uncomment to play solitaire
 /* comment all this to play match
 const States = ["idle", "busy"];
 
