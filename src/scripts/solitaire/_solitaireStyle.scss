@@ -42,14 +42,14 @@
   transform: translateY(calc(var(--card-size)*0.10*(-1)));
   transform: rotate(3deg);
   transition-property: all;
-  transition-duration: 100ms;
+  transition-duration: 200ms;
 }
 
 .stack + .cascade > div:has(.front) {
   transform: translateY(0);
   transform: rotate(0);
   transition-property: all;
-  transition-duration: 100ms;
+  transition-duration: 200ms;
 }
 
 .talon {
@@ -75,6 +75,17 @@
 .foundation-4 {
   grid-column: 7/8;
   grid-row: 1/2;
+}
+
+.foundation-1,
+.foundation-2,
+.foundation-3,
+.foundation-4 {
+  width: calc(var(--card-size) * 2.5);
+  height: calc(var(--card-size) * 3.5);
+  background-color: rgba(240, 248, 255, 0.059);
+  border: 2px solid;
+  border-color: rgba(0, 0, 0, 0.331);
 }
 
 .tableau-1 {

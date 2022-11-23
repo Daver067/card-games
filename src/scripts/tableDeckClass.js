@@ -101,18 +101,14 @@ class TableDeck {
     }, totalDuration);
   };
 
-  buildStack = (deck, target, cascade = false) => {
-    const stack = document.createElement("div");
-    stack.classList.add("stack");
-    target.appendChild(stack);
-    
-    for (let index = 0; index < deck.length; index++) {
-      const card = deck[index];
-      stack.appendChild(card.card);
-    }
+  buildStack = (target, cascade = false) => {
+    let cards = [];
+    const element = document.createElement("div");
+    element.classList.add("stack");
+    target.appendChild(element);
     
     const reverseZ = () => {
-      const children = stack.children;
+      const children = element.children;
       for (let index = 0; index < children.length; index++) {
         const card = children[index];
         card.style.zIndex = children.length - index;
@@ -120,7 +116,7 @@ class TableDeck {
     };
 
     const sortZ = () => {
-      const children = stack.children;
+      const children = element.children;
       for (let index = 0; index < children.length; index++) {
         const card = children[index];
         card.style.zIndex = index;
@@ -128,14 +124,17 @@ class TableDeck {
     };
     
     if(cascade) {
-      stack.classList.add('cascade');
+      element.classList.add('cascade');
       sortZ();
     }
     if (!cascade) {
       reverseZ();
     } 
 
-    return stack;
+    return {
+      element,
+      cards,
+    };
   };
 }
 

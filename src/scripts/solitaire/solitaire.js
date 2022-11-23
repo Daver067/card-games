@@ -11,55 +11,36 @@ const Solitaire = () => {
     let deck = buildDeck();
     //deck = Table.shuffleDeck(deck);
   
-    const stock = Table.buildStack(deck, surface);
-    stock.classList.add("stock");
+    // Builds the stock pile where cards are drawn from.
+    const stock = Table.buildStack(surface);
+    stock.element.classList.add("stock");
   
+    // Builds the talon pile, which is a waste pile.
     let talonCards = [deck[4], deck[9], deck[34]];
-    const talon = Table.buildStack(talonCards, surface);
-    talon.classList.add("talon");
+    const talon = Table.buildStack(surface);
+    talon.element.classList.add("talon");
+    
+    // Initiate 4 foundations, where the cards are ultimately stacked
+    const foundation1 = buildFoundation(surface, "foundation-1");
+    const foundation2 = buildFoundation(surface, "foundation-2");
+    const foundation3 = buildFoundation(surface, "foundation-3");
+    const foundation4 = buildFoundation(surface, "foundation-4");
   
-    let foundation1Cards = [deck[0]];
-    let foundation2Cards = [deck[13]];
-    let foundation3Cards = [deck[26]];
-    let foundation4Cards = [deck[39]];
-  
-    const foundation1 = Table.buildStack(foundation1Cards, surface);
-    foundation1.classList.add("foundation-1");
-    const foundation2 = Table.buildStack(foundation2Cards, surface);
-    foundation2.classList.add("foundation-2");
-    const foundation3 = Table.buildStack(foundation3Cards, surface);
-    foundation3.classList.add("foundation-3");
-    const foundation4 = Table.buildStack(foundation4Cards, surface);
-    foundation4.classList.add("foundation-4");
+    // Initiate 7 Tableaus
+    const tableau1 = buildTableau(surface, "tableau-1");
+    const tableau2 = buildTableau(surface, "tableau-2");
+    const tableau3 = buildTableau(surface, "tableau-3");
+    const tableau4 = buildTableau(surface, "tableau-4");
+    const tableau5 = buildTableau(surface, "tableau-5");
+    const tableau6 = buildTableau(surface, "tableau-6");
+    const tableau7 = buildTableau(surface, "tableau-7");
 
-    let tableau1Cards = [deck[1]];
-    let tableau2Cards = [deck[3], deck[2]];
-    let tableau3Cards = [deck[6], deck[5], deck[4]];
-    let tableau4Cards = [deck[10], deck[9], deck[8], deck[7]];
-    let tableau5Cards = [deck[16], deck[15], deck[14], deck[12], deck[11]];
-    let tableau6Cards = [deck[22], deck[21], deck[20], deck[19], deck[18], deck[17]];
-    let tableau7Cards = [deck[30], deck[29], deck[28], deck[27], deck[25], deck[24], deck[23], 
-    deck[31], deck[32], deck[33], deck[34], deck[35], deck[36],];
-  
-    const tableau1 = Table.buildStack(tableau1Cards, surface, true);
-    tableau1.classList.add("tableau-1");
-    const tableau2 = Table.buildStack(tableau2Cards, surface, true);
-    tableau2.classList.add("tableau-2");
-    const tableau3 = Table.buildStack(tableau3Cards, surface, true);
-    tableau3.classList.add("tableau-3");
-    const tableau4 = Table.buildStack(tableau4Cards, surface, true);
-    tableau4.classList.add("tableau-4");
-    const tableau5 = Table.buildStack(tableau5Cards, surface, true);
-    tableau5.classList.add("tableau-5");
-    const tableau6 = Table.buildStack(tableau6Cards, surface, true);
-    tableau6.classList.add("tableau-6");
-    const tableau7 = Table.buildStack(tableau7Cards, surface, true);
-    tableau7.classList.add("tableau-7");
+
   
     return {
-      surface,
-      deck,
-      stock,
+      //surface, deck, stock, talon,
+      //foundation1, foundation2, foundation3, foundation4,
+      //tableau1, tableau2, tableau3, tableau4, tableau5, tableau6, tableau7,
     };
   };
   
@@ -81,11 +62,47 @@ const Solitaire = () => {
     });
     return Table.deck;
   };
+
+  // Builds the foundations where cards are stacked starting with Ace.
+  // target = element that the foundation is appended to.
+  // className = string name of class to add, makes layout simpler.
+  const buildFoundation = (target, className = "") => {
+    let cards = [];
+    const foundation = Table.buildStack(target);
+    const element = foundation.element;
+    element.classList.add(className); // 
+
+    return {
+      element,
+      cards,
+    }
+  }
+
+  // Builds the tableau stacks in the bottom of solitaire where cards are cascaded in order.
+  // target = element that the tableau is appended to.
+  // className = string name of class to add, makes layout simpler.
+  const buildTableau = (target, className = "") => {
+    let cards = [];
+    const location = target;
+    const tableau = Table.buildStack(target, true);
+    const element = tableau.element;
+    element.classList.add(className);
+
+    return {
+      element,
+      cards,
+    }
+  }
   
+
   //const game = initializeGame();
   return {
     initializeGame
   };
+
+
 };
+
+
 
 export default Solitaire();
