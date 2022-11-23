@@ -8,11 +8,13 @@ const Solitaire = () => {
   const initializeGame = () => {
     const surface = buildSurface();
   
+    // Instances new deck without jokers, and then shufflees
     let deck = buildDeck();
-    //deck = Table.shuffleDeck(deck);
+    deck = Table.shuffleDeck(deck);
   
     // Builds the stock pile where cards are drawn from.
-    const stock = Table.buildStack(surface);
+    // The top card of the stack is the last card of the deck array.
+    const stock = Table.buildStack(surface, false);
     stock.element.classList.add("stock");
   
     // Builds the talon pile, which is a waste pile.
@@ -36,6 +38,22 @@ const Solitaire = () => {
     const tableau7 = buildTableau(surface, "tableau-7");
 
 
+    for (let index = 0; index < deck.length; index++) {
+      const card = deck[index];
+      stock.cards.push(card);
+      stock.element.appendChild(card.card);
+    }
+
+    moveCards(1, stock, tableau1);
+    moveCards(2, stock, tableau2);
+    moveCards(3, stock, tableau3);
+    moveCards(4, stock, tableau4);
+    moveCards(5, stock, tableau5);
+    moveCards(6, stock, tableau6);
+    moveCards(7, stock, tableau7);
+
+
+
   
     return {
       //surface, deck, stock, talon,
@@ -54,12 +72,20 @@ const Solitaire = () => {
     return surface;
   };
   
+  // Builds the deck of cards used for the game. Removes the jokers
   const buildDeck = () => {
     Table.deck = make54();
     Table.deck.state = "idle";
     Table.deck.forEach((card) => {
       card.blindFlip();
     });
+    // Remove both jokers
+    for (let index = 0; index < Table.deck.length; index++) {
+      const card = Table.deck[index];
+      if(card.number === "joker"){
+        Table.deck.splice(index, 2);
+      }
+    }
     return Table.deck;
   };
 
@@ -93,9 +119,19 @@ const Solitaire = () => {
       cards,
     }
   }
-  
 
-  //const game = initializeGame();
+  const moveCards = (quantity, source, destination) => {
+    for (let i = 0; i < quantity; i++) {
+      const card = source.cards.pop();
+      
+
+
+      destination.cards.push(card); 
+      destination.element.appendChild(card.card);  
+    }
+    console.log(source.cards);
+  };
+  
   return {
     initializeGame
   };
