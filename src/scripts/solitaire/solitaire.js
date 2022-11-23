@@ -14,6 +14,7 @@ const Solitaire = () => {
     Table.deck.state = "idle";
     Table.deck.forEach((card) => {
       card.blindFlip();
+      card.blindFlip();
     });
     // Remove both jokers
     for (let index = 0; index < Table.deck.length; index++) {
@@ -100,6 +101,19 @@ const Solitaire = () => {
     }
   };
 
+  // Good god I don't know what to call this function. Flips the bottom 
+  // card of each tableau at the start of the game.
+  const flipBottomCards = () => {
+    for (const key in tableaus) {
+      if (Object.hasOwnProperty.call(tableaus, key)) {
+        const tableau = tableaus[key];
+        console.log(tableau.cards[tableau.cards.length-1]);
+        tableau.cards[tableau.cards.length-1].flipCard();
+      }
+     }
+  }
+
+
   // the main doozy which runs all our helper functions
   const buildSurface = () => {
     const table = document.createElement("div");
@@ -113,6 +127,8 @@ const Solitaire = () => {
     // helper function to build tableaus and move cards on the table right now
     // we should break this down into just building the tableaus, then in Initialize add cards to it
     buildTableauAddCards(stock, surface);
+    flipBottomCards();
+
     return table;
   };
 
