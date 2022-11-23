@@ -32,6 +32,7 @@ const buildStack = (target, cascade = false) => {
     element,
     cards,
     reverseZ,
+    sortZ,
   };
 };
 

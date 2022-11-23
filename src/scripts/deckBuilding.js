@@ -38,10 +38,6 @@ const make54 = () => {
       const cardNumber = standardDeck.members[index2];
       const newCard = makePlayingCard(cardNumber, suit);
       deck.push(newCard);
-      newCard.card.addEventListener("click", () => {
-        // you must now pass the new front and back to the flip
-        newCard.flipCard();
-      });
     }
   }
 

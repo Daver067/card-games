@@ -28,7 +28,7 @@ const Solitaire = () => {
 
   // Builds the talon pile, which is a waste pile.
   function buildTalon(surface) {
-    talon = buildStack(surface);
+    talon = buildStack(surface, false);
     talon.element.classList.add("talon");
   }
 
@@ -107,10 +107,23 @@ const Solitaire = () => {
     for (const key in tableaus) {
       if (Object.hasOwnProperty.call(tableaus, key)) {
         const tableau = tableaus[key];
-        console.log(tableau.cards[tableau.cards.length-1]);
         tableau.cards[tableau.cards.length-1].flipCard();
       }
      }
+  }
+
+  const onStockClick = () => {
+    stock.cards[0].card.addEventListener('click', turnStockCard);
+  };
+
+  const turnStockCard = () => {
+    stock.cards[0].card.removeEventListener('click', turnStockCard);
+    const card = stock.cards.pop();
+    talon.cards.push(card);
+    talon.element.insertBefore(card.card, talon.element.firstChild);
+    talon.reverseZ();
+    card.flipCard();
+    onStockClick();
   }
 
 
@@ -128,6 +141,7 @@ const Solitaire = () => {
     // we should break this down into just building the tableaus, then in Initialize add cards to it
     buildTableauAddCards(stock, surface);
     flipBottomCards();
+    onStockClick();
 
     return table;
   };
@@ -148,11 +162,6 @@ const Solitaire = () => {
   const initializeGame = () => {
     const surface = buildSurface();
     // where we do more game initialization
-
-    console.log(stock);
-    console.log(talon);
-    console.log(foundations);
-    console.log(tableaus);
 
     return surface;
   };
