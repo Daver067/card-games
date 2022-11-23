@@ -51,6 +51,7 @@ const Solitaire = () => {
     moveCards(5, stock, tableau5);
     moveCards(6, stock, tableau6);
     moveCards(7, stock, tableau7);
+    stock.reverseZ();
 
 
 

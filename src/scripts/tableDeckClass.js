@@ -134,6 +134,7 @@ class TableDeck {
     return {
       element,
       cards,
+      reverseZ,
     };
   };
 }
