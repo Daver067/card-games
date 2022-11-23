@@ -62,37 +62,6 @@ const Solitaire = () => {
     }
   }
 
-  ///////////////////////////////////////
-  // PROPERTIES
-  ///////////////////////////////////////
-
-  const Table = new TableDeck();
-  const deck = Table.shuffleDeck(buildDeck());
-
-  // The Initializer, we will want to do more
-  const initializeGame = () => {
-    const surface = buildSurface();
-    // where we do more game initialization
-
-    return surface;
-  };
-
-  // the main doozy which runs all our helper functions
-  const buildSurface = () => {
-    const table = document.createElement("div");
-    table.classList.add("solitaire");
-    const surface = document.createElement("div");
-    surface.classList.add("surface");
-    table.appendChild(surface);
-    buildTalon(surface);
-    buildFoundations(surface);
-    const stock = buildStock(surface);
-    // helper function to build tableaus and move cards on the table right now
-    // we should break this down into just building the tableaus, then in Initialize add cards to it
-    buildTableauAddCards(stock, surface);
-    return table;
-  };
-
   // Builds the foundations where cards are stacked starting with Ace.
   // target = element that the foundation is appended to.
   // className = string name of class to add, makes layout simpler.
@@ -133,6 +102,38 @@ const Solitaire = () => {
       destination.cards.push(card);
       destination.element.appendChild(card.card);
     }
+  };
+
+  // the main doozy which runs all our helper functions
+  const buildSurface = () => {
+    const table = document.createElement("div");
+    table.classList.add("solitaire");
+    const surface = document.createElement("div");
+    surface.classList.add("surface");
+    table.appendChild(surface);
+    buildTalon(surface);
+    buildFoundations(surface);
+    const stock = buildStock(surface);
+    // helper function to build tableaus and move cards on the table right now
+    // we should break this down into just building the tableaus, then in Initialize add cards to it
+    buildTableauAddCards(stock, surface);
+    return table;
+  };
+
+  ///////////////////////////////////////
+  // PROPERTIES
+  ///////////////////////////////////////
+
+  const Table = new TableDeck();
+  const deck = Table.shuffleDeck(buildDeck());
+  // probably need to add more props here...
+
+  // The Initializer, we will want to do more
+  const initializeGame = () => {
+    const surface = buildSurface();
+    // where we do more game initialization
+
+    return surface;
   };
 
   return {
