@@ -44,15 +44,23 @@ const interfaceUI = (function () {
     interfaceForm.appendChild(input);
   };
 
+  // Creates button to flip all cards
+  const flipAllButton = document.createElement('button');
+  flipAllButton.type = "button";
+  
+  flipAllButton.textContent = "Flip all Cards!";
+  interfaceDiv.appendChild(flipAllButton);
+
   // Adds UI to document body. Add to top of page
-  const showUI = () => {
-    document.body.appendChild(interfaceDiv);
+  const showUI = (target) => {
+    target.appendChild(interfaceDiv);
   };
 
   cardSizeInput();
 
   return {
     showUI,
+    flipAllButton,
   };
 })();
 

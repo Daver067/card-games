@@ -225,9 +225,9 @@ const Playing = (num, Suit) => {
   const back = (function () {
     const card = document.createElement("div");
     card.classList.add("back");
-    card.dataset.number = "back";
-    const symbol = document.createElement("div");
-    card.appendChild(symbol);
+    const center = document.createElement("div");
+    center.classList.add('back-center');
+    card.appendChild(center);
     return card;
   })();
 
@@ -238,7 +238,6 @@ const Playing = (num, Suit) => {
     const newCardDom = document.createElement("div");
     cardWrapper.appendChild(newCardDom);
     newCardDom.classList.add("card");
-    newCardDom.appendChild(front);
     newCardDom.appendChild(back);
     front.classList.toggle("flipped");
     back.classList.toggle("flipped");

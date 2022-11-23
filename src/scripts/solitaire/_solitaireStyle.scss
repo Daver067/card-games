@@ -1,0 +1,129 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.solitaire {
+    width: 100vw;
+    height: 100vh;
+    background: rgb(107, 33, 33);
+    background: url(/assets/images/45-degree-fabric-light.png),
+    radial-gradient( circle farthest-corner at 50.4% 50.5%,  rgb(214, 28, 75) 0%, rgb(40, 0, 10) 90% );
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.surface {
+    padding-top: 2rem;
+    height: 100%;
+
+
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto auto; 
+    justify-items: center;
+
+    gap: calc(var(--card-size)/5);
+}
+
+.stock {
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+
+.stock > .stack > div:last-child > div > div  {
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.stack + .cascade > div:has(.front):hover {
+  transform: translateY(calc(var(--card-size)*0.10*(-1)));
+  transform: rotate(3deg);
+  transition-property: all;
+  transition-duration: 200ms;
+}
+
+.stack + .cascade > div:has(.front) {
+  transform: translateY(0);
+  transform: rotate(0);
+  transition-property: all;
+  transition-duration: 200ms;
+}
+
+.talon {
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+.foundation-1 {
+  grid-column: 4/5;
+  grid-row: 1/2;
+}
+
+.foundation-2 {
+  grid-column: 5/6;
+  grid-row: 1/2;
+}
+
+.foundation-3 {
+  grid-column: 6/7;
+  grid-row: 1/2;
+}
+
+.foundation-4 {
+  grid-column: 7/8;
+  grid-row: 1/2;
+}
+
+.foundation-1,
+.foundation-2,
+.foundation-3,
+.foundation-4 {
+  width: calc(var(--card-size) * 2.5);
+  height: calc(var(--card-size) * 3.5);
+  background-color: rgba(240, 248, 255, 0.059);
+  border: 2px solid;
+  border-color: rgba(0, 0, 0, 0.331);
+}
+
+.tableau-1 {
+  grid-column: 1/2;
+  grid-row: 2/3;
+}
+
+.tableau-2 {
+  grid-column: 2/3;
+  grid-row: 2/3;
+}
+
+.tableau-3 {
+  grid-column: 3/4;
+  grid-row: 2/3;
+}
+
+.tableau-4 {
+  grid-column: 4/5;
+  grid-row: 2/3;
+}
+
+.tableau-5 {
+  grid-column: 5/6;
+  grid-row: 2/3;
+}
+
+.tableau-6 {
+  grid-column: 6/7;
+  grid-row: 2/3;
+}
+
+.tableau-7 {
+  grid-column: 7/8;
+  grid-row: 2/3;
+}
+
+
+
+
+

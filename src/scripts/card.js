@@ -1,7 +1,7 @@
 // Creates card object, and handles DOM instantiation
 const Card = () => {
   // PROPERTIES
-  const faceUp = true;
+  const faceUp = false;
   const flipEnabled = true;
   let parent; // Describes where in the DOM the card currently resides
 
@@ -32,7 +32,6 @@ const Card = () => {
     cardWrapper.appendChild(newCard);
 
     newCard.classList.add("card");
-    newCard.appendChild(front);
     newCard.appendChild(back);
 
     return cardWrapper;
@@ -46,35 +45,68 @@ const Card = () => {
     faceUp,
     flipEnabled,
 
-    flipCard() {
-      const cardParent = this.card.getElementsByClassName("card")[0];
+    getFlipSpeed() {
+      const styles = window.getComputedStyle(document.body);
+      const speed = styles.getPropertyValue("--card-flip-speed");
+      console.log(speed);
+      return speed;
+    },
+
+    blindFlip() {
+      const cardParent = this.card.firstElementChild;
+
+      // flipEnabled stops the user from flipping a card rapidly over and over.
+
+      if (this.faceUp === false) {
+        cardParent.appendChild(this.front);
+      }
+
+      this.back.classList.toggle("flipped");
+
+      if (this.faceUp === false) {
+        this.faceUp = true;
+        this.flipEnabled = true;
+      } else {
+        cardParent.removeChild(this.front);
+        this.faceUp = false;
+        this.flipEnabled = true;
+      }
+
+      this.front.classList.toggle("flipped");
+    },
+
+    flipCard(delay = 0) {
+      const cardParent = this.card.firstElementChild;
+
+      // flipEnabled stops the user from flipping a card rapidly over and over.
 
       if (this.flipEnabled === true) {
         this.flipEnabled = false;
-        if (this.faceUp) {
+
+        if (this.faceUp === false) {
+          cardParent.appendChild(this.front);
+        }
+
+        setTimeout(() => {
           this.front.classList.toggle("flipped");
           this.back.classList.toggle("flipped");
-        } else {
-          cardParent.insertBefore(this.front, cardParent.firstChild);
-          this.back.classList.toggle("flipped");
-          this.front.classList.remove("flipped");
-        }
-        const flipStatus = this.front.classList.contains("flipped");
-        if (flipStatus === false) {
+        }, delay);
+
+        if (this.faceUp === false) {
           this.faceUp = true;
           const waitForFlip = () => {
             this.flipEnabled = true;
+            this.card.removeEventListener("transitionend", waitForFlip);
           };
           this.card.addEventListener("transitionend", waitForFlip);
         } else {
           const removeFront = () => {
-            this.backcard.removeEventListener("transitionend", removeFront);
-            const cardFront = card.getElementsByClassName("front")[0];
-            cardParent.removeChild(cardFront);
+            this.card.removeEventListener("transitionend", removeFront);
+            cardParent.removeChild(this.front);
             this.faceUp = false;
             this.flipEnabled = true;
           };
-          card.addEventListener("transitionend", removeFront);
+          this.card.addEventListener("transitionend", removeFront);
         }
       }
     },
