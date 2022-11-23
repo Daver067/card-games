@@ -58,7 +58,8 @@ const Solitaire = () => {
 
   function buildTableauAddCards(stock, surface) {
     for (let i = 1; i < 8; i++) {
-      moveCards(i, stock, buildTableau(surface, `tableau-${i}`));
+      const newTableau = buildTableau(surface, `tableau-${i}`);
+      moveCards(i, stock, newTableau);
     }
   }
 
