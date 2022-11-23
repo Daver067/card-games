@@ -1,6 +1,7 @@
 import "./_solitaireStyle.scss";
 import TableDeck from "../tableDeckClass";
 import { make54 } from "../deckBuilding";
+import { buildStack } from "../tableLayouts";
 
 const Solitaire = () => {
   ///////////////////////////////////////////////
@@ -26,22 +27,21 @@ const Solitaire = () => {
 
   // Builds the talon pile, which is a waste pile.
   function buildTalon(surface) {
-    let talonCards = [deck[4], deck[9], deck[34]];
-    const talon = Table.buildStack(surface);
+    talon = buildStack(surface);
     talon.element.classList.add("talon");
   }
 
   // Builds the stock pile where cards are drawn from.
   // The top card of the stack is the last card of the deck array.
   function buildStock(surface) {
-    const stock = Table.buildStack(surface, false);
+    stock = buildStack(surface, false);
     stock.element.classList.add("stock");
     for (let index = 0; index < deck.length; index++) {
       const card = deck[index];
       stock.cards.push(card);
       stock.element.appendChild(card.card);
     }
-    return stock;
+    stock.reverseZ();
   }
 
   // Builds all 4 foundations
@@ -66,34 +66,29 @@ const Solitaire = () => {
   // Builds the foundations where cards are stacked starting with Ace.
   // target = element that the foundation is appended to.
   // className = string name of class to add, makes layout simpler.
-  const buildFoundation = (target, className = "") => {
-    let cards = [];
-    const foundation = Table.buildStack(target);
+  const buildFoundation = (target, className) => {
+    const foundation = buildStack(target);
     const element = foundation.element;
-    element.classList.add(className); //
-
-    // do we need this return obj?
-    return {
-      element,
-      cards,
-    };
+    element.classList.add(className);
+    foundations[className] = {};
+    foundations[className].cards = foundation.cards;
+    foundations[className].element = foundation.element;
   };
 
   // Builds the tableau stacks in the bottom of solitaire where cards are cascaded in order.
   // target = element that the tableau is appended to.
   // className = string name of class to add, makes layout simpler.
-  const buildTableau = (target, className = "") => {
-    let cards = [];
-    const location = target;
-    const tableau = Table.buildStack(target, true);
+  const buildTableau = (target, className) => {
+    const tableau = buildStack(target, true);
     const element = tableau.element;
     element.classList.add(className);
 
-    // do we need this return obj?
-    return {
-      element,
-      cards,
-    };
+    tableaus[className] = {};
+    tableaus[className].location = target;
+    tableaus[className].cards = tableau.cards;
+    tableaus[className].element = element;
+
+    return tableaus[className];
   };
 
   const moveCards = (quantity, source, destination) => {
@@ -114,7 +109,7 @@ const Solitaire = () => {
     table.appendChild(surface);
     buildTalon(surface);
     buildFoundations(surface);
-    const stock = buildStock(surface);
+    buildStock(surface);
     // helper function to build tableaus and move cards on the table right now
     // we should break this down into just building the tableaus, then in Initialize add cards to it
     buildTableauAddCards(stock, surface);
@@ -127,12 +122,21 @@ const Solitaire = () => {
 
   const Table = new TableDeck();
   const deck = Table.shuffleDeck(buildDeck());
+  let stock = {};
+  let talon = {};
+  let foundations = {};
+  let tableaus = {};
   // probably need to add more props here...
 
   // The Initializer, we will want to do more
   const initializeGame = () => {
     const surface = buildSurface();
     // where we do more game initialization
+
+    console.log(stock);
+    console.log(talon);
+    console.log(foundations);
+    console.log(tableaus);
 
     return surface;
   };
