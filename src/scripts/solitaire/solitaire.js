@@ -140,8 +140,8 @@ const Solitaire = () => {
     // helper function to build tableaus and move cards on the table right now
     // we should break this down into just building the tableaus, then in Initialize add cards to it
     buildTableauAddCards(stock, surface);
-    flipBottomCards();
-    onStockClick();
+    flipBottomCards(); // Flips bottom card only of each Tableau after init
+    onStockClick(); // Adds click listener to top stock card to flip card to Talon.
 
     return table;
   };
