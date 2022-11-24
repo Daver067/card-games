@@ -124,7 +124,6 @@ const Solitaire = () => {
     talon.cards.push(card);
 
     card.card.classList.add("slide");
-    console.log(card.card);
     const originX = card.card.offsetLeft;
     const originY = card.card.offsetTop;
 
@@ -132,9 +131,11 @@ const Solitaire = () => {
     talon.element.insertBefore(card.card, talon.element.firstChild);
 
     
-    
+    const talonIndex = talon.cards.indexOf(card);
+    console.log(talonIndex);
+
     const targetX = card.card.offsetLeft;
-    const targetY = card.card.offsetTop;
+    const targetY = card.card.offsetTop - talonIndex;
 
     const diffX = targetX - originX;
     const diffY = targetY - originY;
