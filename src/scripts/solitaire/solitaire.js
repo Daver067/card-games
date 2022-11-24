@@ -118,12 +118,40 @@ const Solitaire = () => {
 
   const turnStockCard = () => {
     stock.cards[0].card.removeEventListener('click', turnStockCard);
+
+
     const card = stock.cards.pop();
     talon.cards.push(card);
+
+    card.card.classList.add("slide");
+    console.log(card.card);
+    const originX = card.card.offsetLeft;
+    const originY = card.card.offsetTop;
+
+    card.card.style.zIndex = 100;
     talon.element.insertBefore(card.card, talon.element.firstChild);
-    talon.reverseZ();
+
+    
+    
+    const targetX = card.card.offsetLeft;
+    const targetY = card.card.offsetTop;
+
+    const diffX = targetX - originX;
+    const diffY = targetY - originY;
+    
+    
+    card.card.style.left = originX + 'px';
+    card.card.style.top = originY + 'px';
+
+    
+    card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
+
     card.flipCard();
-    onStockClick();
+
+    setTimeout(() => {
+      talon.reverseZ();
+      onStockClick();
+    }, 200)
   }
 
 
