@@ -1,5 +1,5 @@
-import { makeCard } from "../deckBuilding";
-import { Playing } from "../playing";
+import makeCard from "./cardBuilder";
+import { Playing } from "./cardFoundations/playing";
 
 function StandardCards() {
   // Dictionary of Standard 52 Card deck definitions
@@ -21,11 +21,6 @@ function StandardCards() {
   deck.push(makeCard(Playing("joker", "joker")));
   deck.push(makeCard(Playing("joker", "joker")));
 
-  // just to prove it works ill add a couple blankos
-  deck.push(makeCard());
-  deck.push(makeCard());
-  deck.push(makeCard());
-  deck.push(makeCard());
   return deck;
 }
 

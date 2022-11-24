@@ -1,7 +1,7 @@
 import "./_solitaireStyle.scss";
 import TableDeck from "../tableDeckClass";
-import { make54 } from "../deckBuilding";
 import { buildStack } from "../tableLayouts";
+import StandardCards from "../standardPackOfCards";
 
 const Solitaire = () => {
   ///////////////////////////////////////////////
@@ -10,7 +10,7 @@ const Solitaire = () => {
 
   // Builds the deck of cards used for the game. Removes the jokers
   const buildDeck = () => {
-    Table.deck = make54();
+    Table.deck = StandardCards();
     Table.deck.state = "idle";
     Table.deck.forEach((card) => {
       card.blindFlip();
