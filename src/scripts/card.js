@@ -33,6 +33,8 @@ const Card = () => {
 
     newCard.classList.add("card");
     newCard.appendChild(back);
+    front.classList.toggle("flipped");
+    back.classList.toggle("flipped");
 
     return cardWrapper;
   })();
@@ -55,8 +57,6 @@ const Card = () => {
     blindFlip() {
       const cardParent = this.card.firstElementChild;
 
-      // flipEnabled stops the user from flipping a card rapidly over and over.
-
       if (this.faceUp === false) {
         cardParent.appendChild(this.front);
       }
@@ -65,11 +65,9 @@ const Card = () => {
 
       if (this.faceUp === false) {
         this.faceUp = true;
-        this.flipEnabled = true;
       } else {
         cardParent.removeChild(this.front);
         this.faceUp = false;
-        this.flipEnabled = true;
       }
 
       this.front.classList.toggle("flipped");
@@ -113,4 +111,4 @@ const Card = () => {
   };
 };
 
-export { Card };
+export default Card;

@@ -1,4 +1,4 @@
-import { Card } from "./card";
+import Card from "./card";
 import { Playing } from "./playing";
 
 // Dictionary of Standard 52 Card deck definitions
@@ -20,6 +20,21 @@ const makePlayingCard = (number, suit) => {
 
   return cardBaseAndGraphic;
 };
+
+// the truest form of makeCard.
+// takes either no arguments and spits out a blank card, or takes as many templates and applied them to the card
+// example template would be makeCard(Playing('2', '♦'))
+// or => const newPlayingCard = Playing('2', '♦');
+// makeCard(newPlayingCard)
+function makeCard() {
+  const cardBase = Card(); // makes the base of the card
+  const args = [...arguments]; // takes all arguments entered and put them in an array
+  const newCard = Object.assign({}, cardBase, ...args); // returns a new object made from the base card, and any other objects passed
+
+  // return Object.assign({}, Card(), ...arguments); Because I like to shortform things, this line is all thats needed.
+
+  return newCard;
+}
 
 // Generates a standard deck of 54 cards to a specified target.
 // Same as a 52 card deck, but incldues two jokers
@@ -55,34 +70,4 @@ const make54 = () => {
   return deck;
 };
 
-const make54BASIC = () => {
-  const deck = [];
-  const suitArray = [
-    standardDeck.suit["diamond"],
-    standardDeck.suit["heart"],
-    standardDeck.suit["club"],
-    standardDeck.suit["spade"],
-  ];
-
-  for (let index = 0; index < suitArray.length; index++) {
-    const suit = suitArray[index];
-    for (let index2 = 0; index2 < standardDeck.members.length; index2++) {
-      const cardNumber = standardDeck.members[index2];
-      const newCard = makePlayingCard(cardNumber, suit);
-      deck.push(newCard);
-    }
-  }
-
-  const makeJoker = () => {
-    const joker = makePlayingCard("joker", "joker");
-    joker.number = "joker";
-    deck.push(joker);
-    return joker;
-  };
-
-  makeJoker();
-  makeJoker();
-  return deck;
-};
-
-export { make54, make54BASIC };
+export { make54, makeCard };

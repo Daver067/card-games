@@ -101,31 +101,30 @@ const Solitaire = () => {
     }
   };
 
-  // Good god I don't know what to call this function. Flips the bottom 
+  // Good god I don't know what to call this function. Flips the bottom
   // card of each tableau at the start of the game.
   const flipBottomCards = () => {
     for (const key in tableaus) {
       if (Object.hasOwnProperty.call(tableaus, key)) {
         const tableau = tableaus[key];
-        tableau.cards[tableau.cards.length-1].flipCard();
+        tableau.cards[tableau.cards.length - 1].flipCard();
       }
-     }
-  }
+    }
+  };
 
   const onStockClick = () => {
-    stock.cards[0].card.addEventListener('click', turnStockCard);
+    stock.cards[0].card.addEventListener("click", turnStockCard);
   };
 
   const turnStockCard = () => {
-    stock.cards[0].card.removeEventListener('click', turnStockCard);
+    stock.cards[0].card.removeEventListener("click", turnStockCard);
     const card = stock.cards.pop();
     talon.cards.push(card);
     talon.element.insertBefore(card.card, talon.element.firstChild);
     talon.reverseZ();
     card.flipCard();
     onStockClick();
-  }
-
+  };
 
   // the main doozy which runs all our helper functions
   const buildSurface = () => {
@@ -141,6 +140,7 @@ const Solitaire = () => {
     // we should break this down into just building the tableaus, then in Initialize add cards to it
     buildTableauAddCards(stock, surface);
     flipBottomCards();
+    console.log(tableaus);
     onStockClick();
 
     return table;
