@@ -41,8 +41,8 @@ const Solitaire = () => {
       const card = deck[index];
       stock.cards.push(card);
       stock.element.appendChild(card.card);
+      stock.updateStack();
     }
-    stock.reverseZ();
   }
 
   // Builds all 4 foundations
@@ -88,6 +88,7 @@ const Solitaire = () => {
     tableaus[className].location = target;
     tableaus[className].cards = tableau.cards;
     tableaus[className].element = element;
+    tableaus[className].updateStack = tableau.updateStack();
 
     return tableaus[className];
   };
@@ -108,12 +109,13 @@ const Solitaire = () => {
       if (Object.hasOwnProperty.call(tableaus, key)) {
         const tableau = tableaus[key];
         tableau.cards[tableau.cards.length-1].flipCard();
+        tableau.updateStack;
       }
      }
   }
 
   const onStockClick = () => {
-    stock.cards[0].card.addEventListener('click', turnStockCard);
+    stock.cards[stock.cards.length-1].card.addEventListener('click', turnStockCard);
   };
 
   const turnStockCard = () => {
@@ -127,25 +129,25 @@ const Solitaire = () => {
     const originX = card.card.offsetLeft;
     const originY = card.card.offsetTop;
 
-    card.card.style.zIndex = 100;
-    talon.element.insertBefore(card.card, talon.element.firstChild);
+    talon.element.appendChild(card.card);
+    talon.updateStack();
 
     
     const talonIndex = talon.cards.indexOf(card);
     console.log(talonIndex);
 
-    const targetX = card.card.offsetLeft;
-    const targetY = card.card.offsetTop - talonIndex;
+    //const targetX = card.card.offsetLeft;
+    //const targetY = card.card.offsetTop - talonIndex;
 
-    const diffX = targetX - originX;
-    const diffY = targetY - originY;
+    //const diffX = targetX - originX;
+    //const diffY = targetY + originY;
     
     
-    card.card.style.left = originX + 'px';
-    card.card.style.top = originY + 'px';
+    //card.card.style.left = originX + 'px';
+    //card.card.style.top = originY + 'px';
 
     
-    card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
+    //card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
 
     card.flipCard();
 
