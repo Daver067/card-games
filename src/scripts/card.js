@@ -33,6 +33,8 @@ const Card = () => {
 
     newCard.classList.add("card");
     newCard.appendChild(back);
+    front.classList.toggle("flipped");
+    back.classList.toggle("flipped");
 
     return cardWrapper;
   })();
@@ -122,4 +124,4 @@ const Card = () => {
   };
 };
 
-export { Card };
+export default Card;

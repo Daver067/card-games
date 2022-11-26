@@ -1,15 +1,10 @@
-import { make54 } from "./scripts/deckBuilding";
-import { matchGame } from "./scripts/matchingGame/matchIndex";
-import { interfaceUI, makeFlop } from "./scripts/showUI";
+import matchGame from "./scripts/matchingGame/matchIndex";
 import Solitaire from "./scripts/solitaire/solitaire";
 import TableDeck from "./scripts/tableDeckClass";
 import Playground from "./scripts/deckDisplay/stacks";
 import "./style.scss";
 
-matchGame.initiateGame(); // uncomment this to play match... its broken for now from the merge.
-
-
-
+document.body.appendChild(matchGame.initiateGame()); // uncomment this to play match.
 
 //document.body.appendChild(Solitaire.initializeGame());
 //uncomment to play solitaire

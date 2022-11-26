@@ -1,6 +1,6 @@
 import { interfaceUI, makeFlop } from "../showUI";
 import TableDeck from "../tableDeckClass";
-import { make54BASIC } from "../deckBuilding";
+import StandardCards from "./standardPackOfCards";
 
 const matchGame = {
   firstChoice: null,
@@ -9,13 +9,15 @@ const matchGame = {
 
   // sets up the game
   initiateGame() {
+    const returnDiv = document.createElement("div");
+
     // Debug Commands.. adds resizing of cards
-    interfaceUI.showUI(document.body);
+    interfaceUI.showUI(returnDiv);
 
     // creates a deck, and appends it to the table
     const Table = new TableDeck();
-    Table.deck = make54BASIC();
-    const target = document.body;
+    Table.deck = StandardCards();
+    const target = returnDiv;
     const testFlop = makeFlop(target);
     Table.deck = Table.shuffleDeck(Table.deck);
     matchGame.deck = Table.deck;
@@ -25,6 +27,7 @@ const matchGame = {
       matchGame.addflip(cardInDeck);
       testFlop.appendChild(cardInDeck.card);
     });
+    return returnDiv;
   },
 
   addflip(card) {
@@ -87,4 +90,4 @@ const matchGame = {
   },
 };
 
-export { matchGame };
+export default matchGame;

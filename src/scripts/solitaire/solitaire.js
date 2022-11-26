@@ -101,7 +101,7 @@ const Solitaire = () => {
     }
   };
 
-  // Good god I don't know what to call this function. Flips the bottom 
+  // Good god I don't know what to call this function. Flips the bottom
   // card of each tableau at the start of the game.
   const flipBottomCards = () => {
     for (const key in tableaus) {
@@ -110,8 +110,8 @@ const Solitaire = () => {
         tableau.cards[tableau.cards.length-1].flipCard();
         console.log(tableau);
       }
-     }
-  }
+    }
+  };
 
   const onStockClick = () => {
     stock.cards[stock.cards.length-1].card.addEventListener('click', turnStockCard);
