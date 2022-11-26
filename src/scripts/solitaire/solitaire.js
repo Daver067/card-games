@@ -96,7 +96,6 @@ const Solitaire = () => {
   const moveCards = (quantity, source, destination) => {
     for (let i = 0; i < quantity; i++) {
       const card = source.cards.pop();
-
       destination.cards.push(card);
       destination.element.appendChild(card.card);
     }
@@ -109,7 +108,7 @@ const Solitaire = () => {
       if (Object.hasOwnProperty.call(tableaus, key)) {
         const tableau = tableaus[key];
         tableau.cards[tableau.cards.length-1].flipCard();
-        tableau.updateStack;
+        console.log(tableau);
       }
      }
   }
@@ -136,18 +135,18 @@ const Solitaire = () => {
     const talonIndex = talon.cards.indexOf(card);
     console.log(talonIndex);
 
-    //const targetX = card.card.offsetLeft;
-    //const targetY = card.card.offsetTop - talonIndex;
+    const targetX = card.card.offsetLeft;
+    const targetY = card.card.offsetTop - talonIndex;
 
-    //const diffX = targetX - originX;
-    //const diffY = targetY + originY;
+    const diffX = targetX - originX;
+    const diffY = targetY + originY;
     
     
-    //card.card.style.left = originX + 'px';
-    //card.card.style.top = originY + 'px';
+    card.card.style.left = diffX + 'px';
+    card.card.style.top = diffY + 'px';
 
     
-    //card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
+    card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
 
     card.flipCard();
 

@@ -29,9 +29,7 @@ const buildStack = (target, cascade = false) => {
       }
     };
     if((element.classList.contains('cascade'))){
-      console.log(cards);
       for (let index = 0; index < cards.length; index++) {
-        console.log("Hello");
         const cardElement = cards[index].card;
         cardElement.style.position = "absolute";
         cardElement.style.top = `${index*5}`;

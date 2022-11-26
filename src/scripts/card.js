@@ -37,7 +37,77 @@ const Card = () => {
     return cardWrapper;
   })();
 
+  function flipCard(delay = 0) {
+    const cardParent = this.card.firstElementChild;
+
+    // flipEnabled stops the user from flipping a card rapidly over and over.
+
+    if (this.flipEnabled === true) {
+      this.flipEnabled = false;
+
+      if (this.faceUp === false) {
+        cardParent.appendChild(this.front);
+      }
+
+      setTimeout(() => {
+        this.front.classList.toggle("flipped");
+        this.back.classList.toggle("flipped");
+      }, delay);
+
+      if (this.faceUp === false) {
+        this.faceUp = true;
+        console.log(this.faceUp);
+        const waitForFlip = () => {
+          this.flipEnabled = true;
+          this.card.removeEventListener("transitionend", waitForFlip);
+        };
+        this.card.addEventListener("transitionend", waitForFlip);
+      } else {
+        const removeFront = () => {
+          this.card.removeEventListener("transitionend", removeFront);
+          cardParent.removeChild(this.front);
+          this.faceUp = false;
+          console.log(this.faceUp);
+          this.flipEnabled = true;
+        };
+        this.card.addEventListener("transitionend", removeFront);
+      }
+    }
+    
+  }
+
+  function getFlipSpeed() {
+    const styles = window.getComputedStyle(document.body);
+    const speed = styles.getPropertyValue("--card-flip-speed");
+    console.log(speed);
+    return speed;
+  }
+
+  function blindFlip() {
+    const cardParent = this.card.firstElementChild;
+
+    // flipEnabled stops the user from flipping a card rapidly over and over.
+
+    if (this.faceUp === false) {
+      cardParent.appendChild(this.front);
+    }
+
+    this.back.classList.toggle("flipped");
+
+    if (this.faceUp === false) {
+      this.faceUp = true;
+      this.flipEnabled = true;
+    } else {
+      cardParent.removeChild(this.front);
+      this.faceUp = false;
+      this.flipEnabled = true;
+    }
+
+    this.front.classList.toggle("flipped");
+  }
+
   return {
+    // Properties
     front,
     back,
     card,
@@ -45,71 +115,10 @@ const Card = () => {
     faceUp,
     flipEnabled,
 
-    getFlipSpeed() {
-      const styles = window.getComputedStyle(document.body);
-      const speed = styles.getPropertyValue("--card-flip-speed");
-      console.log(speed);
-      return speed;
-    },
-
-    blindFlip() {
-      const cardParent = this.card.firstElementChild;
-
-      // flipEnabled stops the user from flipping a card rapidly over and over.
-
-      if (this.faceUp === false) {
-        cardParent.appendChild(this.front);
-      }
-
-      this.back.classList.toggle("flipped");
-
-      if (this.faceUp === false) {
-        this.faceUp = true;
-        this.flipEnabled = true;
-      } else {
-        cardParent.removeChild(this.front);
-        this.faceUp = false;
-        this.flipEnabled = true;
-      }
-
-      this.front.classList.toggle("flipped");
-    },
-
-    flipCard(delay = 0) {
-      const cardParent = this.card.firstElementChild;
-
-      // flipEnabled stops the user from flipping a card rapidly over and over.
-
-      if (this.flipEnabled === true) {
-        this.flipEnabled = false;
-
-        if (this.faceUp === false) {
-          cardParent.appendChild(this.front);
-        }
-
-        setTimeout(() => {
-          this.front.classList.toggle("flipped");
-          this.back.classList.toggle("flipped");
-        }, delay);
-
-        if (this.faceUp === false) {
-          this.faceUp = true;
-          const waitForFlip = () => {
-            this.flipEnabled = true;
-            this.card.removeEventListener("transitionend", waitForFlip);
-          };
-          this.card.addEventListener("transitionend", waitForFlip);
-        } else {
-          const removeFront = () => {
-            this.card.removeEventListener("transitionend", removeFront);
-            cardParent.removeChild(this.front);
-            this.faceUp = false;
-            this.flipEnabled = true;
-          };
-          this.card.addEventListener("transitionend", removeFront);
-        }
-      }
-    },
+    // Functions
+    flipCard,
+    getFlipSpeed,
+    blindFlip,
   };
 };
 
