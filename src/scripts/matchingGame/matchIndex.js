@@ -1,5 +1,5 @@
 import { interfaceUI, makeFlop } from "../showUI";
-import TableDeck from "../tableDeckClass";
+import Deck from "../DeckClass";
 import StandardCards from "../standardPackOfCards";
 
 const matchGame = {
@@ -15,11 +15,10 @@ const matchGame = {
     interfaceUI.showUI(returnDiv);
 
     // creates a deck, and appends it to the table
-    const Table = new TableDeck();
-    Table.deck = StandardCards();
+    const Table = new Deck(StandardCards());
     const target = returnDiv;
     const testFlop = makeFlop(target);
-    Table.deck = Table.shuffleDeck(Table.deck);
+    Table.shuffleDeck();
     matchGame.deck = Table.deck;
 
     matchGame.deck.forEach((cardInDeck) => {

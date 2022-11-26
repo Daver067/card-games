@@ -1,11 +1,11 @@
-import TableDeck from "./tableDeckClass";
+import Deck from "./DeckClass";
 
 class Player {
   constructor(name) {
     this.name = name;
-    this.hand = new TableDeck();
-    this.discardPile = new TableDeck(); // this may be the tableDeck discard pile
-    this.drawPile = new TableDeck(); // this may be the tableDeck draw pile
+    this.hand = new Deck();
+    this.discardPile = new Deck(); // this may be the Deck discard pile
+    this.drawPile = new Deck(); // this may be the Deck draw pile
   }
 
   playCard = () => {

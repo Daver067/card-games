@@ -1,5 +1,5 @@
 import "./_solitaireStyle.scss";
-import TableDeck from "../tableDeckClass";
+import Deck from "../DeckClass";
 import { buildStack } from "../tableLayouts";
 import StandardCards from "../standardPackOfCards";
 
@@ -7,24 +7,6 @@ const Solitaire = () => {
   ///////////////////////////////////////////////
   /////////// HELPER FUNCTIONS
   ///////////////////////////////////////////
-
-  // Builds the deck of cards used for the game. Removes the jokers
-  const buildDeck = () => {
-    Table.deck = StandardCards();
-    Table.deck.state = "idle";
-    Table.deck.forEach((card) => {
-      card.blindFlip();
-      card.blindFlip();
-    });
-    // Remove both jokers
-    for (let index = 0; index < Table.deck.length; index++) {
-      const card = Table.deck[index];
-      if (card.number === "joker") {
-        Table.deck.splice(index, 2);
-      }
-    }
-    return Table.deck;
-  };
 
   // Builds the talon pile, which is a waste pile.
   function buildTalon(surface) {
@@ -37,8 +19,8 @@ const Solitaire = () => {
   function buildStock(surface) {
     stock = buildStack(surface, false);
     stock.element.classList.add("stock");
-    for (let index = 0; index < deck.length; index++) {
-      const card = deck[index];
+    for (let index = 0; index < Table.deck.length; index++) {
+      const card = Table.deck[index];
       stock.cards.push(card);
       stock.element.appendChild(card.card);
     }
@@ -150,8 +132,14 @@ const Solitaire = () => {
   // PROPERTIES
   ///////////////////////////////////////
 
-  const Table = new TableDeck();
-  const deck = Table.shuffleDeck(buildDeck());
+  const Table = new Deck(StandardCards());
+  Table.state = "idle";
+  Table.deck.forEach((card) => {
+    card.blindFlip();
+    card.blindFlip();
+  });
+  Table.removeCard("joker", "joker");
+  Table.removeCard("joker", "joker");
   let stock = {};
   let talon = {};
   let foundations = {};

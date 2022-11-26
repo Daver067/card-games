@@ -1,6 +1,7 @@
-class TableDeck {
-  constructor() {
-    this.deck = [];
+class Deck {
+  constructor(arrayOfCards = []) {
+    // takes an array of cards and makes them the deck... or if none makes empty deck
+    this.deck = arrayOfCards;
   }
   // getters and setters
 
@@ -98,4 +99,4 @@ class TableDeck {
   };
 }
 
-export default TableDeck;
+export default Deck;
