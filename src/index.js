@@ -3,7 +3,7 @@ import { matchGame } from "./scripts/matchingGame/matchIndex";
 import { interfaceUI, makeFlop } from "./scripts/showUI";
 import Solitaire from "./scripts/solitaire/solitaire";
 import TableDeck from "./scripts/tableDeckClass";
-import Playground from "./scripts/stackPlayground/stacks";
+import Playground from "./scripts/deckDisplay/stacks";
 import "./style.scss";
 
 matchGame.initiateGame(); // uncomment this to play match... its broken for now from the merge.
