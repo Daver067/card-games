@@ -1,16 +1,16 @@
 class Deck {
   constructor(arrayOfCards = []) {
     // takes an array of cards and makes them the deck... or if none makes empty deck
-    this.deck = arrayOfCards;
+    this.cards = arrayOfCards;
   }
   // getters and setters
 
-  get deck() {
-    return this._deck;
+  get cards() {
+    return this._cards;
   }
 
-  set deck(newDeck) {
-    this._deck = newDeck;
+  set cards(newDeck) {
+    this._cards = newDeck;
   }
 
   // methods
@@ -25,40 +25,40 @@ class Deck {
       return false;
     }
     // this will be if there are no conditions, or conditions are met
-    this.deck.push(card); // do we want to choose where it goes? this adds it to the end...
+    this.cards.push(card); // do we want to choose where it goes? this adds it to the end...
     return true;
   }
 
   // passes a card to another deck (it MUST be a deck)
-  passCard(targetDeck, card = this.deck[0], rules = null) {
+  passCard(targetDeck, card = this.cards[0], rules = null) {
     if (targetDeck.receiveCard(card, rules) === false) {
       return false;
     }
-    const indexOfCardToRemove = this.deck.indexOf(card);
-    this.deck.splice(indexOfCardToRemove, 1);
+    const indexOfCardToRemove = this.cards.indexOf(card);
+    this.cards.splice(indexOfCardToRemove, 1);
     return true;
   }
 
   // just totally eliminates a card from existence
   removeCard = (cardSuit, cardNum) => {
-    const copiedDeck = [...this.deck];
-    for (let i = 0; i < this.deck.length; i++) {
-      if (this.deck[i].suit === cardSuit && this.deck[i].number === cardNum) {
+    const copiedDeck = [...this.cards];
+    for (let i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].suit === cardSuit && this.cards[i].number === cardNum) {
         copiedDeck.splice(i, 1);
       }
     }
-    this.deck = copiedDeck;
+    this.cards = copiedDeck;
   };
 
   shuffleDeck = () => {
-    const copiedDeck = [...this.deck]; // makes a copy of the original deck, to help not confuse loop using this.deck.length
+    const copiedDeck = [...this.cards]; // makes a copy of the original deck, to help not confuse loop using this.deck.length
     const shuffledDeck = []; // where the shuffled cards get pushed to
-    for (let i = 0; i < this.deck.length; i++) {
+    for (let i = 0; i < this.cards.length; i++) {
       // loops this once for each card in deck
       const randomNum = Math.floor(Math.random() * copiedDeck.length); // makes a random number from 0 - (copied deck length -1) to use as an index
       shuffledDeck.push(copiedDeck.splice(randomNum, 1)[0]); // copiedDeck.splice returns an array with a random card in it. shuffledDeck.push()[0] adds only the value of the array to shuffled deck
     }
-    this.deck = shuffledDeck; // returns shuffled deck
+    this.cards = shuffledDeck; // returns shuffled deck
   };
 
   dealCards = () => {
@@ -77,7 +77,7 @@ class Deck {
     const flipSpeed = cardArray[0].getFlipSpeed();
     const totalDuration = parseFloat(flipSpeed) * 1000 + duration;
     setTimeout(() => {
-      this.deck.state = "idle";
+      this.state = "idle";
     }, totalDuration);
   };
 
@@ -94,7 +94,7 @@ class Deck {
     const totalDuration =
       parseFloat(flipSpeed) * 1000 + (cardArray.length + 1) * delay;
     setTimeout(() => {
-      this.deck.state = "idle";
+      this.state = "idle";
     }, totalDuration);
   };
 }

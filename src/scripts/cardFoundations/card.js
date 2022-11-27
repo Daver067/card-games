@@ -58,7 +58,6 @@ const Card = () => {
 
       if (this.faceUp === false) {
         this.faceUp = true;
-        console.log(this.faceUp);
         const waitForFlip = () => {
           this.flipEnabled = true;
           this.card.removeEventListener("transitionend", waitForFlip);
@@ -69,13 +68,11 @@ const Card = () => {
           this.card.removeEventListener("transitionend", removeFront);
           cardParent.removeChild(this.front);
           this.faceUp = false;
-          console.log(this.faceUp);
           this.flipEnabled = true;
         };
         this.card.addEventListener("transitionend", removeFront);
       }
     }
-    
   }
 
   function getFlipSpeed() {

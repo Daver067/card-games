@@ -1,14 +1,14 @@
 //import buildCribbageStock from "./scripts/cribbageSquares/cribbageStock";
-//import matchGame from "./scripts/matchingGame/matchIndex";
+import matchGame from "./scripts/matchingGame/matchIndex";
 import Solitaire from "./scripts/solitaire/solitaire";
 import { deckDisplay } from "./scripts/deckDisplay/deckDisplay";
 import "./style.scss";
 
 //document.body.appendChild(matchGame.initiateGame()); // uncomment this to play match.
 
-document.body.appendChild(Solitaire.initializeGame()); // uncomment this to play solitaire.
+//document.body.appendChild(Solitaire.initializeGame()); // uncomment this to play solitaire.
 
 //buildCribbageStock();
 
-//const deckDisplayPage = deckDisplay();
-//document.body.appendChild(deckDisplayPage.page); // uncomment this to play match.
+const deckDisplayPage = deckDisplay();
+document.body.appendChild(deckDisplayPage.page); // uncomment this to play match.

@@ -19,8 +19,8 @@ const Solitaire = () => {
   function buildStock(surface) {
     stock = buildStack(surface, false);
     stock.element.classList.add("stock");
-    for (let index = 0; index < Table.deck.length; index++) {
-      const card = Table.deck[index];
+    for (let index = 0; index < Table.cards.length; index++) {
+      const card = Table.cards[index];
       stock.cards.push(card);
       stock.element.appendChild(card.card);
       stock.updateStack();
@@ -89,19 +89,20 @@ const Solitaire = () => {
     for (const key in tableaus) {
       if (Object.hasOwnProperty.call(tableaus, key)) {
         const tableau = tableaus[key];
-        tableau.cards[tableau.cards.length-1].flipCard();
-        console.log(tableau);
+        tableau.cards[tableau.cards.length - 1].flipCard();
       }
     }
   };
 
   const onStockClick = () => {
-    stock.cards[stock.cards.length-1].card.addEventListener('click', turnStockCard);
+    stock.cards[stock.cards.length - 1].card.addEventListener(
+      "click",
+      turnStockCard
+    );
   };
 
   const turnStockCard = () => {
-    stock.cards[0].card.removeEventListener('click', turnStockCard);
-
+    stock.cards[0].card.removeEventListener("click", turnStockCard);
 
     const card = stock.cards.pop();
     talon.cards.push(card);
@@ -113,21 +114,17 @@ const Solitaire = () => {
     talon.element.appendChild(card.card);
     talon.updateStack();
 
-    
     const talonIndex = talon.cards.indexOf(card);
-    console.log(talonIndex);
 
     const targetX = card.card.offsetLeft;
     const targetY = card.card.offsetTop - talonIndex;
 
     const diffX = targetX - originX;
     const diffY = targetY + originY;
-    
-    
-    card.card.style.left = diffX + 'px';
-    card.card.style.top = diffY + 'px';
 
-    
+    card.card.style.left = diffX + "px";
+    card.card.style.top = diffY + "px";
+
     card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
 
     card.flipCard();
@@ -135,9 +132,8 @@ const Solitaire = () => {
     setTimeout(() => {
       talon.reverseZ();
       onStockClick();
-    }, 200)
-  }
-
+    }, 200);
+  };
 
   // the main doozy which runs all our helper functions
   const buildSurface = () => {
@@ -164,7 +160,7 @@ const Solitaire = () => {
 
   const Table = new Deck(StandardCards());
   Table.state = "idle";
-  Table.deck.forEach((card) => {
+  Table.cards.forEach((card) => {
     card.blindFlip();
     card.blindFlip();
   });
