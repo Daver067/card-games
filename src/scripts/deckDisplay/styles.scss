@@ -51,10 +51,21 @@
 	transition-duration: 0.4s;
 }
 
-button,
-.layout {
-	height: min-content;
+button.layout,
+input.layout {
+	height: 60%;
+	min-width: 100px;
 	grid-row: 1/2;
 	color: aliceblue;
 	background-color: black;
+	border: none;
+	border-radius: 0.5rem;
+	text-align: center;
 }
+
+label.layout {
+	font-size: 1.6rem;
+	text-align: right;
+	color: aliceblue;
+}
+

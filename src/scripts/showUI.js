@@ -41,7 +41,7 @@ const interfaceUI = (function () {
     });
     //Adds input field to form
     interfaceForm.appendChild(label);
-    interfaceForm.appendChild(input);
+    return input
   };
 
   // Creates button to flip all cards

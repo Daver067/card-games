@@ -16,10 +16,44 @@ const deckDisplay = () => {
     const cascadeButton = makeTestButton("Cascade");
     const stackButton = makeTestButton("Stack");
     const flipAllButton = makeTestButton("Flip All Cards");
+    const cardSizeButton = (function() {
+      const input = document.createElement("input");
+      //Input Logic
+      input.classList.add("layout");
+      input.name = "card-size";
+      input.type = "number";
+      input.minLength = 1;
+      input.maxLength = 3;
+      input.min = 20;
+      input.max = 150;
+      input.placeholder = "60";
+      //Add logic for when enter key is pressed
+      input.addEventListener("keydown", (event) => {
+        event.preventDefault;
+        if (event.code === "Enter") {
+          const root = document.documentElement;
+          root.style.setProperty("--card-size", `${input.value}px`);
+          stack(deckBase, false);
+        }
+      });
+      
+      return input
+    })();
+    const cardSizeLabel = (function() {
+      const label = document.createElement("label");
+      //label Logic
+      label.classList.add("layout");
+      label.for = "card-size";
+      label.textContent = "Card Size";
+      
+      return label
+    })();
     
     uiHeader.appendChild(cascadeButton);
     uiHeader.appendChild(stackButton);
     uiHeader.appendChild(flipAllButton);
+    uiHeader.appendChild(cardSizeLabel);
+    uiHeader.appendChild(cardSizeButton);
 
     const deckBase = addDeckBase();
     const deck = makeDeck(deckBase);
@@ -27,13 +61,11 @@ const deckDisplay = () => {
     //stack(deckBase);
 
     cascadeButton.addEventListener('click', function(){
-      console.log("Cascade!");
-      cascade(deckBase);
+      cascade(deckBase, true);
     })
 
     stackButton.addEventListener('click', function(){
-      console.log("Stack!");
-      stack(deckBase);
+      stack(deckBase, true);
     })
 
     flipAllButton.addEventListener('click', function(){
@@ -42,7 +74,7 @@ const deckDisplay = () => {
       deck.flipBatchIncrement(deck.cards, 100);
     })
 
-    stack(deckBase);
+    stack(deckBase, false);
 
     return page;
   };
@@ -66,34 +98,52 @@ const deckDisplay = () => {
   }
 
   // Arranges card as vertical stack of one on top of another.
-  function stack(base) {
+  function stack(base, animate = true) {
+    const styles = window.getComputedStyle(document.body);
+    const cardSize = parseInt(styles.getPropertyValue('--card-size'));
+
     const card_elements = Array.from(base.children);
     base.classList.add("layout-stack");
 
-    const styles = window.getComputedStyle(document.body);
-    const cardHeight = parseInt(styles.getPropertyValue('--card-size'));
+    function updateAnimation (card) {
+      if(animate){
+        card.classList.add('layout-transition');
+      } else {
+        card.classList.remove('layout-transition');
+      }
+    }
 
     for (let index = 0; index < card_elements.length; index++) {
       const card = card_elements[index];
       card.classList.add("layout-card");
-      card.classList.add('layout-transition')
-      card.style.transform = `translateY(${index*-(cardHeight/55)}px)`;
+      updateAnimation(card);
+      setTimeout(() => {
+        card.style.transform = `translateY(${index*-(cardSize/80)}px)`;
+      }, 1);
     }
   }
 
   // Arranges cards in a cascade, where one card partially overlaps the last.
-  function cascade(
-    base,
-    direction = "right" /*Controls direction of cascade*/
-  ) {
+  function cascade(base, animate = true) {
+    const styles = window.getComputedStyle(document.body);
+    const cardSize = parseInt(styles.getPropertyValue('--card-size'));
+
     const card_elements = Array.from(base.children);
     base.classList.add("layout-cascade");
+
+    function updateAnimation (card) {
+      if(animate){
+        card.classList.add('layout-transition');
+      } else {
+        card.classList.remove('layout-transition');
+      }
+    }
 
     for (let index = 0; index < card_elements.length; index++) {
       const card = card_elements[index];
       card.classList.add("layout-card");
-      card.classList.add('layout-transition')
-      card.style.transform = `translateY(${index * 35}px)`;
+      updateAnimation(card);
+      card.style.transform = `translateY(${index * (cardSize/2)}px)`;
     }
   }
 

@@ -42,14 +42,12 @@
   transform: translateY(calc(var(--card-size)*0.10*(-1)));
   transform: rotate(3deg);
   transition-property: all;
-  transition-duration: 200ms;
 }
 
 .stack + .cascade > div:has(.front) {
   transform: translateY(0);
   transform: rotate(0);
   transition-property: all;
-  transition-duration: 200ms;
 }
 
 .talon {
@@ -125,7 +123,6 @@
 
 .slide {
   position: absolute;
-  transition: all 0.4s;
 }
 
 
