@@ -10,5 +10,5 @@ import "./style.scss";
 
 //buildCribbageStock();
 
-const deckDisplayPage = deckDisplay();
-document.body.appendChild(deckDisplayPage.page); // uncomment this to play match.
+const deckDisplayPage = deckDisplay().displayTestPage();
+document.body.appendChild(deckDisplayPage); // uncomment this to play match.
