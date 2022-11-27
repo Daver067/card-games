@@ -23,8 +23,8 @@ const Solitaire = () => {
       const card = Table.deck[index];
       stock.cards.push(card);
       stock.element.appendChild(card.card);
+      stock.updateStack();
     }
-    stock.reverseZ();
   }
 
   // Builds all 4 foundations
@@ -70,6 +70,7 @@ const Solitaire = () => {
     tableaus[className].location = target;
     tableaus[className].cards = tableau.cards;
     tableaus[className].element = element;
+    tableaus[className].updateStack = tableau.updateStack();
 
     return tableaus[className];
   };
@@ -77,7 +78,6 @@ const Solitaire = () => {
   const moveCards = (quantity, source, destination) => {
     for (let i = 0; i < quantity; i++) {
       const card = source.cards.pop();
-
       destination.cards.push(card);
       destination.element.appendChild(card.card);
     }
@@ -89,24 +89,55 @@ const Solitaire = () => {
     for (const key in tableaus) {
       if (Object.hasOwnProperty.call(tableaus, key)) {
         const tableau = tableaus[key];
-        tableau.cards[tableau.cards.length - 1].flipCard();
+        tableau.cards[tableau.cards.length-1].flipCard();
+        console.log(tableau);
       }
     }
   };
 
   const onStockClick = () => {
-    stock.cards[0].card.addEventListener("click", turnStockCard);
+    stock.cards[stock.cards.length-1].card.addEventListener('click', turnStockCard);
   };
 
   const turnStockCard = () => {
-    stock.cards[0].card.removeEventListener("click", turnStockCard);
+    stock.cards[0].card.removeEventListener('click', turnStockCard);
+
+
     const card = stock.cards.pop();
     talon.cards.push(card);
-    talon.element.insertBefore(card.card, talon.element.firstChild);
-    talon.reverseZ();
+
+    card.card.classList.add("slide");
+    const originX = card.card.offsetLeft;
+    const originY = card.card.offsetTop;
+
+    talon.element.appendChild(card.card);
+    talon.updateStack();
+
+    
+    const talonIndex = talon.cards.indexOf(card);
+    console.log(talonIndex);
+
+    const targetX = card.card.offsetLeft;
+    const targetY = card.card.offsetTop - talonIndex;
+
+    const diffX = targetX - originX;
+    const diffY = targetY + originY;
+    
+    
+    card.card.style.left = diffX + 'px';
+    card.card.style.top = diffY + 'px';
+
+    
+    card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
+
     card.flipCard();
-    onStockClick();
-  };
+
+    setTimeout(() => {
+      talon.reverseZ();
+      onStockClick();
+    }, 200)
+  }
+
 
   // the main doozy which runs all our helper functions
   const buildSurface = () => {
@@ -121,9 +152,8 @@ const Solitaire = () => {
     // helper function to build tableaus and move cards on the table right now
     // we should break this down into just building the tableaus, then in Initialize add cards to it
     buildTableauAddCards(stock, surface);
-    flipBottomCards();
-    console.log(tableaus);
-    onStockClick();
+    flipBottomCards(); // Flips bottom card only of each Tableau after init
+    onStockClick(); // Adds click listener to top stock card to flip card to Talon.
 
     return table;
   };

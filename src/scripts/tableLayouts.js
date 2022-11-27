@@ -20,6 +20,25 @@ const buildStack = (target, cascade = false) => {
     }
   };
 
+  const updateStack = () => {
+    if(!(element.classList.contains('cascade'))){
+      for (let index = 0; index < cards.length; index++) {
+        const cardElement = cards[index].card;
+        cardElement.style.position = "absolute";
+        cardElement.style.bottom = `${index}px`;
+      }
+    };
+    if((element.classList.contains('cascade'))){
+      for (let index = 0; index < cards.length; index++) {
+        const cardElement = cards[index].card;
+        cardElement.style.position = "absolute";
+        cardElement.style.top = `${index*5}`;
+    }
+    };
+      
+    
+  };
+
   if (cascade) {
     element.classList.add("cascade");
     sortZ();
@@ -28,11 +47,13 @@ const buildStack = (target, cascade = false) => {
     reverseZ();
   }
 
+
   return {
     element,
     cards,
     reverseZ,
     sortZ,
+    updateStack,
   };
 };
 

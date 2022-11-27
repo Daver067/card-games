@@ -1,0 +1,30 @@
+.layout-deck-base {
+    position: relative;
+}
+
+.layout-card {
+    position: absolute;
+    box-shadow: none;
+}
+
+.layout-cascade {
+
+}
+
+.layout-stack {
+
+}
+
+.layout-grid {
+
+}
+
+.layout-test-page{
+    width: 100vw;
+    height: 100vh;
+
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
