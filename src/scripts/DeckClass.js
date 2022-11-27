@@ -2,6 +2,7 @@ class Deck {
   constructor(arrayOfCards = []) {
     // takes an array of cards and makes them the deck... or if none makes empty deck
     this.cards = arrayOfCards;
+    this.state = "idle" // Can be "idle" or "busy"
   }
   // getters and setters
 
@@ -69,34 +70,40 @@ class Deck {
   flipBatchDuration (cardArray, duration) {
     const flipDelay = duration / cardArray.length;
 
-    for (let i = 0; i < cardArray.length; i++) {
-      const timeDelay = flipDelay * i;
-      const element = cardArray[i];
-      element.flipCard(timeDelay);
-    }
-    const flipSpeed = cardArray[0].getFlipSpeed();
-    const totalDuration = parseFloat(flipSpeed) * 1000 + duration;
-    setTimeout(() => {
-      this.state = "idle";
-    }, totalDuration);
+    if(this.state === "idle"){
+      this.state = "busy";
+      for (let i = 0; i < cardArray.length; i++) {
+        const timeDelay = flipDelay * i;
+        const element = cardArray[i];
+        element.flipCard(timeDelay);
+      }
+      const flipSpeed = cardArray[0].getFlipSpeed();
+      const totalDuration = parseFloat(flipSpeed) * 1000 + duration;
+      setTimeout(() => {
+        this.state = "idle";
+      }, totalDuration);
+    };
   };
 
   // Flips an array of cards with a set delay between each flip
   flipBatchIncrement (cardArray, delay) {
     // For each card, flip it after an incrementing delay
-    for (let i = 0; i < cardArray.length; i++) {
-      let timeDelay = delay * i;
-      const element = cardArray[i];
-      element.flipCard(timeDelay);
-    }
-    // Calculate total duration of operation, the change deck state back to idle.
-    const flipSpeed = cardArray[0].getFlipSpeed();
-    const totalDuration =
-      parseFloat(flipSpeed) * 1000 + (cardArray.length + 1) * delay;
-    setTimeout(() => {
-      this.state = "idle";
-    }, totalDuration);
-  };
+    if(this.state === "idle"){
+      this.state = "busy";
+      for (let i = 0; i < cardArray.length; i++) {
+        let timeDelay = delay * i;
+        const element = cardArray[i];
+        element.flipCard(timeDelay);
+      }
+      // Calculate total duration of operation, the change deck state back to idle.
+      const flipSpeed = cardArray[0].getFlipSpeed();
+      const totalDuration =
+        parseFloat(flipSpeed) * 1000 + (cardArray.length + 1) * delay;
+      setTimeout(() => {
+        this.state = "idle";
+      }, totalDuration);
+    };
+    };
 
 }
 
