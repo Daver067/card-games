@@ -1,8 +1,8 @@
 import StandardCards from "../standardPackOfCards";
-import TableDeck from "../tableDeckClass";
+import Deck from "../DeckClass";
 
 function buildCribbageStock() {
-  const stock = new TableDeck();
+  const stock = new Deck();
   stock.deck = StandardCards();
   stock.removeCard("joker", "joker");
   stock.removeCard("joker", "joker");

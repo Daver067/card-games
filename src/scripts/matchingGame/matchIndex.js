@@ -1,6 +1,6 @@
 import { interfaceUI, makeFlop } from "../showUI";
-import TableDeck from "../tableDeckClass";
-import StandardCards from "./standardPackOfCards";
+import Deck from "../DeckClass";
+import StandardCards from "../standardPackOfCards";
 
 const matchGame = {
   firstChoice: null,
@@ -15,14 +15,12 @@ const matchGame = {
     interfaceUI.showUI(returnDiv);
 
     // creates a deck, and appends it to the table
-    const Table = new TableDeck();
-    Table.deck = StandardCards();
+    matchGame.deck = new Deck(StandardCards());
     const target = returnDiv;
     const testFlop = makeFlop(target);
-    Table.deck = Table.shuffleDeck(Table.deck);
-    matchGame.deck = Table.deck;
+    matchGame.deck.shuffleDeck();
 
-    matchGame.deck.forEach((cardInDeck) => {
+    matchGame.deck.cards.forEach((cardInDeck) => {
       cardInDeck.matched = false;
       matchGame.addflip(cardInDeck);
       testFlop.appendChild(cardInDeck.card);
@@ -38,7 +36,7 @@ const matchGame = {
       // the handler so I can add/remove the listener
       card.flipCard(); // flips it
       card.card.removeEventListener("click", flipAndStopFlip); // stops the card from being flipped back over
-      matchGame.deck.forEach((cardInDeck) => {
+      matchGame.deck.cards.forEach((cardInDeck) => {
         cardInDeck.card.removeEventListener("click", flipAndStopFlip);
       });
       if (matchGame.firstChoice === null) {
@@ -78,7 +76,7 @@ const matchGame = {
       }, 1000);
       function checkWin() {
         let allMatched = true;
-        matchGame.deck.forEach((cardd) => {
+        matchGame.deck.cards.forEach((cardd) => {
           if (cardd.matched === false) allMatched = false;
         });
         return allMatched;

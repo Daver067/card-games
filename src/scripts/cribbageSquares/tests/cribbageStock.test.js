@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import TableDeck from "../../tableDeckClass";
+import Deck from "../../DeckClass";
 import buildCribbageStock from "../cribbageStock";
 
 test("stock builds a deck and removes jokers", () => {
@@ -20,7 +20,7 @@ test("stock first card is flipped face-up", () => {
 
 test("passing a card from one deck to another with no rules works", () => {
   const stock = buildCribbageStock();
-  const deck = new TableDeck();
+  const deck = new Deck();
   stock.passCard(deck, stock.deck[5]);
 
   expect(deck.deck[0].number).toBe("6");
