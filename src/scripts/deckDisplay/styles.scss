@@ -36,6 +36,15 @@
     align-items: center;
 }
 
-button {
+.layout-header {
+    background-color: rgba(0, 0, 0, 0.566);
+    height: 100%;
+    width: 100vw;
     grid-row: 1/2;
+
+}
+
+button .layout{
+    grid-row: 1/2;
+
 }

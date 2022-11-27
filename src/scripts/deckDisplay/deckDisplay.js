@@ -6,8 +6,11 @@ import { buildStack } from "../tableLayouts";
 const deckDisplay = () => {
     const page = document.createElement('div');
     const uiHeader = document.createElement('div');
+
     page.classList.add('layout-test-page');
-    uiHeader.classList.add('')
+    uiHeader.classList.add('layout-header');
+    page.appendChild(uiHeader);
+    
     const dealer = new TableDeck;
 
     const stackButton = makeTestButton("Stack Cards");
