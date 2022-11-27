@@ -1,5 +1,11 @@
 .layout-deck-base {
     position: relative;
+    width: calc(var(--card-size) * 2.5);
+    height: calc(var(--card-size) * 3.5);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+
+    grid-row: 2/3;
 }
 
 .layout-card {
@@ -24,7 +30,12 @@
     height: 100vh;
 
 
-    display: flex;
-    justify-content: start;
+    display: grid;
+    grid-template-rows: 10% 1fr;
+    justify-content: center;
     align-items: center;
+}
+
+button {
+    grid-row: 1/2;
 }

@@ -5,15 +5,19 @@ import { buildStack } from "../tableLayouts";
 
 const deckDisplay = () => {
     const page = document.createElement('div');
+    const uiHeader = document.createElement('div');
     page.classList.add('layout-test-page');
+    uiHeader.classList.add('')
     const dealer = new TableDeck;
+
+    const stackButton = makeTestButton("Stack Cards");
     
     function makeDeck(target) {
         const deck = dealer.shuffleDeck(make54());
         for (let i = 0; i < deck.length; i++) {
             const card = deck[i];
             target.appendChild(card.card);
-            card.flipCard();
+            card.blindFlip();
         }
         return deck;
     }
@@ -28,26 +32,48 @@ const deckDisplay = () => {
     // Arranges card as vertical stack of one on top of another.
     function stack (base) {
         const card_elements = Array.from(base.children);
+        base.classList.add('layout-cascade');
+
+        const styles = window.getComputedStyle(document.body);
+        const cardHeight = parseInt(styles.getPropertyValue('--card-size'));
+
+        
+        for (let index = 0; index < card_elements.length; index++) {
+            const card = card_elements[index];
+            console.log(cardHeight);
+            card.classList.add('layout-card');
+            card.style.transform = `translateY(${index*-(cardHeight/55)}px)`;
+        }
+
+    };
+
+    // Arranges cards in a cascade, where one card partially overlaps the last.
+    function cascade (base, direction = "down" /*Controls direction of cascade*/) {
+        const card_elements = Array.from(base.children);
         console.log(card_elements);
         base.classList.add('layout-cascade');
 
         for (let index = 0; index < card_elements.length; index++) {
             const card = card_elements[index];
             card.classList.add('layout-card');
-            card.style.transform = `translateY(${index*-5}px)`;
+            card.style.transform = `translateY(${index*+30}px)`;
         }
-
-    };
-
-    // Arranges cards in a cascade, where one card partially overlaps the last.
-    function cascade (deck, direction = "right" /*Controls direction of cascade*/) {
-
     };
 
     // Arranges cards in a grid, by set rows and columns.
     function grid (deck, columns, rows) {
 
     };
+
+    function makeTestButton (text) {
+        const button = document.createElement('buton');
+        button.textContent = text;
+
+        page.appendChild(button);
+        return button;
+    };
+
+    
 
     const deckBase = addDeckBase();
     const deck = makeDeck(deckBase);
