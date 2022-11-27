@@ -66,7 +66,7 @@ class Deck {
   };
 
   // Flips an array of cards with a total time equal to duration
-  flipBatchDuration = (cardArray, duration) => {
+  flipBatchDuration (cardArray, duration) {
     const flipDelay = duration / cardArray.length;
 
     for (let i = 0; i < cardArray.length; i++) {
@@ -82,7 +82,7 @@ class Deck {
   };
 
   // Flips an array of cards with a set delay between each flip
-  flipBatchIncrement = (cardArray, delay) => {
+  flipBatchIncrement (cardArray, delay) {
     // For each card, flip it after an incrementing delay
     for (let i = 0; i < cardArray.length; i++) {
       let timeDelay = delay * i;
@@ -97,6 +97,7 @@ class Deck {
       this.state = "idle";
     }, totalDuration);
   };
+
 }
 
 export default Deck;

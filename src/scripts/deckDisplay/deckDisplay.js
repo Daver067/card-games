@@ -15,9 +15,11 @@ const deckDisplay = () => {
     
     const cascadeButton = makeTestButton("Cascade");
     const stackButton = makeTestButton("Stack");
+    const flipAllButton = makeTestButton("Flip All Cards");
     
     uiHeader.appendChild(cascadeButton);
     uiHeader.appendChild(stackButton);
+    uiHeader.appendChild(flipAllButton);
 
     const deckBase = addDeckBase();
     const deck = makeDeck(deckBase);
@@ -34,6 +36,14 @@ const deckDisplay = () => {
       stack(deckBase);
     })
 
+    flipAllButton.addEventListener('click', function(){
+      console.log("Flip All Cards!");
+      console.log(deck);
+      deck.flipBatchIncrement(deck.cards, 100);
+    })
+
+    stack(deckBase);
+
     return page;
   };
 
@@ -43,7 +53,7 @@ const deckDisplay = () => {
     for (let i = 0; i < deck.cards.length; i++) {
       const card = deck.cards[i];
       target.appendChild(card.card);
-      card.flipCard();
+      card.blindFlip();;
     }
     return deck;
   }
@@ -66,6 +76,7 @@ const deckDisplay = () => {
     for (let index = 0; index < card_elements.length; index++) {
       const card = card_elements[index];
       card.classList.add("layout-card");
+      card.classList.add('layout-transition')
       card.style.transform = `translateY(${index*-(cardHeight/55)}px)`;
     }
   }
@@ -81,6 +92,7 @@ const deckDisplay = () => {
     for (let index = 0; index < card_elements.length; index++) {
       const card = card_elements[index];
       card.classList.add("layout-card");
+      card.classList.add('layout-transition')
       card.style.transform = `translateY(${index * 35}px)`;
     }
   }
