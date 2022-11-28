@@ -78,7 +78,6 @@ const Card = () => {
   function getFlipSpeed() {
     const styles = window.getComputedStyle(document.body);
     const speed = styles.getPropertyValue("--card-flip-speed");
-    console.log(speed);
     return speed;
   }
 

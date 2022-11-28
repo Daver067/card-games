@@ -49,15 +49,20 @@ const deckDisplay = () => {
       return label
     })();
     
-    uiHeader.appendChild(cascadeButton);
-    uiHeader.appendChild(stackButton);
-    uiHeader.appendChild(flipAllButton);
-    uiHeader.appendChild(cardSizeLabel);
-    uiHeader.appendChild(cardSizeButton);
+    // Appends all the UI elements for debugging.
+    [
+      cascadeButton,
+      stackButton,
+      flipAllButton,
+      cardSizeLabel,
+      cardSizeButton,
+    ].forEach(element => {
+      uiHeader.appendChild(element);
+    })
 
     const deckBase = addDeckBase();
     const deck = makeDeck(deckBase);
-    page.appendChild(deckBase);
+    page.appendChild(deckBase.container);
     //stack(deckBase);
 
     cascadeButton.addEventListener('click', function(){
@@ -69,9 +74,9 @@ const deckDisplay = () => {
     })
 
     flipAllButton.addEventListener('click', function(){
-      console.log("Flip All Cards!");
-      console.log(deck);
-      deck.flipBatchIncrement(deck.cards, 100);
+      if(deckBase.deck.state === "idle"){
+        deck.flipBatchDuration(deck.cards, 1000);
+      };
     })
 
     stack(deckBase, false);
@@ -81,10 +86,11 @@ const deckDisplay = () => {
 
   function makeDeck(target) {
     const deck = new Deck(StandardCards());
+    target.deck = deck;
     deck.shuffleDeck();
     for (let i = 0; i < deck.cards.length; i++) {
       const card = deck.cards[i];
-      target.appendChild(card.card);
+      target.container.appendChild(card.card);
       card.blindFlip();;
     }
     return deck;
@@ -94,57 +100,66 @@ const deckDisplay = () => {
   function addDeckBase() {
     const container = document.createElement("div");
     container.classList.add("layout-deck-base");
-    return container;
+    return {
+      container
+    };
   }
 
   // Arranges card as vertical stack of one on top of another.
   function stack(base, animate = true) {
-    const styles = window.getComputedStyle(document.body);
-    const cardSize = parseInt(styles.getPropertyValue('--card-size'));
 
-    const card_elements = Array.from(base.children);
-    base.classList.add("layout-stack");
-
-    function updateAnimation (card) {
-      if(animate){
-        card.classList.add('layout-transition');
-      } else {
-        card.classList.remove('layout-transition');
-      }
-    }
-
-    for (let index = 0; index < card_elements.length; index++) {
-      const card = card_elements[index];
-      card.classList.add("layout-card");
-      updateAnimation(card);
+    if(base.deck.state === "idle"){
+      base.deck.state = "busy";
+      console.log(base.deck.state);
+      const styles = window.getComputedStyle(document.body);
+      const cardSize = parseInt(styles.getPropertyValue('--card-size'));
+  
+      const card_elements = Array.from(base.container.children);
+      base.container.classList.add("layout-stack");
+  
+      for (let index = 0; index < card_elements.length; index++) {
+        const card = card_elements[index];
+        card.classList.add("layout-card");
+        updateAnimation(card, animate);
+        setTimeout(() => {
+          card.style.transform = `translateY(${index*-(cardSize/80)}px)`;
+        }, 1);
+      };
+      const duration = parseFloat(getComputedStyle(base.deck.cards[0].card)['transitionDuration']);
       setTimeout(() => {
-        card.style.transform = `translateY(${index*-(cardSize/80)}px)`;
-      }, 1);
+        base.deck.state = "idle";
+        console.log(base.deck.state);
+      }, (duration*1000));
     }
   }
 
   // Arranges cards in a cascade, where one card partially overlaps the last.
-  function cascade(base, animate = true) {
-    const styles = window.getComputedStyle(document.body);
-    const cardSize = parseInt(styles.getPropertyValue('--card-size'));
+  function cascade(base, 
+    animate = true, // If false, deck will update instantly.
+    direction = "down", // Set to up, down, left, or right
+    ) {
 
-    const card_elements = Array.from(base.children);
-    base.classList.add("layout-cascade");
-
-    function updateAnimation (card) {
-      if(animate){
-        card.classList.add('layout-transition');
-      } else {
-        card.classList.remove('layout-transition');
+    if(base.deck.state === "idle"){
+      base.deck.state = "busy";
+      console.log(base.deck.state);
+      const styles = window.getComputedStyle(document.body);
+      const cardSize = parseInt(styles.getPropertyValue('--card-size'));
+  
+      const card_elements = Array.from(base.container.children);
+      base.container.classList.add("layout-cascade");
+  
+      for (let index = 0; index < card_elements.length; index++) {
+        const card = card_elements[index];
+        card.classList.add("layout-card");
+        updateAnimation(card, animate);
+        card.style.transform = `translateY(${index * (cardSize/2)}px)`;
       }
-    }
-
-    for (let index = 0; index < card_elements.length; index++) {
-      const card = card_elements[index];
-      card.classList.add("layout-card");
-      updateAnimation(card);
-      card.style.transform = `translateY(${index * (cardSize/2)}px)`;
-    }
+      const duration = parseFloat(getComputedStyle(base.deck.cards[0].card)['transitionDuration']);
+      setTimeout(() => {
+        base.deck.state = "idle";
+        console.log(base.deck.state);
+      }, (duration*1000));
+    };
   }
 
     // Arranges cards in a grid, by set rows and columns.
@@ -159,7 +174,15 @@ const deckDisplay = () => {
         return button;
     };
 
-    
+    function updateAnimation (card, animate) {
+      // Where card is the card you want to animate or not,
+      // and animate is either true/false
+      if(animate){
+        card.classList.add('layout-transition');
+      } else {
+        card.classList.remove('layout-transition');
+      }
+    }
 
 
 
