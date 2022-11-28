@@ -5,14 +5,28 @@ import StandardCards from "../standardPackOfCards";
 
 const deckDisplay = () => {
 
+  // Constructs a page for debugging purpose. Can be deleted later
   function displayTestPage() {
+    // Crates a page and a header
     const page = document.createElement("div");
     const uiHeader = document.createElement('div');
   
+    // Adds relevant classes, and adds header to page
     page.classList.add('layout-test-page');
     uiHeader.classList.add('layout-header');
     page.appendChild(uiHeader);
+
+    const testPlatform = document.createElement('div');
+    testPlatform.classList.add('layout-test-platform');
+    page.appendChild(testPlatform);
+    const deckFlex1 = document.createElement('div');
+    deckFlex1.classList.add('layout-test-deck1');
+    testPlatform.appendChild(deckFlex1);
+    const deckFlex2 = document.createElement('div');
+    deckFlex1.classList.add('layout-test-deck2');
+    testPlatform.appendChild(deckFlex2);
     
+    // Constructs debug buttons and elements
     const cascadeButton = makeTestButton("Cascade");
     const stackButton = makeTestButton("Stack");
     const flipAllButton = makeTestButton("Flip All Cards");
@@ -60,11 +74,6 @@ const deckDisplay = () => {
       uiHeader.appendChild(element);
     })
 
-    const deckBase = addDeckBase();
-    const deck = makeDeck(deckBase);
-    page.appendChild(deckBase.container);
-    //stack(deckBase);
-
     cascadeButton.addEventListener('click', function(){
       cascade(deckBase, true);
     })
@@ -77,13 +86,34 @@ const deckDisplay = () => {
       if(deckBase.deck.state === "idle"){
         deck.flipBatchDuration(deck.cards, 1000);
       };
-    })
+    });
 
+
+    const deckBase = addDeckBase();
+    const deck = makeDeck(deckBase);
+    deckFlex1.appendChild(deckBase.container);
     stack(deckBase, false);
+
+    const pile2 = addDeckBase();
+    deckFlex2.appendChild(pile2.container);
+    const cardCount = Math.floor(deckBase.deck.cards.length/2);
+    for (let i = 0; i < 27; i++) {
+      deckBase.deck.passCard(pile2.deck);
+    }
+    pile2.update();
+    cascade(pile2, false);
+
+    console.log(deckBase);
+    console.log(pile2);
 
     return page;
   };
 
+  /* 
+  For debugging, instances a deck at a specified target. In a real world
+  setting, you would add the cards to an empty array on a deckBase, and then
+  update the deckBase.
+  */ 
   function makeDeck(target) {
     const deck = new Deck(StandardCards());
     target.deck = deck;
@@ -91,17 +121,27 @@ const deckDisplay = () => {
     for (let i = 0; i < deck.cards.length; i++) {
       const card = deck.cards[i];
       target.container.appendChild(card.card);
-      card.blindFlip();;
+      card.blindFlip();
     }
     return deck;
   }
 
   // Adds a base the size of the card to be the basis of deck layouts.
   function addDeckBase() {
+    let deck = new Deck(); // Must always equal an array of cards.
     const container = document.createElement("div");
     container.classList.add("layout-deck-base");
+
+    function update() {
+      for (let i = 0; i < deck.cards.length; i++) {
+        const card = deck.cards[i];
+        this.container.appendChild(card.card);
+      }
+    }
     return {
-      container
+      container,
+      deck,
+      update,
     };
   }
 
@@ -110,7 +150,6 @@ const deckDisplay = () => {
 
     if(base.deck.state === "idle"){
       base.deck.state = "busy";
-      console.log(base.deck.state);
       const styles = window.getComputedStyle(document.body);
       const cardSize = parseInt(styles.getPropertyValue('--card-size'));
   
@@ -128,7 +167,6 @@ const deckDisplay = () => {
       const duration = parseFloat(getComputedStyle(base.deck.cards[0].card)['transitionDuration']);
       setTimeout(() => {
         base.deck.state = "idle";
-        console.log(base.deck.state);
       }, (duration*1000));
     }
   }
@@ -141,7 +179,6 @@ const deckDisplay = () => {
 
     if(base.deck.state === "idle"){
       base.deck.state = "busy";
-      console.log(base.deck.state);
       const styles = window.getComputedStyle(document.body);
       const cardSize = parseInt(styles.getPropertyValue('--card-size'));
   
@@ -157,38 +194,42 @@ const deckDisplay = () => {
       const duration = parseFloat(getComputedStyle(base.deck.cards[0].card)['transitionDuration']);
       setTimeout(() => {
         base.deck.state = "idle";
-        console.log(base.deck.state);
       }, (duration*1000));
     };
   }
 
-    // Arranges cards in a grid, by set rows and columns.
-    function grid (deck, columns, rows) {
+  // Arranges cards in a grid, by set rows and columns.
+  function grid (deck, columns, rows) {
 
-    };
+   };
 
-    function makeTestButton (text) {
-        const button = document.createElement('button');
-        button.classList.add('layout');
-        button.textContent = text;
-        return button;
-    };
+  function makeTestButton (text) {
+    const button = document.createElement('button');
+    button.classList.add('layout');
+    button.textContent = text;
+    return button;
+  };
 
-    function updateAnimation (card, animate) {
-      // Where card is the card you want to animate or not,
-      // and animate is either true/false
-      if(animate){
-        card.classList.add('layout-transition');
-      } else {
-        card.classList.remove('layout-transition');
-      }
+  function updateAnimation (card, animate) {
+    /**
+     * This function is to be used within cascade, stack, or other deck
+     * functions with animations. Adds or removes classes to manage animation.
+     */
+    if(animate){
+      card.classList.add('layout-transition');
+    } else {
+      card.classList.remove('layout-transition');
     }
+  }
 
 
 
     
     return {
-        displayTestPage, 
+        displayTestPage,
+        cascade,
+        stack,
+        addDeckBase, 
     }
 };
 

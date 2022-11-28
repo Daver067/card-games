@@ -23,6 +23,9 @@
 .layout-grid {
 }
 
+
+/* FOR DEBUG PURPOSES */
+
 .layout-test-page {
 	width: 100vw;
 	height: 100vh;
@@ -31,6 +34,28 @@
 	grid-template-rows: 10% 1fr;
 	justify-items: center;
 	align-items: center;
+}
+
+.layout-test-platform {
+	height: 80%;
+	display: flex;
+	gap: 3rem;
+	padding: 4rem;
+	grid-row: 2/3;
+}
+
+.layout-test-deck1 {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+}
+
+.layout-test-deck2 {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
 }
 
 .layout-header {
@@ -48,7 +73,7 @@
 
 .layout-transition {
 	transition: all;
-	transition-duration: 3s;
+	transition-duration: 0.4s;
 }
 
 button.layout,
