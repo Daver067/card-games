@@ -1,5 +1,5 @@
 @use "./scss/style_card";
-
+@use "./scripts/deckDisplay/draggable/draggable";
 body {
   width: 100vw;
   background-color: #1c1c1c;
@@ -42,7 +42,8 @@ button {
 }
 
 .stack > div:last-child > div > div {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .cascade {
