@@ -47,7 +47,8 @@ const deckDisplay = () => {
         if (event.code === "Enter") {
           const root = document.documentElement;
           root.style.setProperty("--card-size", `${input.value}px`);
-          stack(deckBase, false);
+          pile1.stack(false);
+          pile2.stack(false);
         }
       });
       
@@ -75,22 +76,22 @@ const deckDisplay = () => {
     })
 
     cascadeButton.addEventListener('click', function(){
-      deckBase.cascade(true);
+      pile2.cascade(true);
     })
 
     stackButton.addEventListener('click', function(){
-      deckBase.stack(true);
+      pile2.stack(true);
     })
 
     flipAllButton.addEventListener('click', function(){
-      if(deckBase.deck.state === "idle"){
-        deck.flipBatchDuration(deck.cards, 1000);
+      if(pile1.deck.state === "idle"){
+        pile2.deck.flipBatchDuration(pile2.deck.cards, 1000);
       };
     });
 
     
-    const deckBase = addDeckBase();
-    deckFlex1.appendChild(deckBase.container);
+    const pile1 = addDeckBase();
+    deckFlex1.appendChild(pile1.container);
     
     const deck = new Deck(StandardCards());
     deck.shuffleDeck();
@@ -102,7 +103,7 @@ const deckDisplay = () => {
 
     for (let index = 0; index < 54; index++) {
       const card = deck.cards[index];
-      deck.passCard(deckBase.deck);
+      deck.passCard(pile1.deck);
     }
 
 
@@ -111,13 +112,16 @@ const deckDisplay = () => {
     
     const pile2 = addDeckBase();
     deckFlex2.appendChild(pile2.container);
-    const cardCount = Math.floor(deckBase.deck.cards.length/2);
-    for (let i = 0; i < 20; i++) {
-      deckBase.deck.passCard(pile2.deck);
+    const cardCount = Math.floor(pile1.deck.cards.length*0.1);
+    for (let i = 0; i < cardCount; i++) {
+      pile1.deck.passCard(pile2.deck);
     }
 
     pile2.cascade(true);
-    deckBase.stack(true);
+    pile1.stack(true);
+
+    const topCard1 = pile1
+
 
     return page;
   };
