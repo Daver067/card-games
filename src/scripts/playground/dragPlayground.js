@@ -6,7 +6,7 @@ import StandardCards from "../standardPackOfCards";
 import testDeck from "./draggabletestDeck";
 
 function initiatePlayground() {
-  const deck = new Deck(testDeck());
+  const deck = new Deck(StandardCards());
   const returnDiv = buildPlayground(deck);
   addDraggable(deck, returnDiv);
   return returnDiv;

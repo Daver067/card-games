@@ -6,7 +6,7 @@ function addDraggable(deck, container) {
   });
   container.addEventListener("dragover", (e) => {
     e.preventDefault();
-    const afterElement = getDragAfterElement(container, e.clientX, e.clientY);
+    const afterElement = get2dDragAfterElement(container, e.clientX, e.clientY);
     const draggable = document.querySelector(".dragging");
 
     if (afterElement === null) {
@@ -42,6 +42,37 @@ function getDragAfterElement(container, x) {
     },
     {
       offset: Number.NEGATIVE_INFINITY,
+    }
+  ).element;
+}
+
+function get2dDragAfterElement(container, x, y) {
+  const draggableElements = [
+    ...container.querySelectorAll(".draggable:not(.dragging)"),
+  ];
+  return draggableElements.reduce(
+    (closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offsetX = x - box.left - box.width / 2;
+      const offsetY = y - box.bottom;
+      if (
+        offsetX < 0 &&
+        offsetX > closest.offsetX &&
+        offsetY < 0 &&
+        offsetY > closest.offsetY
+      ) {
+        return {
+          offsetX: offsetX,
+          OffsetY: offsetY,
+          element: child,
+        };
+      } else {
+        return closest;
+      }
+    },
+    {
+      offsetX: Number.NEGATIVE_INFINITY,
+      offsetY: Number.NEGATIVE_INFINITY,
     }
   ).element;
 }
