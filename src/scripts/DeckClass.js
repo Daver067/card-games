@@ -37,7 +37,7 @@ class Deck {
     }
     const indexOfCardToRemove = this.cards.indexOf(card);
     this.cards.splice(indexOfCardToRemove, 1);
-    return true;
+    return card;
   }
 
   // just totally eliminates a card from existence
