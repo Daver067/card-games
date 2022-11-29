@@ -27,9 +27,9 @@ function buildPlayground(deck) {
   deckDisplayElement.deck.cards = StandardCards();
 
   document.body.appendChild(deckDisplayElement.container);
+  deckDisplayElement.deck.passCard(deckDisplayElement2.deck);
 
   deckDisplayElement.stack();
-  deckDisplayElement.deck.passCard(deckDisplayElement2.deck);
 
   document.body.appendChild(deckDisplayElement2.container);
   deckDisplayElement2.cascade();

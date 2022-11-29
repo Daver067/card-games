@@ -1,3 +1,6 @@
+// the deck you want to add the draggable ability to.
+// the container you want to be able to drop cards in
+
 function addDraggable(deck, container) {
   deck.cards.forEach((card) => {
     card.card.classList.add("draggable");
@@ -6,7 +9,12 @@ function addDraggable(deck, container) {
   });
   container.addEventListener("dragover", (e) => {
     e.preventDefault();
-    const afterElement = get2dDragAfterElement(container, e.clientX, e.clientY);
+    const offset = document.querySelector(".dragging").offset;
+    const afterElement = get2dDragAfterElement(
+      container,
+      e.clientX - offset,
+      e.clientY
+    );
     const draggable = document.querySelector(".dragging");
 
     if (afterElement === null) {
@@ -17,9 +25,15 @@ function addDraggable(deck, container) {
   });
 }
 
+// when an item starts being dragged, add this class.
+// finds how far left/right of center the item is grabbed and makes that an offset data value on the card
 function addListenerToDraggable(item) {
-  item.addEventListener("dragstart", () => {
+  item.addEventListener("dragstart", (e) => {
     item.classList.add("dragging");
+    const itemBox = item.getBoundingClientRect();
+    const itemBoxCenter = itemBox.left + itemBox.width / 2;
+    const offset = -itemBoxCenter + e.clientX;
+    item.offset = offset;
   });
   item.addEventListener("dragend", () => {
     item.classList.remove("dragging");
@@ -46,6 +60,8 @@ function getDragAfterElement(container, x) {
   ).element;
 }
 
+// allows dragging and dropping in the container specified
+// item returned is the card element directly after the mouse
 function get2dDragAfterElement(container, x, y) {
   const draggableElements = [
     ...container.querySelectorAll(".draggable:not(.dragging)"),
