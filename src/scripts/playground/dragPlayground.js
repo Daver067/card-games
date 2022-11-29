@@ -1,6 +1,8 @@
 import Deck from "../DeckClass";
+import { deckDisplay } from "../deckDisplay/deckDisplay";
 import { addDraggable } from "../deckDisplay/draggable/grabAndMove";
 import { makeFlop } from "../showUI";
+import StandardCards from "../standardPackOfCards";
 import testDeck from "./draggabletestDeck";
 
 function initiatePlayground() {
@@ -17,6 +19,21 @@ function buildPlayground(deck) {
     card.blindFlip();
     testFlop.appendChild(card.card);
   });
+  // deck testing
+  const deckDisplaya = deckDisplay();
+  const deckDisplayElement = deckDisplaya.addDeckBase();
+  const deckDisplayElement2 = deckDisplaya.addDeckBase();
+
+  deckDisplayElement.deck.cards = StandardCards();
+
+  document.body.appendChild(deckDisplayElement.container);
+
+  deckDisplayElement.stack();
+  deckDisplayElement.deck.passCard(deckDisplayElement2.deck);
+
+  document.body.appendChild(deckDisplayElement2.container);
+  deckDisplayElement2.cascade();
+
   return testFlop;
 }
 

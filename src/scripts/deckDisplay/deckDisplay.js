@@ -1,6 +1,5 @@
 import "./styles.scss";
 import Deck from "../DeckClass";
-import { buildStack } from "../tableLayouts";
 import StandardCards from "../standardPackOfCards";
 
 const deckDisplay = () => {
@@ -132,6 +131,7 @@ const deckDisplay = () => {
     container.classList.add("layout-deck-base");
 
     function update() {
+      console.log(this);
       for (let i = 0; i < this.deck.cards.length; i++) {
         const card = this.deck.cards[i];
         this.container.appendChild(card.card);
