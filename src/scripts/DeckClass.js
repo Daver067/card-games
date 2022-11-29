@@ -31,7 +31,7 @@ class Deck {
   }
 
   // passes a card to another deck (it MUST be a deck)
-  passCard(targetDeck, card = this.cards[0], rules = null) {
+  passCard(targetDeck, card = this.cards[this.cards.length-1], rules = null) {
     if (targetDeck.receiveCard(card, rules) === false) {
       return false;
     }

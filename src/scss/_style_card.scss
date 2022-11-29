@@ -41,7 +41,6 @@
 }
 
 .back {
-  border-radius: calc(0.1 * var(--card-size));
   background-color: #222240;
   transform: perspective(1000px) rotateY(-180deg);
   display: flex;
