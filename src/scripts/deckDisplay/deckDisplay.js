@@ -117,23 +117,20 @@ const deckDisplay = () => {
       pile1.deck.passCard(pile2.deck);
     }
 
-    pile2.stack(false);
-    pile1.stack(false);
+    pile2.cascade(false);
+    pile1.cascade(false);
 
 
     pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
     pile2.container.lastChild.addEventListener('click', giveCardtoPile1);
 
     function giveCardtoPile1() {
-      console.log('click');
-      pile1.container.lastChild.removeEventListener('click', giveCardtoPile1);
-      pile2.container.lastChild.removeEventListener('click', giveCardtoPile2);
+      pile1.container.lastChild.removeEventListener("click", giveCardtoPile2);
+      pile2.container.lastChild.removeEventListener("click", giveCardtoPile1);
       const card = pile2.deck.passCard(pile1.deck);
+      pile1.cascade(false);
+      pile2.cascade(false);
       pile1.container.appendChild(card.card);
-      console.log(pile1.deck);
-      console.log(pile2.deck);
-      pile1.stack(false);
-      pile2.stack(false);
       setTimeout(() => {
         pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
         pile2.container.lastChild.addEventListener('click', giveCardtoPile1);
@@ -142,17 +139,15 @@ const deckDisplay = () => {
 
     function giveCardtoPile2() {
       console.log('click');
-      pile1.container.lastChild.removeEventListener('click', giveCardtoPile1);
-      pile2.container.lastChild.removeEventListener('click', giveCardtoPile2);
+      pile1.container.lastChild.removeEventListener('click', giveCardtoPile2);
+      pile2.container.lastChild.removeEventListener('click', giveCardtoPile1);
       const card = pile1.deck.passCard(pile2.deck);
+      pile2.cascade(false);
+      pile1.cascade(false);
       pile2.container.appendChild(card.card);
-      console.log(pile1.deck);
-      console.log(pile2.deck);
-      pile1.stack(false);
-      pile2.stack(false);
       setTimeout(() => {
         pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
-        pile2.container.lastChild.addEventListener('click', giveCardtoPile2);
+        pile2.container.lastChild.addEventListener('click', giveCardtoPile1);
       }, 0);
     };
 
