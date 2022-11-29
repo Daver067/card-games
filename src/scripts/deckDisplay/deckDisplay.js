@@ -127,21 +127,31 @@ const deckDisplay = () => {
     function giveCardtoPile1() {
       console.log('click');
       pile1.container.lastChild.removeEventListener('click', giveCardtoPile1);
-      pile2.deck.passCard(pile1.deck);
+      pile2.container.lastChild.removeEventListener('click', giveCardtoPile2);
+      const card = pile2.deck.passCard(pile1.deck);
+      pile1.container.appendChild(card.card);
+      console.log(pile1.deck);
+      console.log(pile2.deck);
       pile1.stack(false);
       pile2.stack(false);
       setTimeout(() => {
-        pile1.container.lastChild.addEventListener('click', giveCardtoPile1);
+        pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
+        pile2.container.lastChild.addEventListener('click', giveCardtoPile1);
       }, 0);
     };
 
     function giveCardtoPile2() {
       console.log('click');
+      pile1.container.lastChild.removeEventListener('click', giveCardtoPile1);
       pile2.container.lastChild.removeEventListener('click', giveCardtoPile2);
-      pile1.deck.passCard(pile2.deck);
+      const card = pile1.deck.passCard(pile2.deck);
+      pile2.container.appendChild(card.card);
+      console.log(pile1.deck);
+      console.log(pile2.deck);
       pile1.stack(false);
       pile2.stack(false);
       setTimeout(() => {
+        pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
         pile2.container.lastChild.addEventListener('click', giveCardtoPile2);
       }, 0);
     };
