@@ -9,11 +9,12 @@ function addDraggable(deck, container) {
   });
   container.addEventListener("dragover", (e) => {
     e.preventDefault();
-    const offset = document.querySelector(".dragging").offset;
+    const offsetX = document.querySelector(".dragging").offsetX;
+    const offsetY = document.querySelector(".dragging").offsetY;
     const afterElement = get2dDragAfterElement(
       container,
-      e.clientX - offset,
-      e.clientY
+      e.clientX - offsetX,
+      e.clientY // - offsetY
     );
     const draggable = document.querySelector(".dragging");
 
@@ -31,15 +32,21 @@ function addListenerToDraggable(item) {
   item.addEventListener("dragstart", (e) => {
     item.classList.add("dragging");
     const itemBox = item.getBoundingClientRect();
-    const itemBoxCenter = itemBox.left + itemBox.width / 2;
-    const offset = -itemBoxCenter + e.clientX;
-    item.offset = offset;
+    const itemBoxCenterX = itemBox.left + itemBox.width / 2;
+    const offsetX = -itemBoxCenterX + e.clientX;
+    item.offsetX = offsetX;
+    const itemBoxTopY = itemBox.top;
+    const offsetY = -itemBoxTopY + e.clientY;
+    item.offsetY = offsetY;
   });
   item.addEventListener("dragend", () => {
     item.classList.remove("dragging");
+    item.offsetX = null;
+    item.offsetY = null;
   });
 }
 
+// this one works in just one direction
 function getDragAfterElement(container, x) {
   const draggableElements = [
     ...container.querySelectorAll(".draggable:not(.dragging)"),
@@ -61,7 +68,7 @@ function getDragAfterElement(container, x) {
 }
 
 // allows dragging and dropping in the container specified
-// item returned is the card element directly after the mouse
+// item returned is the card element directly after the middle of the element
 function get2dDragAfterElement(container, x, y) {
   const draggableElements = [
     ...container.querySelectorAll(".draggable:not(.dragging)"),
