@@ -2,6 +2,50 @@ const Playing = (num, Suit) => {
   // Properties
 
   const number = num;
+  let value = null;
+  switch (num) {
+    case "A":
+      value = 1;
+      break;
+    case "2":
+      value = 2;
+      break;
+    case "3":
+      value = 3;
+      break;
+    case "4":
+      value = 4;
+      break;
+    case "5":
+      value = 5;
+      break;
+    case "6":
+      value = 6;
+      break;
+    case "7":
+      value = 7;
+      break;
+    case "8":
+      value = 8;
+      break;
+    case "9":
+      value = 9;
+      break;
+    case "10":
+      value = 10;
+      break;
+    case "J":
+      value = 11;
+      break;
+    case "Q":
+      value = 12;
+      break;
+    case "K":
+      value = 13;
+      break;
+    default:
+      value = 666;
+  }
   const suit = Suit;
   const color = (() => {
     let cardColor;
@@ -226,7 +270,7 @@ const Playing = (num, Suit) => {
     const card = document.createElement("div");
     card.classList.add("back");
     const center = document.createElement("div");
-    center.classList.add('back-center');
+    center.classList.add("back-center");
     card.appendChild(center);
     return card;
   })();
@@ -250,6 +294,7 @@ const Playing = (num, Suit) => {
     card,
     color,
     number,
+    value,
     suit,
     name,
   };

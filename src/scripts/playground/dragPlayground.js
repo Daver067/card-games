@@ -4,14 +4,19 @@ import { addDraggable } from "../deckDisplay/draggable/grabAndMove";
 import { makeFlop } from "../showUI";
 import StandardCards from "../standardPackOfCards";
 import testDeck from "./draggabletestDeck";
+import moveCardInTableau from "./solitaireConditions";
 
 function initiatePlayground() {
   const deck = new Deck(StandardCards());
-  const returnDiv = buildPlayground(deck);
-  addDraggable(deck, returnDiv);
-  return returnDiv;
+  const allTheCardsDiv = buildPlayground(deck);
+  //addDraggable(deck.cards, allTheCardsDiv);
+  deck.cards.forEach((card) => {
+    moveCardInTableau(deck, card); // find this in playground/solitaireConditions.js
+  });
+  return allTheCardsDiv;
 }
 
+// appends all the cards to the page, flips them faceup
 function buildPlayground(deck) {
   const div = document.createElement("div");
   let testFlop = makeFlop(div);
@@ -19,6 +24,7 @@ function buildPlayground(deck) {
     card.blindFlip();
     testFlop.appendChild(card.card);
   });
+
   // deck testing
   const deckDisplaya = deckDisplay();
   const deckDisplayElement = deckDisplaya.addDeckBase();
