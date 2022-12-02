@@ -2,31 +2,27 @@ import "./styles.scss";
 import Deck from "../DeckClass";
 import { buildStack } from "../tableLayouts";
 import StandardCards from "../standardPackOfCards";
+import {Animate} from "../animations/animate";
 
-const deckDisplay = () => {
+function deckDisplay () {
 
   // Constructs a page for debugging purpose. Can be deleted later
   function displayTestPage() {
-    // Crates a page and a header
-    const page = document.createElement("div");
-    const uiHeader = document.createElement('div');
-  
-    // Adds relevant classes, and adds header to page
-    page.classList.add('layout-test-page');
-    uiHeader.classList.add('layout-header');
-    page.appendChild(uiHeader);
-
-    const testPlatform = document.createElement('div');
-    testPlatform.classList.add('layout-test-platform');
-    page.appendChild(testPlatform);
-    const deckFlex1 = document.createElement('div');
-    deckFlex1.classList.add('layout-test-deck1');
-    testPlatform.appendChild(deckFlex1);
-    const deckFlex2 = document.createElement('div');
-    deckFlex1.classList.add('layout-test-deck2');
-    testPlatform.appendChild(deckFlex2);
+    const page = createContainer('layout-test-page');
+    const uiHeader = createContainer('layout-header');
+    const testPlatform = Object.assign(
+      {container: createContainer('layout-test-platform')}, 
+      Animate(),
+      );
+    const deckFlex1 = createContainer('layout-test-deck1');
+    const deckFlex2 = createContainer('layout-test-deck2');
     
-    // Constructs debug buttons and elements
+    document.body.appendChild(page);
+    page.appendChild(uiHeader);
+    page.appendChild(testPlatform.container);
+    testPlatform.container.appendChild(deckFlex1);
+    testPlatform.container.appendChild(deckFlex2);
+
     const cascadeButton = makeTestButton("Cascade");
     const stackButton = makeTestButton("Stack");
     const flipAllButton = makeTestButton("Flip All Cards");
@@ -47,8 +43,6 @@ const deckDisplay = () => {
         if (event.code === "Enter") {
           const root = document.documentElement;
           root.style.setProperty("--card-size", `${input.value}px`);
-          pile1.stack(false);
-          pile2.stack(false);
         }
       });
       
@@ -63,8 +57,7 @@ const deckDisplay = () => {
       
       return label
     })();
-    
-    // Appends all the UI elements for debugging.
+
     [
       cascadeButton,
       stackButton,
@@ -76,90 +69,81 @@ const deckDisplay = () => {
     })
 
     cascadeButton.addEventListener('click', function(){
-      pile2.cascade(true);
+      
     })
 
     stackButton.addEventListener('click', function(){
-      pile2.stack(true);
+      
     })
 
     flipAllButton.addEventListener('click', function(){
-      if(pile1.deck.state === "idle"){
-        pile2.deck.flipBatchDuration(pile2.deck.cards, 1000);
-      };
-    });
 
     
-    const pile1 = addDeckBase();
-    deckFlex1.appendChild(pile1.container);
-    
+    });
+
     const deck = new Deck(StandardCards());
     deck.shuffleDeck();
 
-    for (let i = 0; i < deck.cards.length; i++) {
-      const card = deck.cards[i];
-      card.blindFlip();
-    }
-
-    for (let index = 0; index < 54; index++) {
-      const card = deck.cards[index];
-      deck.passCard(pile1.deck);
-    }
-
-
-    
-    
-    
+    const pile1 = addDeckBase();
+    deckFlex1.appendChild(pile1.container);
     const pile2 = addDeckBase();
     deckFlex2.appendChild(pile2.container);
-    const cardCount = Math.floor(pile1.deck.cards.length*0.1);
-    for (let i = 0; i < cardCount; i++) {
-      pile1.deck.passCard(pile2.deck);
+    
+    dealCards(27, deck, pile1.deck);
+    initalizeDeckBase(pile1);
+    dealCards(27, deck, pile2.deck);
+    initalizeDeckBase(pile2);
+
+    exectuteAnimations();
+
+    async function exectuteAnimations() {
+      const res1 = await(slideCard(pile1.deck.cards[pile1.deck.cards.length-1], [400,300], 2000));
+      const res2 = await(slideDeck((pile1), [100,200], 2000));
+      const res3 = await(slideCard(pile1.deck.cards[pile1.deck.cards.length-1], [200,500], 2000));
+    };
+
+    function slideCard(card, vector2, duration) {
+      const animatedCard = Object.assign({}, Animate(), card);
+      const slide = animatedCard.slide(animatedCard.card, vector2, duration);
+      return slide.finished;
     }
 
-    pile2.cascade(false);
-    pile1.cascade(false);
-
-
-    pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
-    pile2.container.lastChild.addEventListener('click', giveCardtoPile1);
-
-    function giveCardtoPile1() {
-      pile1.container.lastChild.removeEventListener("click", giveCardtoPile2);
-      pile2.container.lastChild.removeEventListener("click", giveCardtoPile1);
-      const card = pile2.deck.passCard(pile1.deck);
-      pile1.cascade(false);
-      pile2.cascade(false);
-      pile1.container.appendChild(card.card);
-      setTimeout(() => {
-        pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
-        pile2.container.lastChild.addEventListener('click', giveCardtoPile1);
-      }, 0);
+    function slideDeck (deck, vector2, duration) {
+      const animatedDeck = Object.assign({}, Animate(), deck);
+      const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
+      return slide.finished;
     };
 
-    function giveCardtoPile2() {
-      console.log('click');
-      pile1.container.lastChild.removeEventListener('click', giveCardtoPile2);
-      pile2.container.lastChild.removeEventListener('click', giveCardtoPile1);
-      const card = pile1.deck.passCard(pile2.deck);
-      pile2.cascade(false);
-      pile1.cascade(false);
-      pile2.container.appendChild(card.card);
-      setTimeout(() => {
-        pile1.container.lastChild.addEventListener('click', giveCardtoPile2);
-        pile2.container.lastChild.addEventListener('click', giveCardtoPile1);
-      }, 0);
+    function dealCards(quantity, source, target){
+      for (let i = 0; i < quantity; i++) {
+        const card = source.passCard(target);
+        card.blindFlip();
+      }
     };
 
+    function initalizeDeckBase(deckBase){
+      for (let i = 0; i < deckBase.deck.cards.length; i++) {
+        const card = deckBase.deck.cards[i];
+        deckBase.container.appendChild(card.card);
+        card.card.style.setProperty("top", `${i*-1}px`);
+      }
+    };
+    
+    function createContainer(className) {
+      const container = document.createElement('div');
+      container.classList.add(className);
+      return container;
+    };
+
+    function makeTestButton (text) {
+      const button = document.createElement('button');
+      button.classList.add('layout');
+      button.textContent = text;
+      return button;
+    };
 
     return page;
   };
-
-  /* 
-  For debugging, instances a deck at a specified target. In a real world
-  setting, you would add the cards to an empty array on a deckBase, and then
-  update the deckBase.
-  */ 
 
   // Adds a base the size of the card to be the basis of deck layouts.
   function addDeckBase() {
@@ -167,108 +151,13 @@ const deckDisplay = () => {
     const container = document.createElement("div");
     container.classList.add("layout-deck-base");
 
-    function update() {
-      for (let i = 0; i < this.deck.cards.length; i++) {
-        const card = this.deck.cards[i];
-        this.container.appendChild(card.card);
-      }
-    }
-
-      // Arranges card as vertical stack of one on top of another.
-    function stack(animate = true) {
-      
-      if(this.deck.state === "idle"){
-        this.update();
-        this.deck.state = "busy";
-        const styles = window.getComputedStyle(document.body);
-        const cardSize = parseInt(styles.getPropertyValue('--card-size'));
-    
-        const card_elements = Array.from(this.container.children);
-        this.container.classList.add("layout-stack");
-    
-        for (let index = 0; index < card_elements.length; index++) {
-          const card = card_elements[index];
-          card.classList.add("layout-card");
-          updateAnimation(card, animate);
-          setTimeout(() => {
-            card.style.transform = `translateY(${index*-(cardSize/80)}px)`;
-          }, 1);
-        };
-        const duration = parseFloat(getComputedStyle(this.deck.cards[0].card)['transitionDuration']);
-        setTimeout(() => {
-          this.deck.state = "idle";
-        }, (duration*1000));
-      }
-    }
-
-    // Arranges cards in a cascade, where one card partially overlaps the last.
-    function cascade( 
-      animate = true, // If false, deck will update instantly.
-      direction = "down", // Set to up, down, left, or right
-      ) {
-        
-        if(this.deck.state === "idle"){
-        this.update();
-        this.deck.state = "busy";
-        const styles = window.getComputedStyle(document.body);
-        const cardSize = parseInt(styles.getPropertyValue('--card-size'));
-    
-        const card_elements = Array.from(this.container.children);
-        this.container.classList.add("layout-cascade");
-    
-        for (let index = 0; index < card_elements.length; index++) {
-          const card = card_elements[index];
-          card.classList.add("layout-card");
-          updateAnimation(card, animate);
-          setTimeout(() => {
-            card.style.transform = `translateY(${index * (cardSize/2)}px)`;
-          }, 0);
-        }
-        const duration = parseFloat(getComputedStyle(this.deck.cards[0].card)['transitionDuration']);
-        setTimeout(() => {
-          this.deck.state = "idle";
-        }, (duration*1000));
-      };
-    }
-
     return {
       container,
       deck,
-      update,
-      stack,
-      cascade,
     };
   }
 
 
-
-  // Arranges cards in a grid, by set rows and columns.
-  function grid (deck, columns, rows) {
-
-   };
-
-  function makeTestButton (text) {
-    const button = document.createElement('button');
-    button.classList.add('layout');
-    button.textContent = text;
-    return button;
-  };
-
-  function updateAnimation (card, animate) {
-    /**
-     * This function is to be used within cascade, stack, or other deck
-     * functions with animations. Adds or removes classes to manage animation.
-     */
-    if(animate){
-      card.classList.add('layout-transition');
-    } else {
-      card.classList.remove('layout-transition');
-    }
-  }
-
-
-
-    
     return {
         displayTestPage,
         addDeckBase, 
