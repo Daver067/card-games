@@ -94,12 +94,31 @@ function deckDisplay () {
     dealCards(27, deck, pile2.deck);
     initalizeDeckBase(pile2);
 
-    exectuteAnimations();
+    pile1.cascade([0, 0.18], 1000);
 
+    // This is a super useful template for chaining
+    // animations one after another.
     async function exectuteAnimations() {
-      const res1 = await(slideCard(pile1.deck.cards[pile1.deck.cards.length-1], [400,300], 2000));
-      const res2 = await(slideDeck((pile1), [100,200], 2000));
-      const res3 = await(slideCard(pile1.deck.cards[pile1.deck.cards.length-1], [200,500], 2000));
+      await(slideCard(
+        pile1.deck.cards[pile1.deck.cards.length-1],
+        [20,30],
+        2000
+      ));
+      await(slideDeck(
+        (pile1),
+        [40,50],
+        2000
+      ));
+      await(slideCard(
+        pile1.deck.cards[pile1.deck.cards.length-1],
+        [0,0],
+        2000
+      ));
+      await(slideDeck(
+        (pile1),
+        [0,0],
+        2000
+      ));
     };
 
     function slideCard(card, vector2, duration) {
@@ -125,7 +144,6 @@ function deckDisplay () {
       for (let i = 0; i < deckBase.deck.cards.length; i++) {
         const card = deckBase.deck.cards[i];
         deckBase.container.appendChild(card.card);
-        card.card.style.setProperty("top", `${i*-1}px`);
       }
     };
     
@@ -151,9 +169,37 @@ function deckDisplay () {
     const container = document.createElement("div");
     container.classList.add("layout-deck-base");
 
+    function slideCard(card, vector2, duration) {
+      const animatedCard = Object.assign({}, Animate(), card);
+      const slide = animatedCard.slide(animatedCard.card, vector2, duration);
+      return slide.finished;
+    }
+
+    function cascade(percent /* Percentage */, duration /* ms */){
+      const promise = new Promise(() => {
+        const arrayFinished = [];
+        for (let i = 0; i < deck.cards.length; i++) {
+          const card = deck.cards[i];
+          const vector2 = [];
+          const cardElement = deck.cards[i].card;
+          vector2[0] = (percent[0] * parseInt(cardElement.offsetWidth) * i);
+          vector2[1] = (percent[1] * parseInt(cardElement.offsetHeight) * i);
+          console.log(cardElement);
+          slideCard(card, vector2, duration);
+          arrayFinished.push(slideCard.finished);
+        };
+        Promise.all(arrayFinished).then(() => {
+          console.log("all animations finished");
+          promise.resolve;
+        });
+      });
+      return promise
+    };
+
     return {
       container,
       deck,
+      cascade,
     };
   }
 
