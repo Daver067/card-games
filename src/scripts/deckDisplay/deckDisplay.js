@@ -94,20 +94,21 @@ function deckDisplay () {
     dealCards(27, deck, pile2.deck);
     initalizeDeckBase(pile2);
 
-    pile1.cascade([0, 0.18], 0);
-    pile2.cascade([0, 0.-0.005], 0);
+    pile2.cascade([0, 0.18], 0);
+    pile1.cascade([0, 0.-0.005], 0);
 
     // This is a super useful template for chaining
     // animations one after another.
     async function exectuteAnimations() {
-      await(pile1.deck.flipBatchIncrement(pile1.deck.cards, 30));
+      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 300));
       await(slideDeck(
         (pile1),
         [40,50],
         2000
       ));
-      await(pile1.cascade([0, 0.18], 5000)); // Cascades cards
-      await(pile1.cascade([0, 0.-0.005], 2000)); // Returns them to stack form
+      await(pile1.cascade([0, 0.18], 500)); // Cascades cards
+      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 300));
+      await(pile1.cascade([0, 0.-0.005], 500)); // Returns them to stack form
       await(slideDeck(
         (pile1),
         [0,0],

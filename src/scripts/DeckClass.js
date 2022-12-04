@@ -80,16 +80,13 @@ class Deck {
       };
       const flipSpeed = cardArray[0].getFlipSpeed();
       const totalDuration = parseFloat(flipSpeed) * 1000 + duration;
-      resolve(setTimeout(() => {
-        this.state = "idle";
-      }, totalDuration));
-    });
+      setTimeout(resolve, totalDuration);
+    }).then(()=>{this.state = "idle"});
     return animFinished;
   };
 
   // Flips an array of cards with a set delay between each flip
   flipBatchIncrement (cardArray, delay) {
-    // For each card, flip it after an incrementing delay
     const animFinished = new Promise((resolve)=>{
       if(this.state === "idle"){
         
@@ -104,10 +101,9 @@ class Deck {
       const flipSpeed = cardArray[0].getFlipSpeed();
       const totalDuration =
         parseFloat(flipSpeed) * 1000 + (cardArray.length + 1) * delay;
-      resolve(setTimeout(() => {
-        this.state = "idle";
-      }, totalDuration));
-    });
+      setTimeout(resolve, totalDuration);
+    }).then(()=>{this.state = "idle"});
+    return animFinished;
     };
 
 }
