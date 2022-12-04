@@ -15,9 +15,6 @@ function Animate() {
         duration: number of ms for animation duration
         */
 
-        console.log(element);
-        console.log(vector2);
-        console.log(duration);
 
         if(vector2.length !== 2){
             console.error("Error: vector2 must be an array of 2 values, x and y.");

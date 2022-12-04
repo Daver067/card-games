@@ -69,15 +69,15 @@ function deckDisplay () {
     })
 
     cascadeButton.addEventListener('click', function(){
-      
+      pile1.cascade([0, 0.18], 5000);
     })
-
+    
     stackButton.addEventListener('click', function(){
-      
+      pile1.cascade([0, 0.-0.005], 2000);
     })
 
     flipAllButton.addEventListener('click', function(){
-
+      exectuteAnimations();
     
     });
 
@@ -94,38 +94,28 @@ function deckDisplay () {
     dealCards(27, deck, pile2.deck);
     initalizeDeckBase(pile2);
 
-    pile1.cascade([0, 0.18], 1000);
+    pile1.cascade([0, 0.18], 0);
+    pile2.cascade([0, 0.-0.005], 0);
 
     // This is a super useful template for chaining
     // animations one after another.
     async function exectuteAnimations() {
-      await(slideCard(
-        pile1.deck.cards[pile1.deck.cards.length-1],
-        [20,30],
-        2000
-      ));
+      await(pile1.deck.flipBatchIncrement(pile1.deck.cards, 30));
       await(slideDeck(
         (pile1),
         [40,50],
         2000
       ));
-      await(slideCard(
-        pile1.deck.cards[pile1.deck.cards.length-1],
-        [0,0],
-        2000
-      ));
+      await(pile1.cascade([0, 0.18], 5000)); // Cascades cards
+      await(pile1.cascade([0, 0.-0.005], 2000)); // Returns them to stack form
       await(slideDeck(
         (pile1),
         [0,0],
         2000
       ));
+      await(pile1.deck.flipBatchIncrement(pile1.deck.cards, 30));
     };
 
-    function slideCard(card, vector2, duration) {
-      const animatedCard = Object.assign({}, Animate(), card);
-      const slide = animatedCard.slide(animatedCard.card, vector2, duration);
-      return slide.finished;
-    }
 
     function slideDeck (deck, vector2, duration) {
       const animatedDeck = Object.assign({}, Animate(), deck);
@@ -176,24 +166,22 @@ function deckDisplay () {
     }
 
     function cascade(percent /* Percentage */, duration /* ms */){
-      const promise = new Promise(() => {
-        const arrayFinished = [];
+      const promise = new Promise((resolve) => {
+        const arrayFinished = []; // Array of .finished promises returned by animate
         for (let i = 0; i < deck.cards.length; i++) {
           const card = deck.cards[i];
           const vector2 = [];
           const cardElement = deck.cards[i].card;
           vector2[0] = (percent[0] * parseInt(cardElement.offsetWidth) * i);
           vector2[1] = (percent[1] * parseInt(cardElement.offsetHeight) * i);
-          console.log(cardElement);
-          slideCard(card, vector2, duration);
-          arrayFinished.push(slideCard.finished);
+          const slide = slideCard(card, vector2, duration);
+          arrayFinished.push(slide);
         };
-        Promise.all(arrayFinished).then(() => {
+        resolve(Promise.all(arrayFinished).then(() => {
           console.log("all animations finished");
-          promise.resolve;
-        });
+        }));
       });
-      return promise
+      return promise;
     };
 
     return {
