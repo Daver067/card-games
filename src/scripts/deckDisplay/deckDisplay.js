@@ -43,6 +43,7 @@ function deckDisplay () {
         if (event.code === "Enter") {
           const root = document.documentElement;
           root.style.setProperty("--card-size", `${input.value}px`);
+          (pile1.cascade([0, 0.-0.005], 50));
         }
       });
       
@@ -100,29 +101,35 @@ function deckDisplay () {
     // This is a super useful template for chaining
     // animations one after another.
     async function exectuteAnimations() {
-      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 300));
-      await(slideDeck(
+      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 1500));
+      await(pile1.slideDeck(
         (pile1),
         [40,50],
         2000
       ));
       await(pile1.cascade([0, 0.18], 500)); // Cascades cards
-      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 300));
-      await(pile1.cascade([0, 0.-0.005], 500)); // Returns them to stack form
-      await(slideDeck(
+      //await(pile1.cascade([0, 0.-0.005], 500)); // Returns them to stack form
+      await(pile1.slideDeck(
         (pile1),
         [0,0],
         2000
       ));
+      await(pile1.cascade([1.1, 0], 500)); // Cascades cards
+      await(waitTime(1000));
+      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 2000));
+      await(waitTime(2000));
+      await(pile1.cascade([0, 0.-0.005], 500)); 
       await(pile1.deck.flipBatchIncrement(pile1.deck.cards, 30));
     };
-
-
-    function slideDeck (deck, vector2, duration) {
-      const animatedDeck = Object.assign({}, Animate(), deck);
-      const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
-      return slide.finished;
-    };
+    
+    
+    
+    function waitTime (time){
+      const promise = new Promise((resolve) => {
+        setTimeout(resolve, time);
+      });
+      return promise;
+    } 
 
     function dealCards(quantity, source, target){
       for (let i = 0; i < quantity; i++) {
@@ -166,6 +173,12 @@ function deckDisplay () {
       return slide.finished;
     }
 
+    function slideDeck (deck, vector2, duration) {
+      const animatedDeck = Object.assign({}, Animate(), deck);
+      const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
+      return slide.finished;
+    };
+
     function cascade(percent /* Percentage */, duration /* ms */){
       const promise = new Promise((resolve) => {
         const arrayFinished = []; // Array of .finished promises returned by animate
@@ -188,6 +201,8 @@ function deckDisplay () {
     return {
       container,
       deck,
+      slideCard,
+      slideDeck,
       cascade,
     };
   }
