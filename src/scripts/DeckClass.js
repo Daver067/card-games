@@ -96,7 +96,6 @@ class Deck {
           const element = cardArray[i];
           element.flipCard(timeDelay);
         }
-        // Calculate total duration of operation, the change deck state back to idle.
       };
       const flipSpeed = cardArray[0].getFlipSpeed();
       const totalDuration =

@@ -2,8 +2,10 @@ import "./animStyle.scss"
 
 function Animate() {
 
-    // Moves to the location of another object
-    function slideToObject() {
+    // Moves to the location of another object.
+    // target must be an element. 
+    // Object gets appended to target
+    function slideToObject(element, target, source) {
 
     };
 

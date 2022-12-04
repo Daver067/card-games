@@ -43,7 +43,7 @@ function deckDisplay () {
         if (event.code === "Enter") {
           const root = document.documentElement;
           root.style.setProperty("--card-size", `${input.value}px`);
-          (pile1.cascade([0, 0.-0.005], 50));
+          (pile1.cascade([0, 0.-0.003], 50));
         }
       });
       
@@ -74,7 +74,7 @@ function deckDisplay () {
     })
     
     stackButton.addEventListener('click', function(){
-      pile1.cascade([0, 0.-0.005], 2000);
+      pile1.cascade([0, 0.-0.003], 2000);
     })
 
     flipAllButton.addEventListener('click', function(){
@@ -95,8 +95,48 @@ function deckDisplay () {
     dealCards(27, deck, pile2.deck);
     initalizeDeckBase(pile2);
 
+    pile1.cascade([0, 0.-0.003], 0);
     pile2.cascade([0, 0.18], 0);
-    pile1.cascade([0, 0.-0.005], 0);
+
+    const topCard = pile1.deck.cards[pile1.deck.cards.length-1];
+    topCard.card.addEventListener('click', moveCardToDeck, {once: true});
+
+    async function moveCardToDeck() {
+      let topCard = pile1.deck.cards[pile1.deck.cards.length-1];
+      Object.assign(topCard, Animate());
+
+      const origin = topCard.card.getBoundingClientRect();
+      console.log(origin);
+
+      pile1.deck.passCard(pile2.deck);
+      pile2.container.appendChild(topCard.card);
+      await(pile2.reset(pile2));
+      await(pile2.cascade([0, 0.18], 0));
+
+      const destination = (topCard.card.getBoundingClientRect());
+      console.log(destination)
+      
+      pile2.deck.passCard(pile1.deck);
+      pile1.container.appendChild(topCard.card);
+      await(pile1.reset(pile1));
+      await(pile1.cascade([0, 0.-0.003], 0));
+
+      const vector2 = [0,0];
+      vector2[0] = destination.x - origin.x;
+      vector2[1] = destination.y - origin.y;
+
+      pile1.deck.passCard(pile2.deck);
+      topCard.card.style.zIndex = `${pile2.deck.cards.length-1}`
+      await(pile1.slideCard(topCard, vector2, 5000));
+      (pile2.container.appendChild(topCard.card));
+      await(pile2.cascade([0, 0.18], 0));
+
+
+      topCard = pile1.deck.cards[pile1.deck.cards.length-1];
+      topCard.card.addEventListener('click', moveCardToDeck, {once: true})
+
+    };
+    
 
     // This is a super useful template for chaining
     // animations one after another.
@@ -108,7 +148,7 @@ function deckDisplay () {
         2000
       ));
       await(pile1.cascade([0, 0.18], 500)); // Cascades cards
-      //await(pile1.cascade([0, 0.-0.005], 500)); // Returns them to stack form
+      //await(pile1.cascade([0, 0.-0.003], 500)); // Returns them to stack form
       await(pile1.slideDeck(
         (pile1),
         [0,0],
@@ -118,7 +158,7 @@ function deckDisplay () {
       await(waitTime(1000));
       await(pile1.deck.flipBatchDuration(pile1.deck.cards, 2000));
       await(waitTime(2000));
-      await(pile1.cascade([0, 0.-0.005], 500)); 
+      await(pile1.cascade([0, 0.-0.003], 500)); 
       await(pile1.deck.flipBatchIncrement(pile1.deck.cards, 30));
     };
     
@@ -198,12 +238,23 @@ function deckDisplay () {
       return promise;
     };
 
+    function reset(deckBase){
+      for(const child of deckBase.container.children) {
+        deckBase.container.prepend(child);
+      };
+      for(let i = 0; i < deckBase.deck.cards.length; i++) {
+        const card = deckBase.deck.cards[i];
+        deckBase.container.appendChild(card.card);
+      }
+    };
+
     return {
       container,
       deck,
       slideCard,
       slideDeck,
       cascade,
+      reset,
     };
   }
 
