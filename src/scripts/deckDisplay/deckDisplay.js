@@ -102,40 +102,45 @@ function deckDisplay () {
     topCard.card.addEventListener('click', moveCardToDeck, {once: true});
 
     async function moveCardToDeck() {
-      let topCard = pile1.deck.cards[pile1.deck.cards.length-1];
+      let topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
       Object.assign(topCard, Animate());
 
       const origin = topCard.card.getBoundingClientRect();
-      console.log(origin);
+      const destinationTopCard = pile2.deck.cards[pile2.deck.cards.length - 1];
+      const destinationSecondTopCard =
+        pile2.deck.cards[pile2.deck.cards.length - 2];
+      const destinationTopCardBox =
+        destinationTopCard.card.getBoundingClientRect();
+      const destinationSecondTopCardBox =
+        destinationSecondTopCard.card.getBoundingClientRect();
+
+      const cardTranslateValue = getComputedStyle(topCard.card).transform;
+      const actualTranslateValue = Number(
+        [...cardTranslateValue].splice(22, 5).join("")
+      );
+      console.log(cardTranslateValue[22]);
+      console.log(actualTranslateValue);
+      const yOffset =
+        destinationTopCardBox.y -
+        destinationSecondTopCardBox.y +
+        actualTranslateValue;
+      console.log(yOffset);
+
+      const vector2 = [0, 0];
+      vector2[0] = destinationTopCardBox.x - origin.x;
+      vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
 
       pile1.deck.passCard(pile2.deck);
-      pile2.container.appendChild(topCard.card);
-      await(pile2.reset(pile2));
-      await(pile2.cascade([0, 0.18], 0));
+      topCard.card.style.zIndex = `${pile2.deck.cards.length}`;
 
-      const destination = (topCard.card.getBoundingClientRect());
-      console.log(destination)
+      await pile1.slideCard(topCard, vector2, 400);
+      await pile2.container.appendChild(topCard.card);
+      await pile2.cascade([0, 0.18], 0);
       
-      pile2.deck.passCard(pile1.deck);
-      pile1.container.appendChild(topCard.card);
-      await(pile1.reset(pile1));
-      await(pile1.cascade([0, 0.-0.003], 0));
-
-      const vector2 = [0,0];
-      vector2[0] = destination.x - origin.x;
-      vector2[1] = destination.y - origin.y;
-
-      pile1.deck.passCard(pile2.deck);
-      topCard.card.style.zIndex = `${pile2.deck.cards.length-1}`
-      await(pile1.slideCard(topCard, vector2, 5000));
-      (pile2.container.appendChild(topCard.card));
-      await(pile2.cascade([0, 0.18], 0));
-
-
-      topCard = pile1.deck.cards[pile1.deck.cards.length-1];
-      topCard.card.addEventListener('click', moveCardToDeck, {once: true})
-
-    };
+      topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
+      topCard.card.addEventListener("click", moveCardToDeck, { once: true });
+ 
+    }
     
 
     // This is a super useful template for chaining
@@ -232,7 +237,6 @@ function deckDisplay () {
           arrayFinished.push(slide);
         };
         resolve(Promise.all(arrayFinished).then(() => {
-          console.log("all animations finished");
         }));
       });
       return promise;
@@ -240,7 +244,7 @@ function deckDisplay () {
 
     function reset(deckBase){
       for(const child of deckBase.container.children) {
-        deckBase.container.prepend(child);
+        deckBase.container.removeChild(child);
       };
       for(let i = 0; i < deckBase.deck.cards.length; i++) {
         const card = deckBase.deck.cards[i];
