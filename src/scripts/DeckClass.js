@@ -68,40 +68,43 @@ class Deck {
   // Flips an array of cards with a total time equal to duration
   flipBatchDuration(cardArray, duration) {
     const flipDelay = duration / cardArray.length;
-
-    if (this.state === "idle") {
-      this.state = "busy";
-      for (let i = 0; i < cardArray.length; i++) {
-        const timeDelay = flipDelay * i;
-        const element = cardArray[i];
-        element.flipCard(timeDelay);
+    const animFinished = new Promise((resolve) => {
+      if (this.state === "idle") {
+        this.state = "busy";
+        for (let i = 0; i < cardArray.length; i++) {
+          const timeDelay = flipDelay * i;
+          const element = cardArray[i];
+          element.flipCard(timeDelay);
+        }
       }
       const flipSpeed = cardArray[0].getFlipSpeed();
       const totalDuration = parseFloat(flipSpeed) * 1000 + duration;
-      setTimeout(() => {
-        this.state = "idle";
-      }, totalDuration);
-    }
+      setTimeout(resolve, totalDuration);
+    }).then(() => {
+      this.state = "idle";
+    });
+    return animFinished;
   }
 
   // Flips an array of cards with a set delay between each flip
   flipBatchIncrement(cardArray, delay) {
-    // For each card, flip it after an incrementing delay
-    if (this.state === "idle") {
-      this.state = "busy";
-      for (let i = 0; i < cardArray.length; i++) {
-        let timeDelay = delay * i;
-        const element = cardArray[i];
-        element.flipCard(timeDelay);
+    const animFinished = new Promise((resolve) => {
+      if (this.state === "idle") {
+        this.state = "busy";
+        for (let i = 0; i < cardArray.length; i++) {
+          let timeDelay = delay * i;
+          const element = cardArray[i];
+          element.flipCard(timeDelay);
+        }
       }
-      // Calculate total duration of operation, the change deck state back to idle.
       const flipSpeed = cardArray[0].getFlipSpeed();
       const totalDuration =
         parseFloat(flipSpeed) * 1000 + (cardArray.length + 1) * delay;
-      setTimeout(() => {
-        this.state = "idle";
-      }, totalDuration);
-    }
+      setTimeout(resolve, totalDuration);
+    }).then(() => {
+      this.state = "idle";
+    });
+    return animFinished;
   }
 }
 
