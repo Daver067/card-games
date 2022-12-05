@@ -109,15 +109,18 @@ function deckDisplay () {
       const destinationPreviousTopCard = destination.deck.cards[destination.deck.cards.length-1];
       destinationPreviousTopCard.card.removeEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
      
-      source.moveCardToDeck(source, destination);
-
-
-      const sourceTopCard = source.deck.cards[source.deck.cards.length-1];
-      sourceTopCard.card.addEventListener('click', moveTopCard.bind(Event, source, destination), {once: true});
+      const moveCard = source.moveCardToDeck(source, destination);
       
+      moveCard.then(()=>{
+        const sourceTopCard = source.deck.cards[source.deck.cards.length-1];
+        sourceTopCard.card.addEventListener('click', moveTopCard.bind(Event, source, destination), {once: true});
+        
+  
+        const destinationTopCard = destination.deck.cards[destination.deck.cards.length-1];
+        destinationTopCard.card.addEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
+      })
 
-      const destinationTopCard = destination.deck.cards[destination.deck.cards.length-1];
-      destinationTopCard.card.addEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
+
     };
     // This is a super useful template for chaining
     // animations one after another.
@@ -218,45 +221,47 @@ function deckDisplay () {
       return promise;
     };
 
-    async function moveCardToDeck(source, destination) {
-      console.log(source);
-      console.log(destination);
-      let topCard = source.deck.cards[source.deck.cards.length - 1];
-      Object.assign(topCard, Animate());
-
-      const origin = topCard.card.getBoundingClientRect();
-      const destinationTopCard = destination.deck.cards[destination.deck.cards.length - 1];
-      const destinationSecondTopCard =
-        destination.deck.cards[destination.deck.cards.length - 2];
-      const destinationTopCardBox =
-        destinationTopCard.card.getBoundingClientRect();
-      const destinationSecondTopCardBox =
-        destinationSecondTopCard.card.getBoundingClientRect();
-
-      const cardTranslateValue = getComputedStyle(topCard.card).transform;
-      const actualTranslateValue = Number(
-        [...cardTranslateValue].splice(22, 5).join("")
-      );
-      console.log(cardTranslateValue[22]);
-      console.log(actualTranslateValue);
-      const yOffset =
-        destinationTopCardBox.y -
-        destinationSecondTopCardBox.y +
-        actualTranslateValue;
-      console.log(yOffset);
-
-      const vector2 = [0, 0];
-      vector2[0] = destinationTopCardBox.x - origin.x;
-      vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
-
-      source.deck.passCard(destination.deck);
-      topCard.card.style.zIndex = `${destination.deck.cards.length}`;
-
-      await source.slideCard(topCard, vector2, 400);
-      await destination.container.appendChild(topCard.card);
-      await destination.cascade([0, 0.18], 0);
+    const moveCardToDeck = function (source, destination) {
+      return new Promise((resolve)=>{
+        const topCard = this.deck.cards[this.deck.cards.length-1];
+        topCard.card.addEventListener('click', async (Event)=>{
+          console.log(source);
+          console.log(destination);
+          let topCard = source.deck.cards[source.deck.cards.length - 1];
+          Object.assign(topCard, Animate());
       
-    }
+          const origin = topCard.card.getBoundingClientRect();
+          const destinationTopCard = destination.deck.cards[destination.deck.cards.length - 1];
+          const destinationSecondTopCard =
+            destination.deck.cards[destination.deck.cards.length - 2];
+          const destinationTopCardBox =
+            destinationTopCard.card.getBoundingClientRect();
+          const destinationSecondTopCardBox =
+            destinationSecondTopCard.card.getBoundingClientRect();
+      
+          const cardTranslateValue = getComputedStyle(topCard.card).transform;
+          const actualTranslateValue = Number(
+            [...cardTranslateValue].splice(22, 5).join("")
+          );
+          const yOffset =
+            destinationTopCardBox.y -
+            destinationSecondTopCardBox.y +
+            actualTranslateValue;
+      
+          const vector2 = [0, 0];
+          vector2[0] = destinationTopCardBox.x - origin.x;
+          vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
+      
+          source.deck.passCard(destination.deck);
+          topCard.card.style.zIndex = `${destination.deck.cards.length}`;
+      
+          await source.slideCard(topCard, vector2, 3000);
+          await destination.container.appendChild(topCard.card);
+          await destination.cascade([0, 0.18], 0);
+          resolve();
+        }, {once: true});
+      })
+    };
 
     function reset(deckBase){
       for(const child of deckBase.container.children) {
