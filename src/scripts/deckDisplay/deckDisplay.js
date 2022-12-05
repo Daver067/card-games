@@ -99,12 +99,26 @@ function deckDisplay () {
     pile2.cascade([0, 0.18], 0);
 
     const topCard = pile1.deck.cards[pile1.deck.cards.length-1];
-    topCard.card.addEventListener('click', pile1.moveCardToDeck.bind(Event, pile1,pile2), {once: true});
+    topCard.card.addEventListener('click', moveTopCard.bind(Event, pile1, pile2), {once: true});
 
-    const topCard2 = pile2.deck.cards[pile2.deck.cards.length-1];
-    topCard2.card.addEventListener('click', pile2.moveCardToDeck.bind(Event, pile2,pile1), {once: true});
+    const topCard2 = pile2.deck.cards[pile1.deck.cards.length-1];
+    topCard2.card.addEventListener('click', moveTopCard.bind(Event, pile2, pile1), {once: true});
     
+    function moveTopCard(source,destination) {
 
+      const destinationPreviousTopCard = destination.deck.cards[destination.deck.cards.length-1];
+      destinationPreviousTopCard.card.removeEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
+     
+      source.moveCardToDeck(source, destination);
+
+
+      const sourceTopCard = source.deck.cards[source.deck.cards.length-1];
+      sourceTopCard.card.addEventListener('click', moveTopCard.bind(Event, source, destination), {once: true});
+      
+
+      const destinationTopCard = destination.deck.cards[destination.deck.cards.length-1];
+      destinationTopCard.card.addEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
+    };
     // This is a super useful template for chaining
     // animations one after another.
     async function exectuteAnimations() {
@@ -205,7 +219,6 @@ function deckDisplay () {
     };
 
     async function moveCardToDeck(source, destination) {
-      
       console.log(source);
       console.log(destination);
       let topCard = source.deck.cards[source.deck.cards.length - 1];
