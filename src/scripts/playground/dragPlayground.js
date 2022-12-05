@@ -1,5 +1,5 @@
 import Deck from "../DeckClass";
-import { deckDisplay } from "../deckDisplay/deckDisplay";
+import { addDeckBase } from "../deckDisplay/deckDisplay";
 import { addDraggable } from "../deckDisplay/draggable/grabAndMove";
 import { makeFlop } from "../showUI";
 import StandardCards from "../standardPackOfCards";
@@ -23,22 +23,26 @@ function buildPlayground(deck) {
   deck.cards.forEach((card) => {
     card.blindFlip();
     testFlop.appendChild(card.card);
+    card.card.style.position = "relative";
   });
 
   // deck testing
-  const deckDisplaya = deckDisplay();
-  const deckDisplayElement = deckDisplaya.addDeckBase();
-  const deckDisplayElement2 = deckDisplaya.addDeckBase();
+  const deckDisplayElement1 = addDeckBase();
+  const deckDisplayElement2 = addDeckBase();
 
-  deckDisplayElement.deck.cards = StandardCards();
+  deckDisplayElement1.deck.cards = StandardCards();
 
-  document.body.appendChild(deckDisplayElement.container);
-  deckDisplayElement.deck.passCard(deckDisplayElement2.deck);
-
-  deckDisplayElement.stack();
+  document.body.appendChild(deckDisplayElement1.container);
+  deckDisplayElement1.deck.passCard(deckDisplayElement2.deck);
+  console.log(deckDisplayElement1);
+  console.log(deckDisplayElement2);
+  deckDisplayElement1.reset();
+  deckDisplayElement1.cascade([0, 0 - 0.003], 0);
 
   document.body.appendChild(deckDisplayElement2.container);
-  deckDisplayElement2.cascade();
+  deckDisplayElement2.reset();
+
+  deckDisplayElement2.cascade(([0, -0.003], 0));
 
   return testFlop;
 }

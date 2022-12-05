@@ -193,74 +193,69 @@ function deckDisplay() {
     return page;
   }
 
-  // Adds a base the size of the card to be the basis of deck layouts.
-  function addDeckBase() {
-    let deck = new Deck(); // Must always equal an array of cards.
-    const container = document.createElement("div");
-    container.classList.add("layout-deck-base");
-
-    function slideCard(card, vector2, duration) {
-      const animatedCard = Object.assign({}, Animate(), card);
-      const slide = animatedCard.slide(animatedCard.card, vector2, duration);
-      return slide.finished;
-    }
-
-    function slideDeck(deck, vector2, duration) {
-      const animatedDeck = Object.assign({}, Animate(), deck);
-      const slide = animatedDeck.slide(
-        animatedDeck.container,
-        vector2,
-        duration
-      );
-      return slide.finished;
-    }
-
-    function cascade(percent /* Percentage */, duration /* ms */) {
-      const promise = new Promise((resolve) => {
-        const arrayFinished = []; // Array of .finished promises returned by animate
-        for (let i = 0; i < deck.cards.length; i++) {
-          const card = deck.cards[i];
-          const vector2 = [];
-          const cardElement = deck.cards[i].card;
-          vector2[0] = percent[0] * parseInt(cardElement.offsetWidth) * i;
-          vector2[1] = percent[1] * parseInt(cardElement.offsetHeight) * i;
-          const slide = slideCard(card, vector2, duration);
-          arrayFinished.push(slide);
-        }
-        resolve(
-          Promise.all(arrayFinished).then(() => {
-            console.log("all animations finished");
-          })
-        );
-      });
-      return promise;
-    }
-
-    function reset(deckBase) {
-      while (deckBase.container.firstElementChild) {
-        deckBase.container.removeChild(deckBase.container.firstElementChild);
-      }
-
-      for (let i = 0; i < deckBase.deck.cards.length; i++) {
-        const card = deckBase.deck.cards[i];
-        deckBase.container.appendChild(card.card);
-      }
-    }
-
-    return {
-      container,
-      deck,
-      slideCard,
-      slideDeck,
-      cascade,
-      reset,
-    };
-  }
-
   return {
     displayTestPage,
-    addDeckBase,
   };
 }
 
-export { deckDisplay };
+// Adds a base the size of the card to be the basis of deck layouts.
+function addDeckBase() {
+  let deck = new Deck(); // Must always equal an array of cards.
+  const container = document.createElement("div");
+  container.classList.add("layout-deck-base");
+
+  function slideCard(card, vector2, duration) {
+    const animatedCard = Object.assign({}, Animate(), card);
+    const slide = animatedCard.slide(animatedCard.card, vector2, duration);
+    return slide.finished;
+  }
+
+  function slideDeck(deck, vector2, duration) {
+    const animatedDeck = Object.assign({}, Animate(), deck);
+    const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
+    return slide.finished;
+  }
+
+  function cascade(percent /* Percentage */, duration /* ms */) {
+    const promise = new Promise((resolve) => {
+      const arrayFinished = []; // Array of .finished promises returned by animate
+      for (let i = 0; i < deck.cards.length; i++) {
+        const card = deck.cards[i];
+        const vector2 = [];
+        const cardElement = deck.cards[i].card;
+        vector2[0] = percent[0] * parseInt(cardElement.offsetWidth) * i;
+        vector2[1] = percent[1] * parseInt(cardElement.offsetHeight) * i;
+        const slide = slideCard(card, vector2, duration);
+        arrayFinished.push(slide);
+      }
+      resolve(
+        Promise.all(arrayFinished).then(() => {
+          console.log("all animations finished");
+        })
+      );
+    });
+    return promise;
+  }
+
+  function reset() {
+    while (this.container.firstElementChild) {
+      this.container.removeChild(this.container.firstElementChild);
+    }
+
+    for (let i = 0; i < this.deck.cards.length; i++) {
+      const card = this.deck.cards[i];
+      this.container.appendChild(card.card);
+    }
+  }
+
+  return {
+    container,
+    deck,
+    slideCard,
+    slideDeck,
+    cascade,
+    reset,
+  };
+}
+
+export { deckDisplay, addDeckBase };
