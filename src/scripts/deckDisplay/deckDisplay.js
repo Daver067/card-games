@@ -99,48 +99,10 @@ function deckDisplay () {
     pile2.cascade([0, 0.18], 0);
 
     const topCard = pile1.deck.cards[pile1.deck.cards.length-1];
-    topCard.card.addEventListener('click', moveCardToDeck, {once: true});
+    topCard.card.addEventListener('click', pile1.moveCardToDeck.bind(Event, pile1,pile2), {once: true});
 
-    async function moveCardToDeck() {
-      let topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
-      Object.assign(topCard, Animate());
-
-      const origin = topCard.card.getBoundingClientRect();
-      const destinationTopCard = pile2.deck.cards[pile2.deck.cards.length - 1];
-      const destinationSecondTopCard =
-        pile2.deck.cards[pile2.deck.cards.length - 2];
-      const destinationTopCardBox =
-        destinationTopCard.card.getBoundingClientRect();
-      const destinationSecondTopCardBox =
-        destinationSecondTopCard.card.getBoundingClientRect();
-
-      const cardTranslateValue = getComputedStyle(topCard.card).transform;
-      const actualTranslateValue = Number(
-        [...cardTranslateValue].splice(22, 5).join("")
-      );
-      console.log(cardTranslateValue[22]);
-      console.log(actualTranslateValue);
-      const yOffset =
-        destinationTopCardBox.y -
-        destinationSecondTopCardBox.y +
-        actualTranslateValue;
-      console.log(yOffset);
-
-      const vector2 = [0, 0];
-      vector2[0] = destinationTopCardBox.x - origin.x;
-      vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
-
-      pile1.deck.passCard(pile2.deck);
-      topCard.card.style.zIndex = `${pile2.deck.cards.length}`;
-
-      await pile1.slideCard(topCard, vector2, 400);
-      await pile2.container.appendChild(topCard.card);
-      await pile2.cascade([0, 0.18], 0);
-      
-      topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
-      topCard.card.addEventListener("click", moveCardToDeck, { once: true });
- 
-    }
+    const topCard2 = pile2.deck.cards[pile2.deck.cards.length-1];
+    topCard2.card.addEventListener('click', pile2.moveCardToDeck.bind(Event, pile2,pile1), {once: true});
     
 
     // This is a super useful template for chaining
@@ -242,6 +204,47 @@ function deckDisplay () {
       return promise;
     };
 
+    async function moveCardToDeck(source, destination) {
+      
+      console.log(source);
+      console.log(destination);
+      let topCard = source.deck.cards[source.deck.cards.length - 1];
+      Object.assign(topCard, Animate());
+
+      const origin = topCard.card.getBoundingClientRect();
+      const destinationTopCard = destination.deck.cards[destination.deck.cards.length - 1];
+      const destinationSecondTopCard =
+        destination.deck.cards[destination.deck.cards.length - 2];
+      const destinationTopCardBox =
+        destinationTopCard.card.getBoundingClientRect();
+      const destinationSecondTopCardBox =
+        destinationSecondTopCard.card.getBoundingClientRect();
+
+      const cardTranslateValue = getComputedStyle(topCard.card).transform;
+      const actualTranslateValue = Number(
+        [...cardTranslateValue].splice(22, 5).join("")
+      );
+      console.log(cardTranslateValue[22]);
+      console.log(actualTranslateValue);
+      const yOffset =
+        destinationTopCardBox.y -
+        destinationSecondTopCardBox.y +
+        actualTranslateValue;
+      console.log(yOffset);
+
+      const vector2 = [0, 0];
+      vector2[0] = destinationTopCardBox.x - origin.x;
+      vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
+
+      source.deck.passCard(destination.deck);
+      topCard.card.style.zIndex = `${destination.deck.cards.length}`;
+
+      await source.slideCard(topCard, vector2, 400);
+      await destination.container.appendChild(topCard.card);
+      await destination.cascade([0, 0.18], 0);
+      
+    }
+
     function reset(deckBase){
       for(const child of deckBase.container.children) {
         deckBase.container.removeChild(child);
@@ -257,6 +260,7 @@ function deckDisplay () {
       deck,
       slideCard,
       slideDeck,
+      moveCardToDeck,
       cascade,
       reset,
     };
