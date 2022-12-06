@@ -246,7 +246,7 @@ function addDeckBase() {
 
     const cardTranslateValue = getComputedStyle(topCard.card).transform;
     console.log(cardTranslateValue);
-    const regEx = /\s-?\d{1,3}.?\d{0,3}?(?=\))/;
+    const regEx = /\s-?\d{1,5}.?\d{0,3}?(?=\))/;
     const actualTranslateValue = Number(cardTranslateValue.match(regEx)[0]);
     console.log(actualTranslateValue);
     const yOffset =
