@@ -247,47 +247,34 @@ function addDeckBase(type) {
   async function moveCardToDeck(source, destination) {
     let topCard = source.deck.cards[source.deck.cards.length - 1];
     Object.assign(topCard, Animate());
-    const origin = topCard.card.getBoundingClientRect();
 
-    // if there are no destination cards these values are default
-    let destinationTopCardBox = destination.container.getBoundingClientRect();
-    let destinationSecondTopCardBox =
-      destination.container.getBoundingClientRect();
+    function calculateOffset(element, deckBase, index){
+      const vector2 = [];
+      vector2[0] =
+        deckBase.cascadePercent[0] * parseFloat(element.offsetWidth) * index;
+      vector2[1] =
+        deckBase.cascadePercent[1] * parseFloat(element.offsetHeight) * index;
+      return vector2;
+    };
 
-    if (destination.deck.cards.length >= 1) {
-      const destinationTopCard =
-        destination.deck.cards[destination.deck.cards.length - 1];
-      destinationTopCardBox = destinationTopCard.card.getBoundingClientRect();
-    }
+    const sourceBox = source.container.getBoundingClientRect();
+    const destinationBox = destination.container.getBoundingClientRect();
 
-    if (destination.deck.cards.length >= 2) {
-      const destinationSecondTopCard =
-        destination.deck.cards[destination.deck.cards.length - 2];
-      destinationSecondTopCardBox =
-        destinationSecondTopCard.card.getBoundingClientRect();
-    }
+    const sourceOffset = calculateOffset(topCard.card, source, (source.deck.cards.length-1));
+    const destinationOffset = calculateOffset(topCard.card, destination, (destination.deck.cards.length));
+    console.log(sourceOffset);
+    console.log(destinationOffset);
 
-    const cardTranslateValue = getComputedStyle(topCard.card).transform;
-    console.log(cardTranslateValue);
-    const regEx = /\s-?\d{1,5}.?\d{0,3}?(?=\))/;
-    const actualTranslateValue = Number(cardTranslateValue.match(regEx)[0]);
-    console.log(actualTranslateValue);
-    const yOffset =
-      destinationTopCardBox.y -
-      destinationSecondTopCardBox.y +
-      actualTranslateValue;
-    console.log(yOffset);
-
-    const vector2 = [0, 0];
-    vector2[0] = destinationTopCardBox.x - origin.x;
-    vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
+    const vector2 = [];
+    vector2[0] = (destinationBox.x + destinationOffset[0]) - (sourceBox.x + sourceOffset[0]) + sourceOffset[0];
+    vector2[1] = (destinationBox.y + destinationOffset[1]) - (sourceBox.y + sourceOffset[1]) + sourceOffset[1];
+    console.log(vector2);
 
     source.deck.passCard(destination.deck);
-    topCard.card.style.zIndex = `${destination.deck.cards.length}`;
-
-    await source.slideCard(topCard, vector2, 400);
+    topCard.card.style.zIndex = destination.deck.cards.length;
+    await slideCard(topCard, vector2, 300);
     await destination.container.appendChild(topCard.card);
-    await destination.cascade();
+    await slideCard(topCard, destinationOffset, 0);
   }
 
   function reset() {
