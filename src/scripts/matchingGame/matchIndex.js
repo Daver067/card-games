@@ -22,6 +22,7 @@ const matchGame = {
 
     matchGame.deck.cards.forEach((cardInDeck) => {
       cardInDeck.matched = false;
+      cardInDeck.card.style.positon = "relative";
       matchGame.addflip(cardInDeck);
       testFlop.appendChild(cardInDeck.card);
     });
