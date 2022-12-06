@@ -69,11 +69,11 @@ function deckDisplay() {
     });
 
     cascadeButton.addEventListener("click", function () {
-      pile1.cascade([0, 0.18], 5000);
+      pile1.cascadeValueSetter([0, 0.18], 5000);
     });
 
     stackButton.addEventListener("click", function () {
-      pile1.cascade([0, 0 - 0.003], 2000);
+      pile1.cascadeValueSetter([0, 0 - 0.003], 2000);
     });
 
     flipAllButton.addEventListener("click", function () {
@@ -136,14 +136,15 @@ function deckDisplay() {
     async function exectuteAnimations() {
       await pile1.deck.flipBatchDuration(pile1.deck.cards, 1500);
       await pile1.slideDeck(pile1, [40, 50], 2000);
-      await pile1.cascade([0, 0.18], 500); // Cascades cards
-      await pile1.cascade([0, 0 - 0.003], 500); // Returns them to stack form
+
+      await pile1.cascadeValueSetter([0, 0.18], 500); // Cascades cards
+      await pile1.cascadeValueSetter([0, 0 - 0.003], 500); // Returns them to stack form
       await pile1.slideDeck(pile1, [0, 0], 2000);
-      await pile1.cascade([1.1, 0], 500); // Cascades cards
+      await pile1.cascadeValueSetter([1.1, 0], 500); // Cascades cards
       await waitTime(1000);
       await pile1.deck.flipBatchDuration(pile1.deck.cards, 2000);
       await waitTime(2000);
-      await pile1.cascade([0, 0 - 0.003], 500);
+      await pile1.cascadeValueSetter([0, 0 - 0.003], 500);
       await pile1.deck.flipBatchIncrement(pile1.deck.cards, 30);
     }
 
@@ -224,7 +225,6 @@ function addDeckBase(type) {
         const card = this.deck.cards[i];
         const vector2 = [];
         const cardElement = this.deck.cards[i].card;
-        console.log(this.cascadePercent);
         vector2[0] =
           this.cascadePercent[0] * parseInt(cardElement.offsetWidth) * i;
         vector2[1] =
@@ -237,10 +237,19 @@ function addDeckBase(type) {
     return promise;
   }
 
+  function cascadeValueSetter(percent, duration) {
+    this.cascadePercent = percent;
+    this.cascadeDuration = duration;
+    this.cascade();
+    this.cascadeDuration = 0;
+  }
+
   async function moveCardToDeck(source, destination) {
     let topCard = source.deck.cards[source.deck.cards.length - 1];
     Object.assign(topCard, Animate());
     const origin = topCard.card.getBoundingClientRect();
+
+    // if there are no destination cards these values are default
     let destinationTopCardBox = destination.container.getBoundingClientRect();
     let destinationSecondTopCardBox =
       destination.container.getBoundingClientRect();
@@ -301,6 +310,7 @@ function addDeckBase(type) {
     slideDeck,
     moveCardToDeck,
     cascade,
+    cascadeValueSetter,
     reset,
   };
 }
