@@ -42,7 +42,7 @@ function deckDisplay() {
         if (event.code === "Enter") {
           const root = document.documentElement;
           root.style.setProperty("--card-size", `${input.value}px`);
-          pile1.cascade([0, 0 - 0.003], 50);
+          pile1.cascade();
         }
       });
 
@@ -83,9 +83,9 @@ function deckDisplay() {
     const deck = new Deck(StandardCards());
     deck.shuffleDeck();
 
-    const pile1 = addDeckBase();
+    const pile1 = addDeckBase("stack");
     deckFlex1.appendChild(pile1.container);
-    const pile2 = addDeckBase();
+    const pile2 = addDeckBase("cascade");
     deckFlex2.appendChild(pile2.container);
 
     dealCards(27, deck, pile1.deck);
@@ -93,8 +93,8 @@ function deckDisplay() {
     dealCards(27, deck, pile2.deck);
     initalizeDeckBase(pile2);
 
-    pile1.cascade([0, 0 - 0.003], 0);
-    pile2.cascade([0, 0.18], 0);
+    pile1.cascade();
+    pile2.cascade();
 
     const topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
     topCard.boundListener = moveTopCard.bind(topCard, pile1, pile2);
@@ -137,7 +137,7 @@ function deckDisplay() {
       await pile1.deck.flipBatchDuration(pile1.deck.cards, 1500);
       await pile1.slideDeck(pile1, [40, 50], 2000);
       await pile1.cascade([0, 0.18], 500); // Cascades cards
-      //await(pile1.cascade([0, 0.-0.003], 500)); // Returns them to stack form
+      await pile1.cascade([0, 0 - 0.003], 500); // Returns them to stack form
       await pile1.slideDeck(pile1, [0, 0], 2000);
       await pile1.cascade([1.1, 0], 500); // Cascades cards
       await waitTime(1000);
@@ -189,7 +189,17 @@ function deckDisplay() {
 }
 
 // Adds a base the size of the card to be the basis of deck layouts.
-function addDeckBase() {
+function addDeckBase(type) {
+  let cascadePercent = [0, 0.001];
+  let cascadeDuration = 0;
+  if (type === "stack") {
+    cascadePercent = [0, -0.003];
+    cascadeDuration = 0;
+  } else if (type === "cascade") {
+    cascadePercent = [0, 0.18];
+    cascadeDuration = 0;
+  }
+
   let deck = new Deck(); // Must always equal an array of cards.
   const container = document.createElement("div");
   container.classList.add("layout-deck-base");
@@ -206,16 +216,20 @@ function addDeckBase() {
     return slide.finished;
   }
 
-  function cascade(percent /* Percentage */, duration /* ms */) {
+  function cascade() {
+    this.reset();
     const promise = new Promise((resolve) => {
       const arrayFinished = []; // Array of .finished promises returned by animate
-      for (let i = 0; i < deck.cards.length; i++) {
-        const card = deck.cards[i];
+      for (let i = 0; i < this.deck.cards.length; i++) {
+        const card = this.deck.cards[i];
         const vector2 = [];
-        const cardElement = deck.cards[i].card;
-        vector2[0] = percent[0] * parseInt(cardElement.offsetWidth) * i;
-        vector2[1] = percent[1] * parseInt(cardElement.offsetHeight) * i;
-        const slide = slideCard(card, vector2, duration);
+        const cardElement = this.deck.cards[i].card;
+        console.log(this.cascadePercent);
+        vector2[0] =
+          this.cascadePercent[0] * parseInt(cardElement.offsetWidth) * i;
+        vector2[1] =
+          this.cascadePercent[1] * parseInt(cardElement.offsetHeight) * i;
+        const slide = slideCard(card, vector2, this.cascadeDuration);
         arrayFinished.push(slide);
       }
       resolve(Promise.all(arrayFinished).then(() => {}));
@@ -264,7 +278,7 @@ function addDeckBase() {
 
     await source.slideCard(topCard, vector2, 400);
     await destination.container.appendChild(topCard.card);
-    await destination.cascade([0, 0.18], 0);
+    await destination.cascade();
   }
 
   function reset() {
@@ -281,6 +295,8 @@ function addDeckBase() {
   return {
     container,
     deck,
+    cascadePercent,
+    cascadeDuration,
     slideCard,
     slideDeck,
     moveCardToDeck,
