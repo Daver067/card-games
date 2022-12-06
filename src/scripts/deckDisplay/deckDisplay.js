@@ -96,7 +96,6 @@ function deckDisplay() {
     pile2.cascade([0, 0.18], 0);
 
     const topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
-<<<<<<< HEAD
     topCard.card.addEventListener("click", moveCardToDeck, { once: true });
 
     async function moveCardToDeck() {
@@ -104,78 +103,35 @@ function deckDisplay() {
       Object.assign(topCard, Animate());
 
       const origin = topCard.card.getBoundingClientRect();
-      const destinationTopCard = pile2.deck.cards[pile2.deck.cards.length - 1];
-      const destinationSecondTopCard =
-        pile2.deck.cards[pile2.deck.cards.length - 2];
-      const destinationTopCardBox =
-        destinationTopCard.card.getBoundingClientRect();
-      const destinationSecondTopCardBox =
-        destinationSecondTopCard.card.getBoundingClientRect();
       console.log(origin);
-      console.log(destinationTopCardBox);
-      console.log(destinationSecondTopCardBox);
-      const cardTranslateValue = getComputedStyle(topCard.card).transform;
-      console.log(cardTranslateValue);
-      const actualTranslateValue = Number(
-        [...cardTranslateValue].splice(22, 5).join("")
-      );
-      console.log(cardTranslateValue[22]);
-      console.log(actualTranslateValue);
-      const yOffset =
-        destinationTopCardBox.y -
-        destinationSecondTopCardBox.y +
-        actualTranslateValue;
-      console.log(yOffset);
-
-      const vector2 = [0, 0];
-      vector2[0] = destinationTopCardBox.x - origin.x;
-      vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
 
       pile1.deck.passCard(pile2.deck);
-      topCard.card.style.zIndex = `${pile2.deck.cards.length}`;
+      pile2.container.appendChild(topCard.card);
+      await pile2.reset(pile2);
+      await pile2.cascade([0, 0.18], 0);
+
+      const destination = topCard.card.getBoundingClientRect();
+      console.log(destination);
+
+      pile2.deck.passCard(pile1.deck);
+      pile1.container.appendChild(topCard.card);
+      await pile1.reset(pile1);
+      await pile1.cascade([0, 0 - 0.003], 0);
+
+      const vector2 = [0, 0];
+      vector2[0] = destination.x - origin.x;
+      vector2[1] = destination.y - origin.y;
+
+      pile1.deck.passCard(pile2.deck);
+      topCard.card.style.zIndex = `${pile2.deck.cards.length - 1}`;
       await pile1.slideCard(topCard, vector2, 5000);
-      await pile2.container.appendChild(topCard.card);
+      pile2.container.appendChild(topCard.card);
       await pile2.cascade([0, 0.18], 0);
 
       topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
       topCard.card.addEventListener("click", moveCardToDeck, { once: true });
     }
-=======
-    topCard.boundListener = moveTopCard.bind(topCard, pile1, pile2);
-    topCard.card.addEventListener("click", topCard.boundListener);
 
-    const topCard2 = pile2.deck.cards[pile2.deck.cards.length - 1];
-    topCard2.boundListener = moveTopCard.bind(topCard2, pile2, pile1);
-    topCard2.card.addEventListener("click", topCard2.boundListener);
-
-    // function to move the top card
-    function moveTopCard(source, destination) {
-      // gets the previous card from the top of the destination, and removes the listener
-      const destinationPreviousTopCard =
-        destination.deck.cards[destination.deck.cards.length - 1];
-      destinationPreviousTopCard.card.removeEventListener(
-        "click",
-        destinationPreviousTopCard.boundListener
-      );
-      // removes the click listener from the card you moved. changes the instance and adds the listener to move it back
-      this.card.removeEventListener("click", this.boundListener);
-      source.moveCardToDeck(source, destination);
-      this.boundListener = moveTopCard.bind(this, destination, source);
-      this.card.addEventListener("click", this.boundListener);
->>>>>>> ChartleyTesting
-
-      // finds the new top card on the 'source' deck, instances the bound listener, and adds it
-      const sourceNewTopCard = source.deck.cards[source.deck.cards.length - 1];
-      sourceNewTopCard.boundListener = moveTopCard.bind(
-        sourceNewTopCard,
-        source,
-        destination
-      );
-      sourceNewTopCard.card.addEventListener(
-        "click",
-        sourceNewTopCard.boundListener
-      );
-    }
     // This is a super useful template for chaining
     // animations one after another.
     async function exectuteAnimations() {
@@ -227,121 +183,11 @@ function deckDisplay() {
     }
 
     return page;
-<<<<<<< HEAD
-=======
   }
-
-  // Adds a base the size of the card to be the basis of deck layouts.
-  function addDeckBase() {
-    let deck = new Deck(); // Must always equal an array of cards.
-    const container = document.createElement("div");
-    container.classList.add("layout-deck-base");
-
-    function slideCard(card, vector2, duration) {
-      const animatedCard = Object.assign({}, Animate(), card);
-      const slide = animatedCard.slide(animatedCard.card, vector2, duration);
-      return slide.finished;
-    }
-
-    function slideDeck(deck, vector2, duration) {
-      const animatedDeck = Object.assign({}, Animate(), deck);
-      const slide = animatedDeck.slide(
-        animatedDeck.container,
-        vector2,
-        duration
-      );
-      return slide.finished;
-    }
-
-    function cascade(percent /* Percentage */, duration /* ms */) {
-      const promise = new Promise((resolve) => {
-        const arrayFinished = []; // Array of .finished promises returned by animate
-        for (let i = 0; i < deck.cards.length; i++) {
-          const card = deck.cards[i];
-          const vector2 = [];
-          const cardElement = deck.cards[i].card;
-          vector2[0] = percent[0] * parseInt(cardElement.offsetWidth) * i;
-          vector2[1] = percent[1] * parseInt(cardElement.offsetHeight) * i;
-          const slide = slideCard(card, vector2, duration);
-          arrayFinished.push(slide);
-        }
-        resolve(Promise.all(arrayFinished).then(() => {}));
-      });
-      return promise;
-    }
-
-    async function moveCardToDeck(source, destination) {
-      let topCard = source.deck.cards[source.deck.cards.length - 1];
-      Object.assign(topCard, Animate());
-      const origin = topCard.card.getBoundingClientRect();
-      let destinationTopCardBox = destination.container.getBoundingClientRect();
-      let destinationSecondTopCardBox =
-        destination.container.getBoundingClientRect();
-
-      if (destination.deck.cards.length >= 1) {
-        const destinationTopCard =
-          destination.deck.cards[destination.deck.cards.length - 1];
-        destinationTopCardBox = destinationTopCard.card.getBoundingClientRect();
-      }
-
-      if (destination.deck.cards.length >= 2) {
-        const destinationSecondTopCard =
-          destination.deck.cards[destination.deck.cards.length - 2];
-        destinationSecondTopCardBox =
-          destinationSecondTopCard.card.getBoundingClientRect();
-      }
-
-      const cardTranslateValue = getComputedStyle(topCard.card).transform;
-      console.log(cardTranslateValue);
-      const regEx = /\s-?\d{1,3}.?\d{0,3}?(?=\))/;
-      const actualTranslateValue = Number(cardTranslateValue.match(regEx)[0]);
-      console.log(actualTranslateValue);
-      const yOffset =
-        destinationTopCardBox.y -
-        destinationSecondTopCardBox.y +
-        actualTranslateValue;
-      console.log(yOffset);
-
-      const vector2 = [0, 0];
-      vector2[0] = destinationTopCardBox.x - origin.x;
-      vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
-
-      source.deck.passCard(destination.deck);
-      topCard.card.style.zIndex = `${destination.deck.cards.length}`;
-
-      await source.slideCard(topCard, vector2, 400);
-      await destination.container.appendChild(topCard.card);
-      await destination.cascade([0, 0.18], 0);
-    }
-
-    function reset(deckBase) {
-      for (const child of deckBase.container.children) {
-        deckBase.container.removeChild(child);
-      }
-      for (let i = 0; i < deckBase.deck.cards.length; i++) {
-        const card = deckBase.deck.cards[i];
-        deckBase.container.appendChild(card.card);
-      }
-    }
-
-    return {
-      container,
-      deck,
-      slideCard,
-      slideDeck,
-      moveCardToDeck,
-      cascade,
-      reset,
-    };
->>>>>>> ChartleyTesting
-  }
-
   return {
     displayTestPage,
-<<<<<<< HEAD
   };
 }
-
 // Adds a base the size of the card to be the basis of deck layouts.
 function addDeckBase() {
   let deck = new Deck(); // Must always equal an array of cards.
@@ -391,11 +237,6 @@ function addDeckBase() {
       this.container.appendChild(card.card);
     }
   }
-=======
-    addDeckBase,
-  };
-}
->>>>>>> ChartleyTesting
 
   return {
     container,
