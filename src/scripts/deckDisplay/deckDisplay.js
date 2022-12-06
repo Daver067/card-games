@@ -247,7 +247,20 @@ function addDeckBase(type) {
   async function moveCardToDeck(source, destination) {
     let topCard = source.deck.cards[source.deck.cards.length - 1];
     Object.assign(topCard, Animate());
-
+    const sourceBox = source.container.getBoundingClientRect();
+    const destinationBox = destination.container.getBoundingClientRect();
+    const destinationOffset = calculateOffset(topCard.card, destination, (destination.deck.cards.length));
+    
+    const vector2 = [];
+    vector2[0] = destinationBox.x + destinationOffset[0] - sourceBox.x;
+    vector2[1] = destinationBox.y + destinationOffset[1] - sourceBox.y;
+    
+    source.deck.passCard(destination.deck);
+    topCard.card.style.zIndex = destination.deck.cards.length;
+    await slideCard(topCard, vector2, 3000);
+    await destination.container.appendChild(topCard.card);
+    await slideCard(topCard, destinationOffset, 0);
+    
     function calculateOffset(element, deckBase, index){
       const vector2 = [];
       vector2[0] =
@@ -256,25 +269,6 @@ function addDeckBase(type) {
         deckBase.cascadePercent[1] * parseFloat(element.offsetHeight) * index;
       return vector2;
     };
-
-    const sourceBox = source.container.getBoundingClientRect();
-    const destinationBox = destination.container.getBoundingClientRect();
-
-    const sourceOffset = calculateOffset(topCard.card, source, (source.deck.cards.length-1));
-    const destinationOffset = calculateOffset(topCard.card, destination, (destination.deck.cards.length));
-    console.log(sourceOffset);
-    console.log(destinationOffset);
-
-    const vector2 = [];
-    vector2[0] = (destinationBox.x + destinationOffset[0]) - (sourceBox.x + sourceOffset[0]) + sourceOffset[0];
-    vector2[1] = (destinationBox.y + destinationOffset[1]) - (sourceBox.y + sourceOffset[1]) + sourceOffset[1];
-    console.log(vector2);
-
-    source.deck.passCard(destination.deck);
-    topCard.card.style.zIndex = destination.deck.cards.length;
-    await slideCard(topCard, vector2, 300);
-    await destination.container.appendChild(topCard.card);
-    await slideCard(topCard, destinationOffset, 0);
   }
 
   function reset() {
