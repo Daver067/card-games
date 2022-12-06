@@ -98,26 +98,17 @@ function deckDisplay () {
     pile1.cascade([0, 0.-0.003], 0);
     pile2.cascade([0, 0.18], 0);
 
-    const topCard = pile1.deck.cards[pile1.deck.cards.length-1];
-    topCard.card.addEventListener('click', moveTopCard.bind(Event, pile1, pile2), {once: true});
+    pile1.addClickToMoveTopCard(pile2, moveTopCard.bind(Event, pile1, pile2));
 
-    const topCard2 = pile2.deck.cards[pile1.deck.cards.length-1];
-    topCard2.card.addEventListener('click', moveTopCard.bind(Event, pile2, pile1), {once: true});
+    pile2.addClickToMoveTopCard(pile1, moveTopCard.bind(Event, pile2, pile1));
     
     function moveTopCard(source,destination) {
-
       const destinationPreviousTopCard = destination.deck.cards[destination.deck.cards.length-1];
       destinationPreviousTopCard.card.removeEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
-     
       const moveCard = source.moveCardToDeck(source, destination);
-      
       moveCard.then(()=>{
-        const sourceTopCard = source.deck.cards[source.deck.cards.length-1];
-        sourceTopCard.card.addEventListener('click', moveTopCard.bind(Event, source, destination), {once: true});
-        
-  
-        const destinationTopCard = destination.deck.cards[destination.deck.cards.length-1];
-        destinationTopCard.card.addEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
+        source.addClickToMoveTopCard(destination, moveTopCard.bind(Event, source, destination));
+        destination.addClickToMoveTopCard(source, moveTopCard.bind(Event, destination, source));
       })
 
 
@@ -146,14 +137,14 @@ function deckDisplay () {
       await(pile1.deck.flipBatchIncrement(pile1.deck.cards, 30));
     };
     
-    
-    
+
     function waitTime (time){
       const promise = new Promise((resolve) => {
         setTimeout(resolve, time);
       });
       return promise;
     } 
+
 
     function dealCards(quantity, source, target){
       for (let i = 0; i < quantity; i++) {
@@ -162,6 +153,7 @@ function deckDisplay () {
       }
     };
 
+
     function initalizeDeckBase(deckBase){
       for (let i = 0; i < deckBase.deck.cards.length; i++) {
         const card = deckBase.deck.cards[i];
@@ -169,11 +161,13 @@ function deckDisplay () {
       }
     };
     
+
     function createContainer(className) {
       const container = document.createElement('div');
       container.classList.add(className);
       return container;
     };
+
 
     function makeTestButton (text) {
       const button = document.createElement('button');
@@ -181,6 +175,7 @@ function deckDisplay () {
       button.textContent = text;
       return button;
     };
+
 
     return page;
   };
@@ -197,11 +192,13 @@ function deckDisplay () {
       return slide.finished;
     }
 
+
     function slideDeck (deck, vector2, duration) {
       const animatedDeck = Object.assign({}, Animate(), deck);
       const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
       return slide.finished;
     };
+
 
     function cascade(percent /* Percentage */, duration /* ms */){
       const promise = new Promise((resolve) => {
@@ -220,6 +217,7 @@ function deckDisplay () {
       });
       return promise;
     };
+
 
     const moveCardToDeck = function (source, destination) {
       return new Promise((resolve)=>{
@@ -263,6 +261,13 @@ function deckDisplay () {
       })
     };
 
+
+    function addClickToMoveTopCard (target, callBack) {
+      const topCard = this.deck.cards[this.deck.cards.length-1];
+      topCard.card.addEventListener('click', callBack, {once: true});
+    };
+
+
     function reset(deckBase){
       for(const child of deckBase.container.children) {
         deckBase.container.removeChild(child);
@@ -273,6 +278,7 @@ function deckDisplay () {
       }
     };
 
+
     return {
       container,
       deck,
@@ -280,6 +286,7 @@ function deckDisplay () {
       slideDeck,
       moveCardToDeck,
       cascade,
+      addClickToMoveTopCard,
       reset,
     };
   }
