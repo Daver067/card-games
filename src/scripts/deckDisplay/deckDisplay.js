@@ -96,78 +96,69 @@ function deckDisplay() {
     pile1.cascade();
     pile2.cascade();
 
-    const topCard = pile1.deck.cards[pile1.deck.cards.length - 1];
-    topCard.boundListener = moveTopCard.bind(topCard, pile1, pile2);
-    topCard.card.addEventListener("click", topCard.boundListener);
+    pile1.addClickToMoveTopCard(pile2, moveTopCard.bind(Event, pile1, pile2));
 
-    const topCard2 = pile2.deck.cards[pile2.deck.cards.length - 1];
-    topCard2.boundListener = moveTopCard.bind(topCard2, pile2, pile1);
-    topCard2.card.addEventListener("click", topCard2.boundListener);
+    pile2.addClickToMoveTopCard(pile1, moveTopCard.bind(Event, pile2, pile1));
+    
+    function moveTopCard(source,destination) {
+      const destinationPreviousTopCard = destination.deck.cards[destination.deck.cards.length-1];
+      destinationPreviousTopCard.card.removeEventListener('click', moveTopCard.bind(Event, destination, source), {once: true})
+      const moveCard = source.moveCardToDeck(source, destination);
+      moveCard.then(()=>{
+        source.addClickToMoveTopCard(destination, moveTopCard.bind(Event, source, destination));
+        destination.addClickToMoveTopCard(source, moveTopCard.bind(Event, destination, source));
+      })
 
-    // function to move the top card
-    function moveTopCard(source, destination) {
-      // gets the previous card from the top of the destination, and removes the listener
-      const destinationPreviousTopCard =
-        destination.deck.cards[destination.deck.cards.length - 1];
-      destinationPreviousTopCard.card.removeEventListener(
-        "click",
-        destinationPreviousTopCard.boundListener
-      );
-      // removes the click listener from the card you moved. changes the instance and adds the listener to move it back
-      this.card.removeEventListener("click", this.boundListener);
-      source.moveCardToDeck(source, destination);
-      this.boundListener = moveTopCard.bind(this, destination, source);
-      this.card.addEventListener("click", this.boundListener);
 
-      // finds the new top card on the 'source' deck, instances the bound listener, and adds it
-      const sourceNewTopCard = source.deck.cards[source.deck.cards.length - 1];
-      sourceNewTopCard.boundListener = moveTopCard.bind(
-        sourceNewTopCard,
-        source,
-        destination
-      );
-      sourceNewTopCard.card.addEventListener(
-        "click",
-        sourceNewTopCard.boundListener
-      );
-    }
+    };
     // This is a super useful template for chaining
     // animations one after another.
     async function exectuteAnimations() {
-      await pile1.deck.flipBatchDuration(pile1.deck.cards, 1500);
-      await pile1.slideDeck(pile1, [40, 50], 2000);
+      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 1500));
+      await(pile1.slideDeck(
+        (pile1),
+        [40,50],
+        2000
+      ));
+      await(pile1.cascade([0, 0.18], 500)); // Cascades cards
+      //await(pile1.cascade([0, 0.-0.003], 500)); // Returns them to stack form
+      await(pile1.slideDeck(
+        (pile1),
+        [0,0],
+        2000
+      ));
+      await(pile1.cascade([1.1, 0], 500)); // Cascades cards
+      await(waitTime(1000));
+      await(pile1.deck.flipBatchDuration(pile1.deck.cards, 2000));
+      await(waitTime(2000));
+      await(pile1.cascade([0, 0.-0.003], 500)); 
+      await(pile1.deck.flipBatchIncrement(pile1.deck.cards, 30));
+    };
+    
 
-      await pile1.cascadeValueSetter([0, 0.18], 500); // Cascades cards
-      await pile1.cascadeValueSetter([0, 0 - 0.003], 500); // Returns them to stack form
-      await pile1.slideDeck(pile1, [0, 0], 2000);
-      await pile1.cascadeValueSetter([1.1, 0], 500); // Cascades cards
-      await waitTime(1000);
-      await pile1.deck.flipBatchDuration(pile1.deck.cards, 2000);
-      await waitTime(2000);
-      await pile1.cascadeValueSetter([0, 0 - 0.003], 500);
-      await pile1.deck.flipBatchIncrement(pile1.deck.cards, 30);
-    }
-
-    function waitTime(time) {
+    function waitTime (time){
       const promise = new Promise((resolve) => {
         setTimeout(resolve, time);
       });
       return promise;
     }
 
-    function dealCards(quantity, source, target) {
+
+    function dealCards(quantity, source, target){
       for (let i = 0; i < quantity; i++) {
         const card = source.passCard(target);
         card.blindFlip();
       }
     }
 
-    function initalizeDeckBase(deckBase) {
+
+    function initalizeDeckBase(deckBase){
       for (let i = 0; i < deckBase.deck.cards.length; i++) {
         const card = deckBase.deck.cards[i];
         deckBase.container.appendChild(card.card);
       }
-    }
+    };
+    
 
     function createContainer(className) {
       const container = document.createElement("div");
@@ -175,12 +166,15 @@ function deckDisplay() {
       return container;
     }
 
-    function makeTestButton(text) {
-      const button = document.createElement("button");
-      button.classList.add("layout");
+
+    function makeTestButton (text) {
+      const button = document.createElement('button');
+      button.classList.add('layout');
       button.textContent = text;
       return button;
-    }
+    };
+
+
 
     return page;
   }
@@ -211,89 +205,81 @@ function addDeckBase(type) {
     return slide.finished;
   }
 
-  function slideDeck(deck, vector2, duration) {
-    const animatedDeck = Object.assign({}, Animate(), deck);
-    const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
-    return slide.finished;
-  }
 
-  function cascade() {
-    this.reset();
-    const promise = new Promise((resolve) => {
-      const arrayFinished = []; // Array of .finished promises returned by animate
-      for (let i = 0; i < this.deck.cards.length; i++) {
-        const card = this.deck.cards[i];
-        const vector2 = [];
-        const cardElement = this.deck.cards[i].card;
-        vector2[0] =
-          this.cascadePercent[0] * parseInt(cardElement.offsetWidth) * i;
-        vector2[1] =
-          this.cascadePercent[1] * parseInt(cardElement.offsetHeight) * i;
-        const slide = slideCard(card, vector2, this.cascadeDuration);
-        arrayFinished.push(slide);
-      }
-      resolve(Promise.all(arrayFinished).then(() => {}));
-    });
-    return promise;
-  }
+    function slideDeck (deck, vector2, duration) {
+      const animatedDeck = Object.assign({}, Animate(), deck);
+      const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
+      return slide.finished;
+    };
 
-  function cascadeValueSetter(percent, duration) {
-    this.cascadePercent = percent;
-    this.cascadeDuration = duration;
-    this.cascade();
-    this.cascadeDuration = 0;
-  }
 
-  async function moveCardToDeck(source, destination) {
-    let topCard = source.deck.cards[source.deck.cards.length - 1];
-    Object.assign(topCard, Animate());
-    const origin = topCard.card.getBoundingClientRect();
+    function cascade(percent /* Percentage */, duration /* ms */){
+      const promise = new Promise((resolve) => {
+        const arrayFinished = []; // Array of .finished promises returned by animate
+        for (let i = 0; i < deck.cards.length; i++) {
+          const card = deck.cards[i];
+          const vector2 = [];
+          const cardElement = deck.cards[i].card;
+          vector2[0] = (percent[0] * parseInt(cardElement.offsetWidth) * i);
+          vector2[1] = (percent[1] * parseInt(cardElement.offsetHeight) * i);
+          const slide = slideCard(card, vector2, duration);
+          arrayFinished.push(slide);
+        };
+        resolve(Promise.all(arrayFinished).then(() => {
+        }));
+      });
+      return promise;
+    };
 
-    // if there are no destination cards these values are default
-    let destinationTopCardBox = destination.container.getBoundingClientRect();
-    let destinationSecondTopCardBox =
-      destination.container.getBoundingClientRect();
 
-    if (destination.deck.cards.length >= 1) {
-      const destinationTopCard =
-        destination.deck.cards[destination.deck.cards.length - 1];
-      destinationTopCardBox = destinationTopCard.card.getBoundingClientRect();
-    }
+    const moveCardToDeck = function (source, destination) {
+      return new Promise((resolve)=>{
+        const topCard = this.deck.cards[this.deck.cards.length-1];
+        topCard.card.addEventListener('click', async (Event)=>{
+          console.log(source);
+          console.log(destination);
+          let topCard = source.deck.cards[source.deck.cards.length - 1];
+          Object.assign(topCard, Animate());
+      
+          const origin = topCard.card.getBoundingClientRect();
+          const destinationTopCard = destination.deck.cards[destination.deck.cards.length - 1];
+          const destinationSecondTopCard =
+            destination.deck.cards[destination.deck.cards.length - 2];
+          const destinationTopCardBox =
+            destinationTopCard.card.getBoundingClientRect();
+          const destinationSecondTopCardBox =
+            destinationSecondTopCard.card.getBoundingClientRect();
+      
+          const cardTranslateValue = getComputedStyle(topCard.card).transform;
+          const actualTranslateValue = Number(
+            [...cardTranslateValue].splice(22, 5).join("")
+          );
+          const yOffset =
+            destinationTopCardBox.y -
+            destinationSecondTopCardBox.y +
+            actualTranslateValue;
+      
+          const vector2 = [0, 0];
+          vector2[0] = destinationTopCardBox.x - origin.x;
+          vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
+      
+          source.deck.passCard(destination.deck);
+          topCard.card.style.zIndex = `${destination.deck.cards.length}`;
+      
+          await source.slideCard(topCard, vector2, 3000);
+          await destination.container.appendChild(topCard.card);
+          await destination.cascade([0, 0.18], 0);
+          resolve();
+        }, {once: true});
+      })
+    };
 
-    if (destination.deck.cards.length >= 2) {
-      const destinationSecondTopCard =
-        destination.deck.cards[destination.deck.cards.length - 2];
-      destinationSecondTopCardBox =
-        destinationSecondTopCard.card.getBoundingClientRect();
-    }
 
-    const cardTranslateValue = getComputedStyle(topCard.card).transform;
-    console.log(cardTranslateValue);
-    const regEx = /\s-?\d{1,5}.?\d{0,3}?(?=\))/;
-    const actualTranslateValue = Number(cardTranslateValue.match(regEx)[0]);
-    console.log(actualTranslateValue);
-    const yOffset =
-      destinationTopCardBox.y -
-      destinationSecondTopCardBox.y +
-      actualTranslateValue;
-    console.log(yOffset);
+    function addClickToMoveTopCard (target, callBack) {
+      const topCard = this.deck.cards[this.deck.cards.length-1];
+      topCard.card.addEventListener('click', callBack, {once: true});
+    };
 
-    const vector2 = [0, 0];
-    vector2[0] = destinationTopCardBox.x - origin.x;
-    vector2[1] = destinationTopCardBox.y + yOffset - origin.y;
-
-    source.deck.passCard(destination.deck);
-    topCard.card.style.zIndex = `${destination.deck.cards.length}`;
-
-    await source.slideCard(topCard, vector2, 400);
-    await destination.container.appendChild(topCard.card);
-    await destination.cascade();
-  }
-
-  function reset() {
-    while (this.container.firstElementChild) {
-      this.container.removeChild(this.container.firstElementChild);
-    }
 
     for (let i = 0; i < this.deck.cards.length; i++) {
       const card = this.deck.cards[i];
@@ -301,18 +287,17 @@ function addDeckBase(type) {
     }
   }
 
-  return {
-    container,
-    deck,
-    cascadePercent,
-    cascadeDuration,
-    slideCard,
-    slideDeck,
-    moveCardToDeck,
-    cascade,
-    cascadeValueSetter,
-    reset,
-  };
-}
+
+    return {
+      container,
+      deck,
+      slideCard,
+      slideDeck,
+      moveCardToDeck,
+      cascade,
+      addClickToMoveTopCard,
+      reset,
+    };
+  }
 
 export { deckDisplay, addDeckBase };
