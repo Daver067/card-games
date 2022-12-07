@@ -1,6 +1,6 @@
 import "./_solitaireStyle.scss";
 import Deck from "../DeckClass";
-import { buildStack } from "../tableLayouts";
+import { addDeckBase, deckDisplay } from "../deckDisplay/deckDisplay";
 import StandardCards from "../standardPackOfCards";
 
 const Solitaire = () => {
@@ -10,21 +10,22 @@ const Solitaire = () => {
 
   // Builds the talon pile, which is a waste pile.
   function buildTalon(surface) {
-    talon = buildStack(surface, false);
-    talon.element.classList.add("talon");
+    talon = addDeckBase('stack');
+    talon.container.classList.add("talon");
+    surface.appendChild(talon.container);
   }
 
   // Builds the stock pile where cards are drawn from.
   // The top card of the stack is the last card of the deck array.
   function buildStock(surface) {
-    stock = buildStack(surface, false);
-    stock.element.classList.add("stock");
-    for (let index = 0; index < Table.cards.length; index++) {
-      const card = Table.cards[index];
-      stock.cards.push(card);
-      stock.element.appendChild(card.card);
-      stock.updateStack();
+    stock = addDeckBase('stack');
+    stock.container.classList.add("stock");
+    surface.appendChild(stock.container);
+    console.log(stock.cascadePercent);
+    for (let index = 0; index < 52; index++) {
+      Table.passCard(stock.deck);
     }
+    stock.cascade();
   }
 
   // Builds all 4 foundations
@@ -41,8 +42,11 @@ const Solitaire = () => {
 
   function buildTableauAddCards(stock, surface) {
     for (let i = 1; i < 8; i++) {
-      const newTableau = buildTableau(surface, `tableau-${i}`);
-      moveCards(i, stock, newTableau);
+      const newTableau = buildTableau(`tableau-${i}`);
+      surface.appendChild(newTableau.container);
+      for (let index = 0; index < i; index++) {
+        stock.moveCardToDeck(newTableau);
+      }
     }
   }
 
@@ -50,37 +54,19 @@ const Solitaire = () => {
   // target = element that the foundation is appended to.
   // className = string name of class to add, makes layout simpler.
   const buildFoundation = (target, className) => {
-    const foundation = buildStack(target);
-    const element = foundation.element;
-    element.classList.add(className);
-    foundations[className] = {};
-    foundations[className].cards = foundation.cards;
-    foundations[className].element = foundation.element;
+    const foundation = addDeckBase('stack');
+    foundation.container.classList.add(className);
+    target.appendChild(foundation.container);
+    return foundation;
   };
 
   // Builds the tableau stacks in the bottom of solitaire where cards are cascaded in order.
   // target = element that the tableau is appended to.
   // className = string name of class to add, makes layout simpler.
-  const buildTableau = (target, className) => {
-    const tableau = buildStack(target, true);
-    const element = tableau.element;
-    element.classList.add(className);
-
-    tableaus[className] = {};
-    tableaus[className].location = target;
-    tableaus[className].cards = tableau.cards;
-    tableaus[className].element = element;
-    tableaus[className].updateStack = tableau.updateStack();
-
-    return tableaus[className];
-  };
-
-  const moveCards = (quantity, source, destination) => {
-    for (let i = 0; i < quantity; i++) {
-      const card = source.cards.pop();
-      destination.cards.push(card);
-      destination.element.appendChild(card.card);
-    }
+  const buildTableau = (className) => {
+    const tableau = addDeckBase('cascade');
+    tableau.container.classList.add(className);
+    return tableau
   };
 
   // Good god I don't know what to call this function. Flips the bottom
@@ -95,44 +81,18 @@ const Solitaire = () => {
   };
 
   const onStockClick = () => {
-    stock.cards[stock.cards.length - 1].card.addEventListener(
+    stock.deck.cards[stock.deck.cards.length - 1].card.addEventListener(
       "click",
       turnStockCard
     );
   };
 
-  const turnStockCard = () => {
-    stock.cards[0].card.removeEventListener("click", turnStockCard);
-
-    const card = stock.cards.pop();
-    talon.cards.push(card);
-
-    card.card.classList.add("slide");
-    const originX = card.card.offsetLeft;
-    const originY = card.card.offsetTop;
-
-    talon.element.appendChild(card.card);
-    talon.updateStack();
-
-    const talonIndex = talon.cards.indexOf(card);
-
-    const targetX = card.card.offsetLeft;
-    const targetY = card.card.offsetTop - talonIndex;
-
-    const diffX = targetX - originX;
-    const diffY = targetY + originY;
-
-    card.card.style.left = diffX + "px";
-    card.card.style.top = diffY + "px";
-
-    card.card.style.transform = `translate(${diffX}px, ${diffY}px)`;
-
-    card.flipCard();
-
-    setTimeout(() => {
-      talon.reverseZ();
-      onStockClick();
-    }, 200);
+  const turnStockCard = async () => {
+    const topCard = stock.deck.cards[stock.deck.cards.length-1]
+    topCard.card.removeEventListener("click", turnStockCard);
+    const move = stock.moveCardToDeck(talon);
+    (topCard.flipCard());
+    onStockClick();
   };
 
   // the main doozy which runs all our helper functions
@@ -142,11 +102,9 @@ const Solitaire = () => {
     const surface = document.createElement("div");
     surface.classList.add("surface");
     table.appendChild(surface);
+    buildStock(surface);
     buildTalon(surface);
     buildFoundations(surface);
-    buildStock(surface);
-    // helper function to build tableaus and move cards on the table right now
-    // we should break this down into just building the tableaus, then in Initialize add cards to it
     buildTableauAddCards(stock, surface);
     flipBottomCards(); // Flips bottom card only of each Tableau after init
     onStockClick(); // Adds click listener to top stock card to flip card to Talon.

@@ -3,7 +3,6 @@
   width: calc(var(--card-size) * 2.5);
   height: calc(var(--card-size) * 3.5);
   border-radius: calc(0.15 * var(--card-size));
-  grid-row: 2/3;
 }
 
 .layout-deck-base > .card-wrapper:first-child > div > div {

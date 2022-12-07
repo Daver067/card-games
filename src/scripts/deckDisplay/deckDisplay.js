@@ -1,6 +1,5 @@
 import "./styles.scss";
 import Deck from "../DeckClass";
-import { buildStack } from "../tableLayouts";
 import StandardCards from "../standardPackOfCards";
 import { Animate } from "../animations/animate";
 import { AnimateDeck } from "../animations/animateDeck";
@@ -70,11 +69,11 @@ function deckDisplay() {
     });
 
     cascadeButton.addEventListener("click", function () {
-      pile1.cascadeValueSetter([0, 0.18], 5000);
+      pile1.cascadeValueSetter([0, 0.18], 500);
     });
 
     stackButton.addEventListener("click", function () {
-      pile1.cascadeValueSetter([0, 0 - 0.003], 2000);
+      pile1.cascadeValueSetter([0, 0 - 0.003], 500);
     });
 
     flipAllButton.addEventListener("click", function () {
@@ -304,7 +303,7 @@ function addDeckBase(type) {
     vector2[1] = destinationBox.y + destinationOffset[1] - sourceBox.y;
 
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
-    await slideCard(topCard, vector2, 3000);
+    await slideCard(topCard, vector2, 600);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
 
