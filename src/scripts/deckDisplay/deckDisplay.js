@@ -3,6 +3,7 @@ import Deck from "../DeckClass";
 import { buildStack } from "../tableLayouts";
 import StandardCards from "../standardPackOfCards";
 import { Animate } from "../animations/animate";
+import { AnimateDeck } from "../animations/animateDeck";
 
 function deckDisplay() {
   // Constructs a page for debugging purpose. Can be deleted later
@@ -85,6 +86,7 @@ function deckDisplay() {
 
     const pile1 = addDeckBase("stack");
     deckFlex1.appendChild(pile1.container);
+
     const pile2 = addDeckBase("cascade");
     deckFlex2.appendChild(pile2.container);
 
@@ -115,7 +117,7 @@ function deckDisplay() {
       );
       // removes the click listener from the card you moved. changes the instance and adds the listener to move it back
       this.card.removeEventListener("click", this.boundListener);
-      source.moveCardToDeck(source, destination);
+      source.moveCardToDeck(destination);
       this.boundListener = moveTopCard.bind(this, destination, source);
       this.card.addEventListener("click", this.boundListener);
 
@@ -237,6 +239,8 @@ function addDeckBase(type) {
     return promise;
   }
 
+  // sets a new value to the percent of cascade, and a one time use duration
+  // then performs the cascade and resets duration to 0
   function cascadeValueSetter(percent, duration) {
     this.cascadePercent = percent;
     this.cascadeDuration = duration;
@@ -244,33 +248,72 @@ function addDeckBase(type) {
     this.cascadeDuration = 0;
   }
 
-  async function moveCardToDeck(source, destination) {
-    let topCard = source.deck.cards[source.deck.cards.length - 1];
-    Object.assign(topCard, Animate());
+  // slimmed down move card to deck
+  async function moveCardToDeck(
+    destinationDeckBase, // only need to know the destination DeckBase, as we know its coming from *this*Deckbase
+    gameRules = true, // ability to pass in rules for passing the card from one deckbase to another
+    animationCallback = this.animateMoveCardToNewDeck // probably un-needed arg... but allows us to change the animation, or use null to not animate the move
+  ) {
+    // will return either the card that got passed, or false if the rules aren't "true"
+    const cardPassed = this.deck.passCard(
+      destinationDeckBase.deck,
+      this.deck.cards[this.deck.cards.length - 1],
+      gameRules
+    );
+
+    // if the attempt to pass the card is a fail, return immediately
+    if (cardPassed === false) {
+      return;
+    }
+
+    // if the animation callback is set to null, don't animate anything and return
+    if (animationCallback === null) {
+      return;
+    }
+
+    // the card got passed, and this is the animation we want to show.
+    animationCallback(this, destinationDeckBase, cardPassed);
+  }
+
+  // Only to do with animations.
+  // I had to now reference where things used to be in objects, because the card
+  // has been moved in the Objects, but not visually on the screen
+  async function animateMoveCardToNewDeck(
+    source,
+    destination,
+    cardThatWasPassed
+  ) {
+    let topCard = cardThatWasPassed;
     const sourceBox = source.container.getBoundingClientRect();
     const destinationBox = destination.container.getBoundingClientRect();
-    const destinationOffset = calculateOffset(topCard.card, destination, (destination.deck.cards.length));
-    
+    const destinationOffset = calculateOffset(
+      topCard.card,
+      destination,
+      destination.deck.cards.length - 1
+    );
+
     const vector2 = [];
     vector2[0] = destinationBox.x + destinationOffset[0] - sourceBox.x;
     vector2[1] = destinationBox.y + destinationOffset[1] - sourceBox.y;
-    
-    source.deck.passCard(destination.deck);
-    topCard.card.style.zIndex = destination.deck.cards.length;
+
+    topCard.card.style.zIndex = destination.deck.cards.length - 1;
     await slideCard(topCard, vector2, 3000);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
-    
-    function calculateOffset(element, deckBase, index){
-      const vector2 = [];
-      vector2[0] =
-        deckBase.cascadePercent[0] * parseFloat(element.offsetWidth) * index;
-      vector2[1] =
-        deckBase.cascadePercent[1] * parseFloat(element.offsetHeight) * index;
-      return vector2;
-    };
-  }
 
+    //////////////////Helper Functions ////////////////
+
+    function calculateOffset(element, deckBase, index) {
+      const vector = [];
+      vector[0] =
+        deckBase.cascadePercent[0] * parseFloat(element.offsetWidth) * index;
+      vector[1] =
+        deckBase.cascadePercent[1] * parseFloat(element.offsetHeight) * index;
+      return vector;
+    }
+    ///////////////////////////////////////////////////
+  }
+  // resets the container of the DeckBase
   function reset() {
     while (this.container.firstElementChild) {
       this.container.removeChild(this.container.firstElementChild);
@@ -281,7 +324,6 @@ function addDeckBase(type) {
       this.container.appendChild(card.card);
     }
   }
-
   return {
     container,
     deck,
@@ -293,6 +335,7 @@ function addDeckBase(type) {
     cascade,
     cascadeValueSetter,
     reset,
+    animateMoveCardToNewDeck,
   };
 }
 

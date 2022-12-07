@@ -1,3 +1,4 @@
+import { Animate } from "./animations/animate";
 import makeCard from "./cardBuilder";
 import { Playing } from "./cardFoundations/playing";
 import Deck from "./DeckClass";
@@ -14,7 +15,7 @@ function StandardCards() {
     const suit = standardDeck.suit[index];
     for (let index2 = 0; index2 < standardDeck.members.length; index2++) {
       const cardNumber = standardDeck.members[index2];
-      const newCard = makeCard(Playing(cardNumber, suit));
+      const newCard = makeCard(Playing(cardNumber, suit), Animate());
       returnDeck.push(newCard);
     }
   }
