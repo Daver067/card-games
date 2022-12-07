@@ -90,9 +90,9 @@ function deckDisplay() {
     const pile2 = addDeckBase("cascade");
     deckFlex2.appendChild(pile2.container);
 
-    dealCards(27, deck, pile1.deck);
+    dealCards(7, deck, pile1.deck);
     initalizeDeckBase(pile1);
-    dealCards(27, deck, pile2.deck);
+    dealCards(7, deck, pile2.deck);
     initalizeDeckBase(pile2);
 
     pile1.cascade();
@@ -109,12 +109,14 @@ function deckDisplay() {
     // function to move the top card
     function moveTopCard(source, destination) {
       // gets the previous card from the top of the destination, and removes the listener
-      const destinationPreviousTopCard =
-        destination.deck.cards[destination.deck.cards.length - 1];
-      destinationPreviousTopCard.card.removeEventListener(
-        "click",
-        destinationPreviousTopCard.boundListener
-      );
+      if (destination.deck.cards.length !== 0) {
+        const destinationPreviousTopCard =
+          destination.deck.cards[destination.deck.cards.length - 1];
+        destinationPreviousTopCard.card.removeEventListener(
+          "click",
+          destinationPreviousTopCard.boundListener
+        );
+      }
       // removes the click listener from the card you moved. changes the instance and adds the listener to move it back
       this.card.removeEventListener("click", this.boundListener);
       source.moveCardToDeck(destination);
@@ -122,6 +124,9 @@ function deckDisplay() {
       this.card.addEventListener("click", this.boundListener);
 
       // finds the new top card on the 'source' deck, instances the bound listener, and adds it
+      if (source.deck.cards.length === 0) {
+        return;
+      }
       const sourceNewTopCard = source.deck.cards[source.deck.cards.length - 1];
       sourceNewTopCard.boundListener = moveTopCard.bind(
         sourceNewTopCard,
@@ -249,7 +254,7 @@ function addDeckBase(type) {
   }
 
   // slimmed down move card to deck
-  async function moveCardToDeck(
+  function moveCardToDeck(
     destinationDeckBase, // only need to know the destination DeckBase, as we know its coming from *this*Deckbase
     gameRules = true, // ability to pass in rules for passing the card from one deckbase to another
     animationCallback = this.animateMoveCardToNewDeck // probably un-needed arg... but allows us to change the animation, or use null to not animate the move
@@ -268,6 +273,8 @@ function addDeckBase(type) {
 
     // if the animation callback is set to null, don't animate anything and return
     if (animationCallback === null) {
+      this.cascade();
+      destinationDeckBase.cascade();
       return;
     }
 
@@ -304,6 +311,7 @@ function addDeckBase(type) {
     //////////////////Helper Functions ////////////////
 
     function calculateOffset(element, deckBase, index) {
+      index < 0 ? (index = 1) : (index = index);
       const vector = [];
       vector[0] =
         deckBase.cascadePercent[0] * parseFloat(element.offsetWidth) * index;
