@@ -39,15 +39,9 @@
 }
 
 .stack + .cascade > div:has(.front):hover {
-  transform: translateY(calc(var(--card-size)*0.10*(-1)));
-  transform: rotate(3deg);
-  transition-property: all;
 }
 
 .stack + .cascade > div:has(.front) {
-  transform: translateY(0);
-  transform: rotate(0);
-  transition-property: all;
 }
 
 .talon {

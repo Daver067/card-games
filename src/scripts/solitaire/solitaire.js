@@ -45,7 +45,11 @@ const Solitaire = () => {
       const newTableau = buildTableau(`tableau-${i}`);
       surface.appendChild(newTableau.container);
       for (let index = 0; index < i; index++) {
-        stock.moveCardToDeck(newTableau);
+        setTimeout(() => {
+          setTimeout(() => {
+            stock.moveCardToDeck(newTableau);
+          }, index*300);
+        }, i*100);
       }
     }
   }
@@ -96,12 +100,13 @@ const Solitaire = () => {
   };
 
   // the main doozy which runs all our helper functions
-  const buildSurface = () => {
+  function buildSurface() {
     const table = document.createElement("div");
     table.classList.add("solitaire");
     const surface = document.createElement("div");
     surface.classList.add("surface");
     table.appendChild(surface);
+    Table.shuffleDeck();
     buildStock(surface);
     buildTalon(surface);
     buildFoundations(surface);
@@ -112,6 +117,10 @@ const Solitaire = () => {
     return table;
   };
 
+  async function makeDecks() {
+    
+  }
+
   ///////////////////////////////////////
   // PROPERTIES
   ///////////////////////////////////////
@@ -119,7 +128,6 @@ const Solitaire = () => {
   const Table = new Deck(StandardCards());
   Table.state = "idle";
   Table.cards.forEach((card) => {
-    card.blindFlip();
     card.blindFlip();
   });
   Table.removeCard("joker", "joker");
