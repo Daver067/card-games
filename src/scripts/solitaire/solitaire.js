@@ -24,7 +24,6 @@ const Solitaire = () => {
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
     stock.deck.shuffleDeck();
-    stock.cascadeValueSetter([0, 0 - 0.003], 500);
 
     // erase below to remove the unneccesary flip
     //stock.deck.cards.forEach((card) => {
@@ -34,8 +33,6 @@ const Solitaire = () => {
 
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
-    console.log(stock.cascadePercent);
-
     stock.cascade();
   }
 
@@ -52,6 +49,8 @@ const Solitaire = () => {
   // probably want this to be 2 steps
 
   function buildTableauAddCards(stock, surface) {
+    /*
+    // This is for pile at a time
     for (let i = 1; i < 8; i++) {
       const newTableau = buildTableau(`tableau-${i}`);
       tableaus[`tableau-${i}`] = newTableau;
@@ -82,7 +81,46 @@ const Solitaire = () => {
           }, i * 450);
         }
       }
+    } 
+    
+    */
+
+    // below is for layers
+    //     /*<<< keep this
+    for (let i = 1; i < 8; i++) {
+      const newTableau = buildTableau(`tableau-${i}`);
+      tableaus[`tableau-${i}`] = newTableau;
+      surface.appendChild(newTableau.container);
     }
+    for (let i = 1; i < 8; i++) {
+      for (let j = i; j < 8; j++) {
+        setTimeout(() => {
+          setTimeout(() => {
+            moveCardInTableau(
+              tableaus[`tableau-${j}`],
+              stock.deck.cards[stock.deck.cards.length - 1]
+            );
+            stock.moveCardToDeck(tableaus[`tableau-${j}`]);
+          }, j * 100 - i * 25);
+        }, i * 600);
+        if (i === 7 && j === 7) {
+          const newFlip = flipBottomCards.bind(null, tableaus);
+          setTimeout(() => {
+            setTimeout(() => {
+              onStockClick();
+            }, j * 100);
+          }, i * 750);
+          setTimeout(() => {
+            setTimeout(() => {
+              //erase comment below to enable bottom card flip!!
+              newFlip();
+              // dont erase newFlip()
+            }, j * 100);
+          }, i * 750);
+        }
+      }
+    }
+    //         */
   }
 
   // Builds the foundations where cards are stacked starting with Ace.
@@ -101,6 +139,12 @@ const Solitaire = () => {
   const buildTableau = (className) => {
     const tableau = addDeckBase("cascade");
     tableau.container.classList.add(className);
+    tableau.boundListener = moveCardInTableau.bind(null, tableau, {
+      empty: true,
+      card: tableau.container,
+      faceUp: true,
+    });
+    tableau.container.addEventListener("click", tableau.boundListener);
     return tableau;
   };
 

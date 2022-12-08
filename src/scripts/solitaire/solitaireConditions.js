@@ -65,6 +65,17 @@ const game = {
 };
 
 function tableauClickHandler(cardObj, gameInfo) {
+  console.log(cardObj);
+  if (cardObj.empty === true) {
+    console.log("this is a blank tableau");
+    if (gameInfo.firstCard.card.value === 13) {
+      gameInfo.firstCard.deckBase.moveCardToDeck(this, gameInfo.firstCard.card);
+    }
+    removeReAddListeners();
+    clearGameInfo();
+
+    return;
+  }
   if (!cardObj.faceUp) {
     if (this.deck.cards.indexOf(cardObj) === this.deck.cards.length - 1)
       cardObj.flipCard();
@@ -88,6 +99,22 @@ function tableauClickHandler(cardObj, gameInfo) {
       gameInfo.rules.moveCardToTableauRule() // apply the rule!
     ) !== false
   ) {
+    removeReAddListeners();
+  }
+
+  clearGameInfo();
+  ///////////////////////////////////////
+  //////////////HELPER FUNCTIONS
+  ////////////////////////////////////
+  function clearGameInfo() {
+    // reset all the props
+    gameInfo.firstCard.deckBase = null;
+    gameInfo.firstCard.card = null;
+    gameInfo.secondCard.deckBase = null;
+    gameInfo.secondCard.card = null;
+  }
+
+  function removeReAddListeners() {
     // remove the two listeners on the cards that had the exchange
     gameInfo.firstCard.card.card.removeEventListener(
       "click",
@@ -101,12 +128,6 @@ function tableauClickHandler(cardObj, gameInfo) {
     moveCardInTableau(gameInfo.secondCard.deckBase, gameInfo.firstCard.card);
     moveCardInTableau(gameInfo.secondCard.deckBase, gameInfo.secondCard.card);
   }
-
-  // reset all the props
-  gameInfo.firstCard.deckBase = null;
-  gameInfo.firstCard.card = null;
-  gameInfo.secondCard.deckBase = null;
-  gameInfo.secondCard.card = null;
 }
 
 export default moveCardInTableau;
