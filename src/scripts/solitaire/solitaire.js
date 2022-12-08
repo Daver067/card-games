@@ -22,7 +22,13 @@ const Solitaire = () => {
     stock.deck.state = "idle";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
-    stock.deck.cards.forEach((card) => {});
+
+    // erase below to remove the unneccesary flip
+    stock.deck.cards.forEach((card) => {
+      card.blindFlip();
+    });
+    // end erase here
+
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
     console.log(stock.cascadePercent);
@@ -62,7 +68,9 @@ const Solitaire = () => {
           }, i * 300);
           setTimeout(() => {
             setTimeout(() => {
-              newFlip();
+              // erase comment below to enable bottom card flip!!
+              //newFlip();
+              // dont erase newFlip()
             }, index * 50);
           }, i * 450);
         }
