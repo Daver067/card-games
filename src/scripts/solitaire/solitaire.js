@@ -1,5 +1,4 @@
 import "./_solitaireStyle.scss";
-import Deck from "../DeckClass";
 import { addDeckBase, deckDisplay } from "../deckDisplay/deckDisplay";
 import StandardCards from "../standardPackOfCards";
 
@@ -10,7 +9,7 @@ const Solitaire = () => {
 
   // Builds the talon pile, which is a waste pile.
   function buildTalon(surface) {
-    talon = addDeckBase('stack');
+    talon = addDeckBase("stack");
     talon.container.classList.add("talon");
     surface.appendChild(talon.container);
   }
@@ -18,13 +17,16 @@ const Solitaire = () => {
   // Builds the stock pile where cards are drawn from.
   // The top card of the stack is the last card of the deck array.
   function buildStock(surface) {
-    stock = addDeckBase('stack');
+    stock = addDeckBase("stack");
+    stock.deck.cards = StandardCards();
+    stock.deck.state = "idle";
+    stock.deck.removeCard("joker", "joker");
+    stock.deck.removeCard("joker", "joker");
+    stock.deck.cards.forEach((card) => {});
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
     console.log(stock.cascadePercent);
-    for (let index = 0; index < 52; index++) {
-      Table.passCard(stock.deck);
-    }
+
     stock.cascade();
   }
 
@@ -43,13 +45,27 @@ const Solitaire = () => {
   function buildTableauAddCards(stock, surface) {
     for (let i = 1; i < 8; i++) {
       const newTableau = buildTableau(`tableau-${i}`);
+      tableaus[`tableau-${i}`] = newTableau;
       surface.appendChild(newTableau.container);
       for (let index = 0; index < i; index++) {
         setTimeout(() => {
           setTimeout(() => {
             stock.moveCardToDeck(newTableau);
-          }, index*300);
-        }, i*100);
+          }, index * 50);
+        }, i * 300);
+        if (i === 7 && index === 6) {
+          const newFlip = flipBottomCards.bind(null, tableaus);
+          setTimeout(() => {
+            setTimeout(() => {
+              onStockClick();
+            }, index * 50);
+          }, i * 300);
+          setTimeout(() => {
+            setTimeout(() => {
+              newFlip();
+            }, index * 50);
+          }, i * 450);
+        }
       }
     }
   }
@@ -58,7 +74,7 @@ const Solitaire = () => {
   // target = element that the foundation is appended to.
   // className = string name of class to add, makes layout simpler.
   const buildFoundation = (target, className) => {
-    const foundation = addDeckBase('stack');
+    const foundation = addDeckBase("stack");
     foundation.container.classList.add(className);
     target.appendChild(foundation.container);
     return foundation;
@@ -68,21 +84,18 @@ const Solitaire = () => {
   // target = element that the tableau is appended to.
   // className = string name of class to add, makes layout simpler.
   const buildTableau = (className) => {
-    const tableau = addDeckBase('cascade');
+    const tableau = addDeckBase("cascade");
     tableau.container.classList.add(className);
-    return tableau
+    return tableau;
   };
 
   // Good god I don't know what to call this function. Flips the bottom
   // card of each tableau at the start of the game.
-  const flipBottomCards = () => {
+  function flipBottomCards(tableaus) {
     for (const key in tableaus) {
-      if (Object.hasOwnProperty.call(tableaus, key)) {
-        const tableau = tableaus[key];
-        tableau.cards[tableau.cards.length - 1].flipCard();
-      }
+      tableaus[key].deck.cards[tableaus[key].deck.cards.length - 1].flipCard();
     }
-  };
+  }
 
   const onStockClick = () => {
     stock.deck.cards[stock.deck.cards.length - 1].card.addEventListener(
@@ -92,10 +105,10 @@ const Solitaire = () => {
   };
 
   const turnStockCard = async () => {
-    const topCard = stock.deck.cards[stock.deck.cards.length-1]
+    const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
     const move = stock.moveCardToDeck(talon);
-    (topCard.flipCard());
+    topCard.flipCard();
     onStockClick();
   };
 
@@ -106,32 +119,23 @@ const Solitaire = () => {
     const surface = document.createElement("div");
     surface.classList.add("surface");
     table.appendChild(surface);
-    Table.shuffleDeck();
     buildStock(surface);
     buildTalon(surface);
     buildFoundations(surface);
     buildTableauAddCards(stock, surface);
-    flipBottomCards(); // Flips bottom card only of each Tableau after init
-    onStockClick(); // Adds click listener to top stock card to flip card to Talon.
+    // Flips bottom card only of each Tableau after init
+    // Adds click listener to top stock card to flip card to Talon.
+    //-> moved click listener and flip bottom Cards to end of build Tableau add Cards
 
     return table;
-  };
-
-  async function makeDecks() {
-    
   }
+
+  async function makeDecks() {}
 
   ///////////////////////////////////////
   // PROPERTIES
   ///////////////////////////////////////
 
-  const Table = new Deck(StandardCards());
-  Table.state = "idle";
-  Table.cards.forEach((card) => {
-    card.blindFlip();
-  });
-  Table.removeCard("joker", "joker");
-  Table.removeCard("joker", "joker");
   let stock = {};
   let talon = {};
   let foundations = {};
