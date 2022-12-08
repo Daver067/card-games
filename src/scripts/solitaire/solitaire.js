@@ -1,6 +1,7 @@
 import "./_solitaireStyle.scss";
 import { addDeckBase, deckDisplay } from "../deckDisplay/deckDisplay";
 import StandardCards from "../standardPackOfCards";
+import moveCardInTableau from "./solitaireConditions";
 
 const Solitaire = () => {
   ///////////////////////////////////////////////
@@ -22,11 +23,13 @@ const Solitaire = () => {
     stock.deck.state = "idle";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
+    stock.deck.shuffleDeck();
+    stock.cascadeValueSetter([0, 0 - 0.003], 500);
 
     // erase below to remove the unneccesary flip
-    stock.deck.cards.forEach((card) => {
-      card.blindFlip();
-    });
+    //stock.deck.cards.forEach((card) => {
+    //card.blindFlip();
+    //});
     // end erase here
 
     stock.container.classList.add("stock");
@@ -56,6 +59,10 @@ const Solitaire = () => {
       for (let index = 0; index < i; index++) {
         setTimeout(() => {
           setTimeout(() => {
+            moveCardInTableau(
+              newTableau,
+              stock.deck.cards[stock.deck.cards.length - 1]
+            );
             stock.moveCardToDeck(newTableau);
           }, index * 50);
         }, i * 300);
@@ -68,8 +75,8 @@ const Solitaire = () => {
           }, i * 300);
           setTimeout(() => {
             setTimeout(() => {
-              // erase comment below to enable bottom card flip!!
-              //newFlip();
+              //erase comment below to enable bottom card flip!!
+              newFlip();
               // dont erase newFlip()
             }, index * 50);
           }, i * 450);

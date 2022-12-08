@@ -255,30 +255,32 @@ function addDeckBase(type) {
   // slimmed down move card to deck
   function moveCardToDeck(
     destinationDeckBase, // only need to know the destination DeckBase, as we know its coming from *this*Deckbase
+    card = this.deck.cards[this.deck.cards.length - 1],
     gameRules = true, // ability to pass in rules for passing the card from one deckbase to another
     animationCallback = this.animateMoveCardToNewDeck // probably un-needed arg... but allows us to change the animation, or use null to not animate the move
   ) {
     // will return either the card that got passed, or false if the rules aren't "true"
     const cardPassed = this.deck.passCard(
       destinationDeckBase.deck,
-      this.deck.cards[this.deck.cards.length - 1],
+      card,
       gameRules
     );
 
     // if the attempt to pass the card is a fail, return immediately
     if (cardPassed === false) {
-      return;
+      return false;
     }
 
     // if the animation callback is set to null, don't animate anything and return
     if (animationCallback === null) {
       this.cascade();
       destinationDeckBase.cascade();
-      return;
+      return card;
     }
 
     // the card got passed, and this is the animation we want to show.
     animationCallback(this, destinationDeckBase, cardPassed);
+    return card;
   }
 
   // Only to do with animations.
@@ -290,6 +292,7 @@ function addDeckBase(type) {
     cardThatWasPassed
   ) {
     let topCard = cardThatWasPassed;
+    topCard.card.style.zIndex = 100;
     const sourceBox = source.container.getBoundingClientRect();
     const destinationBox = destination.container.getBoundingClientRect();
     const destinationOffset = calculateOffset(
@@ -302,10 +305,10 @@ function addDeckBase(type) {
     vector2[0] = destinationBox.x + destinationOffset[0] - sourceBox.x;
     vector2[1] = destinationBox.y + destinationOffset[1] - sourceBox.y;
 
-    topCard.card.style.zIndex = destination.deck.cards.length - 1;
     await slideCard(topCard, vector2, 600);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
+    topCard.card.style.zIndex = destination.deck.cards.length - 1;
 
     //////////////////Helper Functions ////////////////
 

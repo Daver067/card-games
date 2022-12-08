@@ -2,9 +2,9 @@ import Deck from "../DeckClass";
 import { addDeckBase } from "../deckDisplay/deckDisplay";
 import { addDraggable } from "../deckDisplay/draggable/grabAndMove";
 import { makeFlop } from "../showUI";
+import moveCardInTableau from "../solitaire/solitaireConditions";
 import StandardCards from "../standardPackOfCards";
 import testDeck from "./draggabletestDeck";
-import moveCardInTableau from "./solitaireConditions";
 
 function initiatePlayground() {
   const deck = new Deck(StandardCards());
