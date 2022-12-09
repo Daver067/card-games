@@ -33,7 +33,11 @@ const Solitaire = () => {
 
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
-    stock.cascade();
+    
+    setTimeout(() => {
+      stock.cascade();
+    }, 0);
+    
   }
 
   // Builds all 4 foundations
@@ -181,10 +185,11 @@ const Solitaire = () => {
     buildStock(surface);
     buildTalon(surface);
     buildFoundations(surface);
-    buildTableauAddCards(stock, surface);
-    // Flips bottom card only of each Tableau after init
-    // Adds click listener to top stock card to flip card to Talon.
-    //-> moved click listener and flip bottom Cards to end of build Tableau add Cards
+    
+    setTimeout(() => {
+      buildTableauAddCards(stock, surface);
+      
+    }, 0);
 
     return table;
   }
