@@ -89,7 +89,7 @@ function deckDisplay() {
     const pile2 = addDeckBase("cascade");
     deckFlex2.appendChild(pile2.container);
 
-    dealCards(7, deck, pile1.deck);
+    dealCards(16, deck, pile1.deck);
     initalizeDeckBase(pile1);
     dealCards(7, deck, pile2.deck);
     initalizeDeckBase(pile2);
@@ -217,6 +217,18 @@ function addDeckBase(type) {
     return slide.finished;
   }
 
+  function spinCard(card, degrees, duration) {
+    const animatedCard = Object.assign({}, Animate(), card);
+    const spin = animatedCard.spin(animatedCard.card, degrees, duration);
+    return spin.finished;
+  }
+
+  function zoomCard(card, factor, duration) {
+    const animatedCard = Object.assign({}, Animate(), card);
+    const zoom = animatedCard.zoom(animatedCard.card, factor, duration);
+    return zoom.finished;
+  }
+
   function slideDeck(deck, vector2, duration) {
     const animatedDeck = Object.assign({}, Animate(), deck);
     const slide = animatedDeck.slide(animatedDeck.container, vector2, duration);
@@ -305,9 +317,11 @@ function addDeckBase(type) {
     vector2[0] = destinationBox.x + destinationOffset[0] - sourceBox.x;
     vector2[1] = destinationBox.y + destinationOffset[1] - sourceBox.y;
 
+    spinCard(topCard, 360, 600);
     await slideCard(topCard, vector2, 600);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
+    spinCard(topCard, 0, 0);
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
 
     //////////////////Helper Functions ////////////////
