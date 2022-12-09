@@ -24,20 +24,12 @@ const Solitaire = () => {
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
     stock.deck.shuffleDeck();
-
-    // erase below to remove the unneccesary flip
-    //stock.deck.cards.forEach((card) => {
-    //card.blindFlip();
-    //});
-    // end erase here
-
+      
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
-    
-    setTimeout(() => {
+    setTimeout(() => { 
       stock.cascade();
     }, 0);
-    
   }
 
   // Builds all 4 foundations
@@ -185,11 +177,10 @@ const Solitaire = () => {
     buildStock(surface);
     buildTalon(surface);
     buildFoundations(surface);
-    
-    setTimeout(() => {
-      buildTableauAddCards(stock, surface);
-      
-    }, 0);
+    buildTableauAddCards(stock, surface);
+    // Flips bottom card only of each Tableau after init
+    // Adds click listener to top stock card to flip card to Talon.
+    //-> moved click listener and flip bottom Cards to end of build Tableau add Cards
 
     return table;
   }
