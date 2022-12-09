@@ -147,9 +147,21 @@ const Solitaire = () => {
   // Good god I don't know what to call this function. Flips the bottom
   // card of each tableau at the start of the game.
   function flipBottomCards(tableaus) {
+    const cardArray = [];
     for (const key in tableaus) {
-      tableaus[key].deck.cards[tableaus[key].deck.cards.length - 1].flipCard();
+      const targetCard = tableaus[key].deck.cards[tableaus[key].deck.cards.length - 1];
+      cardArray.push(targetCard);
     }
+    function flipBatchDuration(cardArray, duration) {
+      const flipDelay = duration / cardArray.length;
+          for (let i = 1; i < (cardArray.length+1); i++) {
+            const timeDelay = flipDelay * i;
+            const element = cardArray[i-1];
+            element.flipCard(timeDelay);
+          }
+      
+    }
+    flipBatchDuration(cardArray, 3000);
   }
 
   const onStockClick = () => {
