@@ -161,7 +161,7 @@ const Solitaire = () => {
           }
       
     }
-    flipBatchDuration(cardArray, 3000);
+    flipBatchDuration(cardArray, 1000);
   }
 
   const onStockClick = () => {

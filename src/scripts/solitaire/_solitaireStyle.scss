@@ -23,10 +23,10 @@
 
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: auto auto; 
+    grid-template-rows: 1fr 3fr; 
     justify-items: center;
 
-    gap: calc(var(--card-size)/5);
+    gap: calc(var(--card-size)/3);
 }
 
 .stock {
