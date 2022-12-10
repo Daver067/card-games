@@ -96,7 +96,8 @@ const Solitaire = () => {
               tableaus[`tableau-${j}`],
               stock.deck.cards[stock.deck.cards.length - 1]
             );
-            stock.moveCardToDeck(tableaus[`tableau-${j}`]);
+            const card = stock.moveCardToDeck(tableaus[`tableau-${j}`]);
+            stock.spinCard(card, 360, 575);
           }, j * 100 - i * 25);
         }, i * 600);
         if (i === 7 && j === 7) {

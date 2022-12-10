@@ -317,7 +317,6 @@ function addDeckBase(type) {
     vector2[0] = destinationBox.x + destinationOffset[0] - sourceBox.x;
     vector2[1] = destinationBox.y + destinationOffset[1] - sourceBox.y;
 
-    spinCard(topCard, 360, 600);
     await slideCard(topCard, vector2, 600);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
@@ -354,6 +353,8 @@ function addDeckBase(type) {
     cascadePercent,
     cascadeDuration,
     slideCard,
+    spinCard,
+    zoomCard,
     slideDeck,
     moveCardToDeck,
     cascade,
