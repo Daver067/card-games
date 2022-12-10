@@ -37,8 +37,7 @@ const Solitaire = () => {
 
     for (let cards = 0; cards < stock.deck.cards.length; cards++) {
       const element = stock.deck.cards[cards].card;
-      element.draggable = true;
-      
+      element.draggable = true; 
     }
 
     stock.deck.state = "idle";
@@ -62,14 +61,6 @@ const Solitaire = () => {
   };
 
 
-
-  function buildTalon(surface) {
-    talon = addDeckBase("stack");
-    talon.container.classList.add("talon");
-    surface.appendChild(talon.container);
-  }
-
-
   function buildFoundations(surface) {
     // Initiate 4 foundations, where the cards are ultimately stacked
     buildFoundation(surface, "foundation-1");
@@ -83,15 +74,6 @@ const Solitaire = () => {
     const foundation = addDeckBase("stack");
     foundation.container.classList.add(className);
     target.appendChild(foundation.container);
-    return foundation;
-  };
-
-
-  function buildFoundation (target, className) {
-    const foundation = addDeckBase("stack");
-    foundation.container.classList.add(className);
-    target.appendChild(foundation.container);
-    foundation.dro
     return foundation;
   };
 
@@ -130,7 +112,6 @@ const Solitaire = () => {
         }
       }
     }
-    //         */
   }
 
 
@@ -183,7 +164,6 @@ const Solitaire = () => {
   };
 
 
-// CARSONS SCRAP LOGIC ENDS HERE
 
   return {
     initializeGame,
