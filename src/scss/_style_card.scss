@@ -43,7 +43,7 @@
 
 .back {
   background-color: #222240;
-  transform: perspective(1000px) rotateY(-180deg);
+  transform: perspective(1000px) rotateY(180deg);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,7 +74,7 @@
 
 .front.flipped {
   --flip-direction: 180deg;
-  transform: perspective(1000px) rotateY(180deg);
+  transform: perspective(1000px) rotateY(-180deg);
 }
 
 .playing {
