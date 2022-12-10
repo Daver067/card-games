@@ -1,7 +1,7 @@
 import "./_solitaireStyle.scss";
 import { addDeckBase, deckDisplay } from "../deckDisplay/deckDisplay";
 import StandardCards from "../standardPackOfCards";
-import moveCardInTableau from "./solitaireConditions";
+//import moveCardInTableau from "./solitaireConditions";
 
 const Solitaire = () => {
 
@@ -12,7 +12,6 @@ const Solitaire = () => {
 
   const initializeGame = () => {
     const surface = buildSurface();
-
     return surface;
   };
 
@@ -28,18 +27,14 @@ const Solitaire = () => {
     buildFoundations(surface);
     buildTableauAddCards(stock, surface);
     return table;
-  }
+  };
 
 
   function buildStock(surface) {
     stock = addDeckBase("stack");
     stock.deck.cards = StandardCards();
-
-    for (let cards = 0; cards < stock.deck.cards.length; cards++) {
-      const element = stock.deck.cards[cards].card;
-      element.draggable = true;
-      
-    }
+    // Temporary logic from Carson's scrap logic
+    addDoubleClickListeners(stock.deck.cards);
 
     stock.deck.state = "idle";
     stock.deck.removeCard("joker", "joker");
@@ -48,17 +43,18 @@ const Solitaire = () => {
       
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
+    
     setTimeout(() => { 
       stock.cascade();
     }, 0);
-  }
+  };
 
 
   function buildTalon(surface) {
     talon = addDeckBase("stack");
     talon.container.classList.add("talon");
     surface.appendChild(talon.container);
-  }
+  };
 
 
   function buildFoundations(surface) {
@@ -67,14 +63,13 @@ const Solitaire = () => {
     buildFoundation(surface, "foundation-2");
     buildFoundation(surface, "foundation-3");
     buildFoundation(surface, "foundation-4");
-  }
+  };
 
 
   function buildFoundation (target, className) {
     const foundation = addDeckBase("stack");
     foundation.container.classList.add(className);
     target.appendChild(foundation.container);
-    foundation.dro
     return foundation;
   };
 
@@ -89,10 +84,12 @@ const Solitaire = () => {
       for (let j = i; j < 8; j++) {
         setTimeout(() => {
           setTimeout(() => {
+            /*
             moveCardInTableau(
               tableaus[`tableau-${j}`],
               stock.deck.cards[stock.deck.cards.length - 1]
             );
+            */
             stock.moveCardToDeck(tableaus[`tableau-${j}`]);
           }, j * 100 - i * 25);
         }, i * 600);
@@ -114,18 +111,20 @@ const Solitaire = () => {
       }
     }
     //         */
-  }
+  };
 
 
   function buildTableau (className) {
     const tableau = addDeckBase("cascade");
     tableau.container.classList.add(className);
+    /*
     tableau.boundListener = moveCardInTableau.bind(null, tableau, {
       empty: true,
       card: tableau.container,
       faceUp: true,
     });
     tableau.container.addEventListener("click", tableau.boundListener);
+    */
     return tableau;
   };
 
@@ -145,7 +144,7 @@ const Solitaire = () => {
           }
     }
     flipBatchDuration(cardArray, 1000);
-  }
+  };
 
 
   function onStockClick () {
@@ -164,6 +163,22 @@ const Solitaire = () => {
     onStockClick();
   };
 
+
+// CARSONS SCRAP LOGIC STARTS HERE // 
+  function addDoubleClickListeners (cardArray) {
+    cardArray.forEach(card => {
+      card.card.addEventListener('dblclick', function() {
+        onDoubleClick(card);
+      })
+    });
+  };
+
+
+  function onDoubleClick (card) {
+    console.log(card);
+  };
+
+// CARSONS SCRAP LOGIC ENDS HERE
 
   return {
     initializeGame,
