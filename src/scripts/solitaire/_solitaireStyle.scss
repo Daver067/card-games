@@ -33,7 +33,35 @@
 .stock {
   grid-column: 1/2;
   grid-row: 1/2;
+  max-width: calc(var(--card-size)*2.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.recycle {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  max-width: calc(var(--card-size)*2.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recycle {
+  color: rgb(2, 2, 2);
+  transition: 0.5s;
+  z-index: 0.5;
+}
+
+
+.recycle:hover {
+  color: rgb(238, 238, 124);
+  transition: 0.5s;
+}
+
 
 .stock > .stack > div:last-child > div > div  {
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;

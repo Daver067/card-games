@@ -32,17 +32,31 @@ const Solitaire = () => {
 
   function buildStock(surface) {
     stock = addDeckBase("stack");
+    
     stock.deck.cards = StandardCards();
-    // Temporary logic from Carson's scrap logic
+    for (let index = 0; index < stock.deck.cards.length; index++) {
+      const card = stock.deck.cards[index];
+      card.location = 'stock';
+    }
+    
     addDoubleClickListeners(stock.deck.cards);
-
+    
     stock.deck.state = "idle";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
     stock.deck.shuffleDeck();
-      
+    
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
+    
+    const recycleWrapper = document.createElement('div');
+    recycleWrapper.classList.add('recycle');
+    recycleWrapper.innerHTML = 
+    `<svg style="width:100%;height:auto" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M12,6V9L16,5L12,1V4A8,8 0 0,0 4,12C4,13.57 4.46,15.03 5.24,16.26L6.7,14.8C6.25,13.97 6,13 6,12A6,6 0 0,1 12,6M18.76,7.74L17.3,9.2C17.74,10.04 18,11 18,12A6,6 0 0,1 12,18V15L8,19L12,23V20A8,8 0 0,0 20,12C20,10.43 19.54,8.97 18.76,7.74Z" />
+    </svg>`;
+    surface.appendChild(recycleWrapper);
+    
     
     setTimeout(() => { 
       stock.cascade();
@@ -90,7 +104,8 @@ const Solitaire = () => {
               stock.deck.cards[stock.deck.cards.length - 1]
             );
             */
-            stock.moveCardToDeck(tableaus[`tableau-${j}`]);
+            const card = stock.moveCardToDeck(tableaus[`tableau-${j}`]);
+            card.location = `tableau-${j}`;
           }, j * 100 - i * 25);
         }, i * 600);
         if (i === 7 && j === 7) {
@@ -148,10 +163,12 @@ const Solitaire = () => {
 
 
   function onStockClick () {
-    stock.deck.cards[stock.deck.cards.length - 1].card.addEventListener(
-      "click",
-      turnStockCard
-    );
+    if(stock.deck.cards.length > 0){
+      stock.deck.cards[stock.deck.cards.length - 1].card.addEventListener(
+        "click",
+        turnStockCard
+      );
+    };
   };
 
 
@@ -159,6 +176,7 @@ const Solitaire = () => {
     const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
     const move = stock.moveCardToDeck(talon);
+    move.location = "talon";
     topCard.flipCard(250);
     onStockClick();
   };
@@ -175,7 +193,64 @@ const Solitaire = () => {
 
 
   function onDoubleClick (card) {
-    console.log(card);
+    printCardInfo(card);
+    switch (card.location) {
+      case "stock":
+        // Nothing, maybe flip card same as single click.
+        break;
+      case "talon":
+        /** 1) Is it an ace? --> Place on first available foundation -- return
+         *  2) Is it a card that is on number higher and same suit than a card on foundation?  
+         *      Place on that foundation -- return
+         *  3) Loop through tableaus
+         *      Is the last card of this stack one number higher and opposite suit of this card? 
+         *          Place card at end of stack - return
+         */
+        break;
+      case "foundation-1":
+      case "foundation-2":
+      case "foundation-3":
+      case "foundation-4":
+        /** Do nothing, once a card is in a foundation, it cannot be played. -- return
+         * 
+         */
+        break;
+      case "tableau-1":
+      case "tableau-2":
+      case "tableau-3":
+      case "tableau-4":
+      case "tableau-5":
+      case "tableau-6":
+      case "tableau-7":
+        /** 1) Is the card faceUp? If not, end sequence and return.
+         *  2) Is the card the last card of the stack?
+         *    Yes: 
+         *      If its an ace, place on first available foundation -- return
+         *      If there is a foundation one number lower and same suit, place on that foundation -- return
+         *      Loop through tableaus except this one:
+         *        Is there a stack where last card is one number higher and opposite suit? 
+         *          If so, place this card there -- return
+         *    No:
+         *      Loop through tableaus except this one:
+         *        Is there a stack where last card is one number higher and opposite suit? 
+         *          Get all cards below this card and shift them all to that stack.
+         *      
+         * 
+         */
+        break;
+      default:
+        console.log("Error! Unknown location!");
+        break;
+    };
+    console.log("end of switch statement")
+  };
+
+  function printCardInfo (card) {
+    console.table({
+      "Location": card.location,
+      "Face Up?": card.faceUp,
+      "Card": `${card.number} of ${card.suit}`
+    })
   };
 
 // CARSONS SCRAP LOGIC ENDS HERE

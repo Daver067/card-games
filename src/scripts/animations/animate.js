@@ -22,7 +22,6 @@ function Animate() {
 
         translate = `translate(${(vector2[0])}px, ${(vector2[1])}px)`;
         transform = `${translate} ${scale} ${rotate}`;
-        console.log(transform);
 
 
         const keys = {
