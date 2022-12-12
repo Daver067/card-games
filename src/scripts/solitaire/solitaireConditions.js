@@ -7,9 +7,11 @@ function moveCardInTableauListener(deckBase, cardObj) {
 }
 
 function emptyTableauListener(deckBase) {
-  const blankCard = Object.assign({}, Card(), Playing("joker", "joker"));
-  blankCard.fake = true;
-  const boundListener = tableauClickHandler.bind(deckBase, blankCard, game);
+  const boundListener = tableauClickHandler.bind(
+    deckBase,
+    { fake: true },
+    game
+  );
   deckBase.container.addEventListener("click", boundListener);
 }
 
@@ -105,7 +107,10 @@ const game = {
   },
 };
 
-function tableauClickHandler(cardObj, gameInfo) {
+function tableauClickHandler(cardObj, gameInfo, event) {
+  event.stopPropagation();
+  console.log(cardObj);
+
   // moving an ace to the foundation spot
   if (cardObj.foundation === true) {
     if (gameInfo.firstCard.card === null) return;
@@ -128,7 +133,6 @@ function tableauClickHandler(cardObj, gameInfo) {
   if (cardObj.inFoundation === true && gameInfo.firstCard.card !== null) {
     gameInfo.secondCard.deckBase = this;
     gameInfo.secondCard.card = cardObj;
-    console.log(gameInfo);
     if (
       gameInfo.firstCard.deckBase.moveCardToDeck(
         gameInfo.secondCard.deckBase,
@@ -163,8 +167,10 @@ function tableauClickHandler(cardObj, gameInfo) {
   if (
     (gameInfo.firstCard === null && cardObj.fake === true) ||
     (gameInfo.firstCard === null && cardObj.foundation === true)
-  )
+  ) {
+    clearGameInfo();
     return;
+  }
 
   // if this is the top card and it is faceDown, flip it over
   if (!cardObj.faceUp) {
