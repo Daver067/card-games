@@ -320,9 +320,8 @@ function addDeckBase(type) {
     await slideCard(topCard, vector2, 600);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
-    resizeContainer(source);
-    resizeContainer(destination);
     spinCard(topCard, 0, 0);
+
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
 
     //////////////////Helper Functions ////////////////
@@ -338,10 +337,6 @@ function addDeckBase(type) {
     }
 
     function resizeContainer(deckBase) {
-      const containerTop = parseFloat(deckBase.container.offsetTop);
-      const containerBottom = parseFloat(deckBase.container.offsetBottom);
-      const containerLeft = parseFloat(deckBase.container.offsetLeft);
-      const containerRight = parseFloat(deckBase.container.offsetRight);
       
       const cardHeight = parseFloat(deckBase.deck.cards[0].card.offsetHeight);
       const cardWidth = parseFloat(deckBase.deck.cards[0].card.offsetWidth);
@@ -350,16 +345,21 @@ function addDeckBase(type) {
       const newWidth = (cardWidth*deckLength*(Math.abs(deckBase.cascadePercent[0]))) + (cardWidth*(1-Math.abs(deckBase.cascadePercent[0])));
       deckBase.container.style.height = `${newHeight}px`;
       deckBase.container.style.width = `${newWidth}px`;
+
+      const deltaX = newWidth - cardWidth;
+      const deltaY = newHeight - cardWidth;
       
+      const container = deckBase.container;
+
       if(deckBase.cascadePercent[0] < 0){
-        deckBase.container.style.offsetRight = `${containerRight}px`;
+        // If x is a negative percent
       } else {
-        deckBase.container.style.offsetLeft = `${containerLeft}px`;
+        // If x is a positive percent
       };
       if(deckBase.cascadePercent[1] < 0){
-        deckBase.container.style.offsetTop= `${containerBottom}px`;
+        // If y is a negative percent
       } else {
-        deckBase.container.style.offsetTop = `${containerTop}px`;
+        // If y is a positive percent
       };
       
       
