@@ -58,7 +58,6 @@ const Solitaire = () => {
     surface.appendChild(recycleWrapper);
     recycleWrapper.addEventListener('click', recycleStock);
     
-    
     setTimeout(() => { 
       stock.cascade();
     }, 0);
@@ -73,7 +72,6 @@ const Solitaire = () => {
 
 
   function buildFoundations(surface) {
-    // Initiate 4 foundations, where the cards are ultimately stacked
     buildFoundation(surface, "foundation-1");
     buildFoundation(surface, "foundation-2");
     buildFoundation(surface, "foundation-3");
@@ -126,7 +124,6 @@ const Solitaire = () => {
         }
       }
     }
-    //         */
   };
 
 
@@ -191,10 +188,8 @@ const Solitaire = () => {
         const card = talon.moveCardToDeck(stock);
         card.location = "stock";
         card.flipCard();
-      }, 5*card);
-      
+      }, 30*card);
     }
-
   };
 
 

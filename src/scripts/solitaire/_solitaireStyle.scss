@@ -4,12 +4,11 @@
 }
 
 .solitaire {
-    width: 100vw;
-    height: 100vh;
-    padding-top: 1rem;
+    width: 100%;
+    min-height: 100vh;
     background: rgb(107, 33, 33);
     background: url(/assets/images/45-degree-fabric-light.png),
-    radial-gradient( circle farthest-corner at 50.4% 50.5%,  rgb(201, 92, 119) 0%, rgb(40, 0, 10) 90% );
+    radial-gradient( circle farthest-corner at 50.4% 50.5%,  rgb(157, 0, 255) 0%, rgb(0, 0, 0) 90% );
 
     display: flex;
     flex-direction: column;
@@ -18,7 +17,7 @@
 }
 
 .surface {
-    padding-top: 2rem;
+    padding-top: 3rem;
     height: 100%;
 
 
