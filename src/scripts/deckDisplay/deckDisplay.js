@@ -320,6 +320,8 @@ function addDeckBase(type) {
     await slideCard(topCard, vector2, 600);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
+    resizeContainer(source);
+    resizeContainer(destination);
     spinCard(topCard, 0, 0);
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
 
@@ -333,6 +335,36 @@ function addDeckBase(type) {
       vector[1] =
         deckBase.cascadePercent[1] * parseFloat(element.offsetHeight) * index;
       return vector;
+    }
+
+    function resizeContainer(deckBase) {
+      const containerTop = parseFloat(deckBase.container.offsetTop);
+      const containerBottom = parseFloat(deckBase.container.offsetBottom);
+      const containerLeft = parseFloat(deckBase.container.offsetLeft);
+      const containerRight = parseFloat(deckBase.container.offsetRight);
+      
+      const cardHeight = parseFloat(deckBase.deck.cards[0].card.offsetHeight);
+      const cardWidth = parseFloat(deckBase.deck.cards[0].card.offsetWidth);
+      const deckLength = deckBase.deck.cards.length;
+      const newHeight = (cardHeight*deckLength*(Math.abs(deckBase.cascadePercent[1]))) + (cardHeight*(1-Math.abs(deckBase.cascadePercent[1])));
+      const newWidth = (cardWidth*deckLength*(Math.abs(deckBase.cascadePercent[0]))) + (cardWidth*(1-Math.abs(deckBase.cascadePercent[0])));
+      deckBase.container.style.height = `${newHeight}px`;
+      deckBase.container.style.width = `${newWidth}px`;
+      
+      if(deckBase.cascadePercent[0] < 0){
+        deckBase.container.style.offsetRight = `${containerRight}px`;
+      } else {
+        deckBase.container.style.offsetLeft = `${containerLeft}px`;
+      };
+      if(deckBase.cascadePercent[1] < 0){
+        deckBase.container.style.offsetTop= `${containerBottom}px`;
+      } else {
+        deckBase.container.style.offsetTop = `${containerTop}px`;
+      };
+      
+      
+  
+
     }
     ///////////////////////////////////////////////////
   }
