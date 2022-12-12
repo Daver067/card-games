@@ -10,6 +10,33 @@ const Solitaire = () => {
   let foundations = {};
   let tableaus = {};
 
+  const cardValueMap = (() => {
+    const map = new Map();
+    map.set('A', 1);
+    map.set('2', 2);
+    map.set('3', 3);
+    map.set('4', 4);
+    map.set('5', 5);
+    map.set('6', 6);
+    map.set('7', 7);
+    map.set('8', 8);
+    map.set('9', 9);
+    map.set('10', 10);
+    map.set('J', 11);
+    map.set('Q', 12);
+    map.set('K', 13);
+    return map
+  })();
+
+  const cardColorMap = (() => {
+    const map = new Map();
+    map.set("♥", "red");
+    map.set("♦", "red");
+    map.set("♠", "black");
+    map.set("♣", "black");
+    return map
+  })();
+
   const initializeGame = () => {
     const surface = buildSurface();
     return surface;
@@ -83,6 +110,7 @@ const Solitaire = () => {
     const foundation = addDeckBase("stack");
     foundation.container.classList.add(className);
     target.appendChild(foundation.container);
+    foundations[className] = foundation;
     return foundation;
   };
 
@@ -214,12 +242,22 @@ const Solitaire = () => {
 
 
   function onDoubleClick (card) {
-    printCardInfo(card);
+    //printCardInfo(card);
     switch (card.location) {
       case "stock":
-        // Nothing, maybe flip card same as single click.
+        // Nothing
         break;
       case "talon":
+        if(card.number === "A"){
+          addAceToFoundations(talon);
+          break;
+        }
+
+        const validFoundationMove = checkForFoundationMove(card);
+        if(validFoundationMove !== false){
+          addCardToFoundations(talon, validFoundationMove);
+          break;
+        };
         /** 1) Is it an ace? --> Place on first available foundation -- return
          *  2) Is it a card that is on number higher and same suit than a card on foundation?  
          *      Place on that foundation -- return
@@ -243,6 +281,37 @@ const Solitaire = () => {
       case "tableau-5":
       case "tableau-6":
       case "tableau-7":
+        const currentTableau = tableaus[card.location];
+        if(card.faceUp === false){break};
+        
+        if(isLastCard(card, currentTableau)){
+          if(card.number === "A"){
+            addAceToFoundations(currentTableau);
+            clickToFlipToLastCard(currentTableau);
+            break;
+          };
+
+          const validFoundationMove = checkForFoundationMove(card);
+          if(validFoundationMove !== false){
+            addCardToFoundations(currentTableau, validFoundationMove);
+            clickToFlipToLastCard(currentTableau);
+            break;
+          };
+
+          const validTableauMove = checkForTableauMove(card);
+          if(validTableauMove !== false){
+            addCardToTableaus(currentTableau, validTableauMove);
+            clickToFlipToLastCard(currentTableau);
+            break;
+          };
+
+        } else 
+        
+        {
+          console.log("Not last card");
+
+        };
+
         /** 1) Is the card faceUp? If not, end sequence and return.
          *  2) Is the card the last card of the stack?
          *    Yes: 
@@ -266,12 +335,105 @@ const Solitaire = () => {
     console.log("end of switch statement")
   };
 
+
   function printCardInfo (card) {
     console.table({
       "Location": card.location,
       "Face Up?": card.faceUp,
       "Card": `${card.number} of ${card.suit}`
     })
+  };
+
+
+  function addAceToFoundations(source) {
+    for (const foundation in foundations) {
+      if (Object.hasOwnProperty.call(foundations, foundation)) {
+        const pile = foundations[foundation];
+        if(pile.deck.cards.length === 0){
+          const card = source.moveCardToDeck(pile);
+          card.location = `${foundation}`
+          break;
+        };
+      }
+    }
+  };
+
+
+  function addCardToFoundations(source, destination) {
+    const card = source.moveCardToDeck(destination);
+    card.location = `${destination}`;
+    console.log(card.location);
+  };
+
+
+  function addCardToTableaus(source, destination) {
+    const card = source.moveCardToDeck(destination);
+    card.location = `${destination}`;
+    console.log(card.location);
+  };
+
+
+  function checkForFoundationMove(card) {
+    const cardValue = cardValueMap.get(card.number);
+    for (const foundation in foundations) {
+      if (Object.hasOwnProperty.call(foundations, foundation)) {
+        const pile = foundations[foundation];
+        if(pile.deck.cards.length > 0){
+          const topCard = pile.deck.cards[pile.deck.cards.length-1];
+          const topValue = cardValueMap.get(topCard.number);
+  
+          if(topCard.suit !== card.suit) continue;
+          if((topValue + 1) !== cardValue) continue;
+          return pile;
+        };
+
+      }
+      return false;
+    }
+  };
+
+
+  function checkForTableauMove(card) {
+    const cardValue = cardValueMap.get(card.number);
+    const cardColor = cardColorMap.get(card.suit);
+    for (const tableau in tableaus) {
+      if (Object.hasOwnProperty.call(tableaus, tableau)) {
+        const pile = tableaus[tableau];
+        if(pile.deck.cards.length > 0){
+          const topCard = pile.deck.cards[pile.deck.cards.length-1];
+          const topValue = cardValueMap.get(topCard.number);
+          const topColor = cardColorMap.get(topCard.suit);
+  
+          if(topColor === cardColor) continue;
+          if((topValue - 1) !== cardValue) continue;
+          return pile;
+        };
+
+      }
+      return false;
+    }
+  };
+
+
+  // Returns true or false if card is last in its array. ADD TO DECK CLASS
+  function isLastCard(card, deckBase){
+    const cardIndex = deckBase.deck.cards.findIndex((index => index === card));
+    if(cardIndex === (deckBase.deck.cards.length-1)){
+      return true;
+    };
+  };
+
+
+  function clickToFlipToLastCard(deckBase){
+    if(deckBase.deck.cards.length === 0){
+      return;
+    };
+    const lastCard = deckBase.deck.cards[deckBase.deck.cards.length-1];
+    lastCard.card.addEventListener('click', () => {
+      if(lastCard.faceUp === false){
+        lastCard.flipCard();
+      };
+    }, {once: true})
   };
 
 // CARSONS SCRAP LOGIC ENDS HERE
