@@ -2,7 +2,7 @@ import Deck from "../DeckClass";
 import { addDeckBase } from "../deckDisplay/deckDisplay";
 import { addDraggable } from "../deckDisplay/draggable/grabAndMove";
 import { makeFlop } from "../showUI";
-import moveCardInTableau from "../solitaire/solitaireConditions";
+import { moveCardInTableauListener } from "../solitaire/solitaireConditions";
 import StandardCards from "../standardPackOfCards";
 import testDeck from "./draggabletestDeck";
 
@@ -11,7 +11,7 @@ function initiatePlayground() {
   const allTheCardsDiv = buildPlayground(deck);
   //addDraggable(deck.cards, allTheCardsDiv);
   deck.cards.forEach((card) => {
-    moveCardInTableau(deck, card); // find this in playground/solitaireConditions.js
+    moveCardInTableauListener(deck, card); // find this in playground/solitaireConditions.js
   });
   return allTheCardsDiv;
 }

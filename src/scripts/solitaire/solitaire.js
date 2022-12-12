@@ -1,10 +1,13 @@
 import "./_solitaireStyle.scss";
 import { addDeckBase, deckDisplay } from "../deckDisplay/deckDisplay";
 import StandardCards from "../standardPackOfCards";
-//import moveCardInTableau from "./solitaireConditions";
+import {
+  moveCardInTableauListener,
+  emptyTableauListener,
+  emptyFoundationListener,
+} from "./solitaireConditions";
 
 const Solitaire = () => {
-
   let stock = {};
   let talon = {};
   let foundations = {};
@@ -14,7 +17,6 @@ const Solitaire = () => {
     const surface = buildSurface();
     return surface;
   };
-
 
   function buildSurface() {
     const table = document.createElement("div");
@@ -27,50 +29,45 @@ const Solitaire = () => {
     buildFoundations(surface);
     buildTableauAddCards(stock, surface);
     return table;
-  };
-
+  }
 
   function buildStock(surface) {
     stock = addDeckBase("stack");
-    
+
     stock.deck.cards = StandardCards();
     for (let index = 0; index < stock.deck.cards.length; index++) {
       const card = stock.deck.cards[index];
-      card.location = 'stock';
+      card.location = "stock";
     }
-    
+
     addDoubleClickListeners(stock.deck.cards);
-    
+
     stock.deck.state = "idle";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
     stock.deck.shuffleDeck();
-    
+
     stock.container.classList.add("stock");
     surface.appendChild(stock.container);
-    
-    const recycleWrapper = document.createElement('div');
-    recycleWrapper.classList.add('recycle');
-    recycleWrapper.innerHTML = 
-    `<svg style="width:100%;height:auto" viewBox="0 0 24 24">
+
+    const recycleWrapper = document.createElement("div");
+    recycleWrapper.classList.add("recycle");
+    recycleWrapper.innerHTML = `<svg style="width:100%;height:auto" viewBox="0 0 24 24">
     <path fill="currentColor" d="M12,6V9L16,5L12,1V4A8,8 0 0,0 4,12C4,13.57 4.46,15.03 5.24,16.26L6.7,14.8C6.25,13.97 6,13 6,12A6,6 0 0,1 12,6M18.76,7.74L17.3,9.2C17.74,10.04 18,11 18,12A6,6 0 0,1 12,18V15L8,19L12,23V20A8,8 0 0,0 20,12C20,10.43 19.54,8.97 18.76,7.74Z" />
     </svg>`;
     surface.appendChild(recycleWrapper);
-    recycleWrapper.addEventListener('click', recycleStock);
-    
-    
-    setTimeout(() => { 
+    recycleWrapper.addEventListener("click", recycleStock);
+
+    setTimeout(() => {
       stock.cascade();
     }, 0);
-  };
-
+  }
 
   function buildTalon(surface) {
     talon = addDeckBase("stack");
     talon.container.classList.add("talon");
     surface.appendChild(talon.container);
-  };
-
+  }
 
   function buildFoundations(surface) {
     // Initiate 4 foundations, where the cards are ultimately stacked
@@ -78,16 +75,15 @@ const Solitaire = () => {
     buildFoundation(surface, "foundation-2");
     buildFoundation(surface, "foundation-3");
     buildFoundation(surface, "foundation-4");
-  };
+  }
 
-
-  function buildFoundation (target, className) {
+  function buildFoundation(target, className) {
     const foundation = addDeckBase("stack");
     foundation.container.classList.add(className);
+    emptyFoundationListener(foundation);
     target.appendChild(foundation.container);
     return foundation;
-  };
-
+  }
 
   function buildTableauAddCards(stock, surface) {
     for (let i = 1; i < 8; i++) {
@@ -99,12 +95,11 @@ const Solitaire = () => {
       for (let j = i; j < 8; j++) {
         setTimeout(() => {
           setTimeout(() => {
-            /*
-            moveCardInTableau(
+            moveCardInTableauListener(
               tableaus[`tableau-${j}`],
               stock.deck.cards[stock.deck.cards.length - 1]
             );
-            */
+
             const card = stock.moveCardToDeck(tableaus[`tableau-${j}`]);
             card.location = `tableau-${j}`;
           }, j * 100 - i * 25);
@@ -118,53 +113,42 @@ const Solitaire = () => {
           }, i * 750);
           setTimeout(() => {
             setTimeout(() => {
-              //erase comment below to enable bottom card flip!!
               newFlip();
-              // dont erase newFlip()
             }, j * 100);
           }, i * 750);
         }
       }
     }
     //         */
-  };
+  }
 
-
-  function buildTableau (className) {
+  function buildTableau(className) {
     const tableau = addDeckBase("cascade");
     tableau.container.classList.add(className);
-    /*
-    tableau.boundListener = moveCardInTableau.bind(null, tableau, {
-      empty: true,
-      card: tableau.container,
-      faceUp: true,
-    });
-    tableau.container.addEventListener("click", tableau.boundListener);
-    */
+    emptyTableauListener(tableau);
     return tableau;
-  };
-
+  }
 
   function flipBottomCards(tableaus) {
     const cardArray = [];
     for (const key in tableaus) {
-      const targetCard = tableaus[key].deck.cards[tableaus[key].deck.cards.length - 1];
+      const targetCard =
+        tableaus[key].deck.cards[tableaus[key].deck.cards.length - 1];
       cardArray.push(targetCard);
     }
     function flipBatchDuration(cardArray, duration) {
       const flipDelay = duration / cardArray.length;
-          for (let i = 1; i < (cardArray.length+1); i++) {
-            const timeDelay = flipDelay * i;
-            const element = cardArray[i-1];
-            element.flipCard(timeDelay);
-          }
+      for (let i = 1; i < cardArray.length + 1; i++) {
+        const timeDelay = flipDelay * i;
+        const element = cardArray[i - 1];
+        element.flipCard(timeDelay);
+      }
     }
     flipBatchDuration(cardArray, 1000);
-  };
+  }
 
-
-  function onStockClick () {
-    if(stock.deck.cards.length > 0){
+  function onStockClick() {
+    if (stock.deck.cards.length > 0) {
       stock.deck.cards[stock.deck.cards.length - 1].card.addEventListener(
         "click",
         turnStockCard
@@ -173,52 +157,46 @@ const Solitaire = () => {
       setTimeout(() => {
         stock.container.style.visibility = "hidden";
       }, 700);
-    };
-  };
+    }
+  }
 
-  
-  function recycleStock () {
+  function recycleStock() {
     stock.container.style.visibility = "visible";
     const talonLength = talon.deck.cards.length;
 
-    talon.deck.cards[0].card.addEventListener(
-      "click",
-      turnStockCard
-    );
+    talon.deck.cards[0].card.addEventListener("click", turnStockCard);
 
     for (let card = 0; card < talonLength; card++) {
       setTimeout(() => {
         const card = talon.moveCardToDeck(stock);
         card.location = "stock";
         card.flipCard();
-      }, 5*card);
-      
+      }, 5 * card);
     }
+  }
 
-  };
-
-
-  function turnStockCard () {
+  // removes the listener from the top card of stock, updates cards location,
+  // flips card adds listener to new top card of stock
+  function turnStockCard() {
     const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
     const move = stock.moveCardToDeck(talon);
     move.location = "talon";
     topCard.flipCard(250);
+    moveCardInTableauListener(talon, move); // adds the ability to move card to tableau
     onStockClick();
-  };
+  }
 
-
-// CARSONS SCRAP LOGIC STARTS HERE // 
-  function addDoubleClickListeners (cardArray) {
-    cardArray.forEach(card => {
-      card.card.addEventListener('dblclick', function() {
+  // CARSONS SCRAP LOGIC STARTS HERE //
+  function addDoubleClickListeners(cardArray) {
+    cardArray.forEach((card) => {
+      card.card.addEventListener("dblclick", function () {
         onDoubleClick(card);
-      })
+      });
     });
-  };
+  }
 
-
-  function onDoubleClick (card) {
+  function onDoubleClick(card) {
     printCardInfo(card);
     switch (card.location) {
       case "stock":
@@ -226,10 +204,10 @@ const Solitaire = () => {
         break;
       case "talon":
         /** 1) Is it an ace? --> Place on first available foundation -- return
-         *  2) Is it a card that is on number higher and same suit than a card on foundation?  
+         *  2) Is it a card that is on number higher and same suit than a card on foundation?
          *      Place on that foundation -- return
          *  3) Loop through tableaus
-         *      Is the last card of this stack one number higher and opposite suit of this card? 
+         *      Is the last card of this stack one number higher and opposite suit of this card?
          *          Place card at end of stack - return
          */
         break;
@@ -238,7 +216,7 @@ const Solitaire = () => {
       case "foundation-3":
       case "foundation-4":
         /** Do nothing, once a card is in a foundation, it cannot be played. -- return
-         * 
+         *
          */
         break;
       case "tableau-1":
@@ -250,36 +228,36 @@ const Solitaire = () => {
       case "tableau-7":
         /** 1) Is the card faceUp? If not, end sequence and return.
          *  2) Is the card the last card of the stack?
-         *    Yes: 
+         *    Yes:
          *      If its an ace, place on first available foundation -- return
          *      If there is a foundation one number lower and same suit, place on that foundation -- return
          *      Loop through tableaus except this one:
-         *        Is there a stack where last card is one number higher and opposite suit? 
+         *        Is there a stack where last card is one number higher and opposite suit?
          *          If so, place this card there -- return
          *    No:
          *      Loop through tableaus except this one:
-         *        Is there a stack where last card is one number higher and opposite suit? 
+         *        Is there a stack where last card is one number higher and opposite suit?
          *          Get all cards below this card and shift them all to that stack.
-         *      
-         * 
+         *
+         *
          */
         break;
       default:
         console.log("Error! Unknown location!");
         break;
-    };
-    console.log("end of switch statement")
-  };
+    }
+    console.log("end of switch statement");
+  }
 
-  function printCardInfo (card) {
+  function printCardInfo(card) {
     console.table({
-      "Location": card.location,
+      Location: card.location,
       "Face Up?": card.faceUp,
-      "Card": `${card.number} of ${card.suit}`
-    })
-  };
+      Card: `${card.number} of ${card.suit}`,
+    });
+  }
 
-// CARSONS SCRAP LOGIC ENDS HERE
+  // CARSONS SCRAP LOGIC ENDS HERE
 
   return {
     initializeGame,
