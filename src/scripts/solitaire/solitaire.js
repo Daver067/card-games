@@ -168,6 +168,8 @@ const Solitaire = () => {
         "click",
         turnStockCard
       );
+    } else {
+      stock.container.style.visibility = "hidden";
     };
   };
 
