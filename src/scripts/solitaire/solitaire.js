@@ -56,6 +56,7 @@ const Solitaire = () => {
     <path fill="currentColor" d="M12,6V9L16,5L12,1V4A8,8 0 0,0 4,12C4,13.57 4.46,15.03 5.24,16.26L6.7,14.8C6.25,13.97 6,13 6,12A6,6 0 0,1 12,6M18.76,7.74L17.3,9.2C17.74,10.04 18,11 18,12A6,6 0 0,1 12,18V15L8,19L12,23V20A8,8 0 0,0 20,12C20,10.43 19.54,8.97 18.76,7.74Z" />
     </svg>`;
     surface.appendChild(recycleWrapper);
+    recycleWrapper.addEventListener('click', recycleStock);
     
     
     setTimeout(() => { 
@@ -169,8 +170,31 @@ const Solitaire = () => {
         turnStockCard
       );
     } else {
-      stock.container.style.visibility = "hidden";
+      setTimeout(() => {
+        stock.container.style.visibility = "hidden";
+      }, 700);
     };
+  };
+
+  
+  function recycleStock () {
+    stock.container.style.visibility = "visible";
+    const talonLength = talon.deck.cards.length;
+
+    talon.deck.cards[0].card.addEventListener(
+      "click",
+      turnStockCard
+    );
+
+    for (let card = 0; card < talonLength; card++) {
+      setTimeout(() => {
+        const card = talon.moveCardToDeck(stock);
+        card.location = "stock";
+        card.flipCard();
+      }, 5*card);
+      
+    }
+
   };
 
 
