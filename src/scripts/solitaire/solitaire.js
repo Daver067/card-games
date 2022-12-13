@@ -308,6 +308,14 @@ const Solitaire = () => {
 					}
 				} else {
 					console.log("Not last card");
+					const validTableauMove = checkForTableauMove(card, currentTableau);
+					if (validTableauMove !== false) {
+						const timer = addMultipleCardsToTableaus(currentTableau, validTableauMove, card);
+						setTimeout(() => {
+							clickToFlipToLastCard(currentTableau);
+						}, 300);
+						break;
+					}
 				}
 
 				/** 1) Is the card faceUp? If not, end sequence and return.
@@ -365,6 +373,19 @@ const Solitaire = () => {
 		console.log(card.location);
 	}
 
+
+    function addMultipleCardsToTableaus(source, destination, card) {
+        const cardIndex = source.deck.cards.findIndex((index) => index === card);
+        for (let index = cardIndex; index < source.deck.cards.length; index++) {
+            setTimeout(() => {
+                const card = source.moveCardToDeck(destination, source.deck.cards[cardIndex]);
+                card.location = `${destination.location}`;
+                console.log(card.location);
+            }, index * 30);
+        }    
+    }
+
+
 	function checkForFoundationMove(card) {
 		const cardValue = cardValueMap.get(card.number);
 		for (const foundation in foundations) {
@@ -377,10 +398,10 @@ const Solitaire = () => {
 					if (topCard.suit !== card.suit) continue;
 					if (topValue + 1 !== cardValue) continue;
 					return pile;
-				}
+				} else {continue};
 			}
-			return false;
 		}
+		return false;
 	}
 
 	function checkForTableauMove(card, source) {
@@ -389,16 +410,21 @@ const Solitaire = () => {
 		for (const tableau in tableaus) {
 			if (Object.hasOwnProperty.call(tableaus, tableau)) {
 				const pile = tableaus[tableau];
+
 				if (pile.deck.cards.length > 0) {
 					const topCard = pile.deck.cards[pile.deck.cards.length - 1];
 					const topValue = cardValueMap.get(topCard.number);
 					const topColor = cardColorMap.get(topCard.suit);
 
-					//if(pile === source) continue;
+					if(pile === source) continue;
 					if (topColor === cardColor) continue;
 					if (topValue - 1 !== cardValue) continue;
 					return pile;
-				}
+				} else {
+					if(cardValue === 13){
+						return pile;
+					};
+				};
 			}
 		}
 		return false;
