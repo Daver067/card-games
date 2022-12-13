@@ -37,7 +37,7 @@ const Solitaire = () => {
     stock.deck.cards = StandardCards();
     for (let index = 0; index < stock.deck.cards.length; index++) {
       const card = stock.deck.cards[index];
-      card.location = "stock";
+      card.location = stock;
     }
 
     addDoubleClickListeners(stock.deck.cards);
@@ -48,6 +48,8 @@ const Solitaire = () => {
     stock.deck.shuffleDeck();
 
     stock.container.classList.add("stock");
+    stock.location = "stock";
+
     surface.appendChild(stock.container);
 
     const recycleWrapper = document.createElement("div");
@@ -66,6 +68,7 @@ const Solitaire = () => {
   function buildTalon(surface) {
     talon = addDeckBase("stack");
     talon.container.classList.add("talon");
+    talon.location = "talon";
     surface.appendChild(talon.container);
   }
 
@@ -81,6 +84,7 @@ const Solitaire = () => {
     const foundation = addDeckBase("stack");
     foundation.container.classList.add(className);
     emptyFoundationListener(foundation);
+    foundation.location = "foundation";
     target.appendChild(foundation.container);
     return foundation;
   }
@@ -101,7 +105,7 @@ const Solitaire = () => {
             );
 
             const card = stock.moveCardToDeck(tableaus[`tableau-${j}`]);
-            card.location = `tableau-${j}`;
+            card.location = tableaus[`tableau-${j}`];
           }, j * 100 - i * 25);
         }, i * 600);
         if (i === 7 && j === 7) {
@@ -125,6 +129,7 @@ const Solitaire = () => {
   function buildTableau(className) {
     const tableau = addDeckBase("cascade");
     tableau.container.classList.add(className);
+    tableau.location = "tableau";
     emptyTableauListener(tableau);
     return tableau;
   }
@@ -164,12 +169,15 @@ const Solitaire = () => {
     stock.container.style.visibility = "visible";
     const talonLength = talon.deck.cards.length;
 
+    talon.deck.cards.forEach((card) => {
+      card.card.removeEventListener("click", card.boundListener);
+    });
     talon.deck.cards[0].card.addEventListener("click", turnStockCard);
 
     for (let card = 0; card < talonLength; card++) {
       setTimeout(() => {
         const card = talon.moveCardToDeck(stock);
-        card.location = "stock";
+        card.location = stock;
         card.flipCard();
       }, 5 * card);
     }
@@ -181,7 +189,7 @@ const Solitaire = () => {
     const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
     const move = stock.moveCardToDeck(talon);
-    move.location = "talon";
+    move.location = talon;
     topCard.flipCard(250);
     moveCardInTableauListener(talon, move); // adds the ability to move card to tableau
     onStockClick();
@@ -199,10 +207,10 @@ const Solitaire = () => {
   function onDoubleClick(card) {
     printCardInfo(card);
     switch (card.location) {
-      case "stock":
+      case stock:
         // Nothing, maybe flip card same as single click.
         break;
-      case "talon":
+      case talon:
         /** 1) Is it an ace? --> Place on first available foundation -- return
          *  2) Is it a card that is on number higher and same suit than a card on foundation?
          *      Place on that foundation -- return
@@ -246,7 +254,6 @@ const Solitaire = () => {
         console.log("Error! Unknown location!");
         break;
     }
-    console.log("end of switch statement");
   }
 
   function printCardInfo(card) {

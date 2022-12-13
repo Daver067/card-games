@@ -26,66 +26,113 @@ function emptyFoundationListener(deckBase) {
 const game = {
   rules: {
     moveCardToTableauRule() {
-      if (game.firstCard.card.color === game.secondCard.card.color) {
-        // if the first card is the same color as the second its not allowed to go there
-        console.log("color match = Fail");
-        return false;
-      } else if (game.firstCard.card.value !== game.secondCard.card.value - 1) {
-        // if the first card isn't exactly 1 card less than the second card it can't be placed there
-        console.log("card number mismatch = Fail");
-        return false;
-      } else if (
-        // checks to see if second click was in the middle of a tableau
-        game.secondCard.deckBase.deck.cards.indexOf(game.secondCard.card) !==
-        game.secondCard.deckBase.deck.cards.length - 1
-      ) {
-        console.log("cant place a card in the middle");
-        return false;
-      } else {
-        // thats all the rules! It must be able to be placed there!
+      let tableauRules = [
+        sameColorCheck,
+        secondCardOneHigher,
+        notTheSameTableau,
+        secondCardIsLastInCascade,
+        onlyPassToTableau,
+      ];
 
-        if (
-          // if this isn't the bottom card, but passed all other checks theres more than 1 card to move
-          game.firstCard.deckBase.deck.cards.indexOf(game.firstCard.card) !==
-          game.firstCard.deckBase.deck.cards.length - 1
-        ) {
-          // make an array of the rest of the cards
-          const otherCardsToMove = game.firstCard.deckBase.deck.cards.splice(
-            game.firstCard.deckBase.deck.cards.indexOf(game.firstCard.card) + 1,
-            game.firstCard.deckBase.deck.cards.length -
-              game.firstCard.deckBase.deck.cards.indexOf(game.firstCard.card) -
-              1
+      let passRules = true;
+      tableauRules.forEach((rule) => {
+        if (rule() === false) {
+          passRules = false;
+        }
+      });
+      if (passRules === false) return false;
+      console.log(
+        game.firstCard.deckBase.deck.cards.indexOf(game.firstCard.card)
+      );
+      console.log(game.firstCard.deckBase.deck.cards.length - 1);
+      // thats all the rules! It must be able to be placed there!
+      if (
+        // if this isn't the bottom card, but passed all other checks theres more than 1 card to move
+        game.firstCard.deckBase.deck.cards.indexOf(game.firstCard.card) !==
+        game.firstCard.deckBase.deck.cards.length - 1
+      ) {
+        console.log("move more cards");
+
+        // make an array of the rest of the cards
+        const otherCardsToMove = game.firstCard.deckBase.deck.cards.slice(
+          game.firstCard.deckBase.deck.cards.indexOf(game.firstCard.card) + 1,
+          game.firstCard.deckBase.deck.cards.length
+        );
+        console.log(otherCardsToMove);
+        // move the other cards, after the first card is moved
+        otherCardsToMove.forEach((card) => {
+          card.card.removeEventListener("click", card.boundListener);
+          const boundMoveFunc = game.firstCard.deckBase.moveCardToDeck.bind(
+            game.firstCard.deckBase,
+            game.secondCard.deckBase,
+            card
           );
-          console.log(otherCardsToMove);
-          // move the other cards, after the first card is moved
-          otherCardsToMove.forEach((card) => {
-            card.card.removeEventListener("click", card.boundListener);
-            const boundMoveFunc = game.firstCard.deckBase.moveCardToDeck.bind(
-              game.firstCard.deckBase,
-              game.secondCard.deckBase,
-              card
-            );
-            const boundChangeListener = moveCardInTableauListener.bind(
-              null,
-              game.secondCard.deckBase,
-              card
-            );
-            setTimeout(() => {
-              boundMoveFunc();
-              boundChangeListener();
-            }, 0);
-          });
-          const bindCascade = game.firstCard.deckBase.cascade.bind(
-            game.firstCard.deckBase
+          const boundChangeListener = moveCardInTableauListener.bind(
+            null,
+            game.secondCard.deckBase,
+            card
           );
           setTimeout(() => {
-            bindCascade();
-          }, 500);
+            boundMoveFunc();
+            boundChangeListener();
+          }, 0);
+        });
+        const bindCascade = game.firstCard.deckBase.cascade.bind(
+          game.firstCard.deckBase
+        );
+        setTimeout(() => {
+          bindCascade();
+        }, 750);
+      }
+      return true;
+      ///////////////////////////////////////////////
+      //////////////////HELPER FUNCTIONS/////////////
+      ///////////////////////////////////////////////
+      function sameColorCheck() {
+        if (game.firstCard.card.color === game.secondCard.card.color) {
+          // if the first card is the same color as the second its not allowed to go there
+          console.log("color match = Fail");
+          return false;
         }
-        console.log("pass");
         return true;
       }
+
+      function secondCardOneHigher() {
+        if (game.firstCard.card.value !== game.secondCard.card.value - 1) {
+          // if the first card isn't exactly 1 card less than the second card it can't be placed there
+          console.log("card number mismatch = Fail");
+          return false;
+        }
+        return true;
+      }
+
+      function notTheSameTableau() {
+        if (game.firstCard.deckBase === game.secondCard.deckBase) {
+          console.log("cant pass to same pile");
+          return false;
+        }
+        return true;
+      }
+
+      function secondCardIsLastInCascade() {
+        if (
+          // checks to see if second click was in the middle of a tableau
+          game.secondCard.deckBase.deck.cards.indexOf(game.secondCard.card) !==
+          game.secondCard.deckBase.deck.cards.length - 1
+        ) {
+          console.log("cant place a card in the middle");
+          return false;
+        }
+        return true;
+      }
+      function onlyPassToTableau() {
+        // if the second card isn't in a tableau return
+        if (game.secondCard.card.location.location !== "tableau") {
+          return false;
+        }
+      }
     },
+
     moveCardToFoundationRule() {
       if (
         game.firstCard.card.value === game.secondCard.card.value + 1 &&
@@ -109,7 +156,6 @@ const game = {
 
 function tableauClickHandler(cardObj, gameInfo, event) {
   event.stopPropagation();
-  console.log(cardObj);
 
   // moving an ace to the foundation spot
   if (cardObj.foundation === true) {
@@ -177,6 +223,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   if (!cardObj.faceUp) {
     if (this.deck.cards.indexOf(cardObj) === this.deck.cards.length - 1)
       cardObj.flipCard();
+    clearGameInfo();
     return;
   }
 

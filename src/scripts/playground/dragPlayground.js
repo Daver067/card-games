@@ -34,8 +34,6 @@ function buildPlayground(deck) {
 
   document.body.appendChild(deckDisplayElement1.container);
   deckDisplayElement1.deck.passCard(deckDisplayElement2.deck);
-  console.log(deckDisplayElement1);
-  console.log(deckDisplayElement2);
   deckDisplayElement1.reset();
   deckDisplayElement1.cascade([0, 0 - 0.003], 0);
 

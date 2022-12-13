@@ -283,6 +283,8 @@ function addDeckBase(type) {
       return false;
     }
 
+    card.location = destinationDeckBase; // changes location info of card
+
     // if the animation callback is set to null, don't animate anything and return
     if (animationCallback === null) {
       this.cascade();
@@ -347,6 +349,7 @@ function addDeckBase(type) {
       this.container.appendChild(card.card);
     }
   }
+
   return {
     container,
     deck,
@@ -361,6 +364,9 @@ function addDeckBase(type) {
     cascadeValueSetter,
     reset,
     animateMoveCardToNewDeck,
+    get topCard() {
+      return this.deck.cards[this.deck.cards.length - 1];
+    },
   };
 }
 
