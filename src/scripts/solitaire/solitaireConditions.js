@@ -162,6 +162,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
 
       return;
     }
+    return;
   }
   // if a blank tableau or a foundation is clicked first abort
   if (
