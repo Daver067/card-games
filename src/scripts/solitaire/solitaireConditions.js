@@ -58,7 +58,6 @@ const game = {
           game.firstCard.deckBase.deck.cards.indexOf(game.firstCard.card) + 1,
           game.firstCard.deckBase.deck.cards.length
         );
-        console.log(otherCardsToMove);
         // move the other cards, after the first card is moved
         otherCardsToMove.forEach((card) => {
           card.card.removeEventListener("click", card.boundListener);
@@ -138,7 +137,6 @@ const game = {
         game.firstCard.card.value === game.secondCard.card.value + 1 &&
         game.firstCard.card.suit === game.secondCard.card.suit
       ) {
-        console.log("pass allowed");
         return true;
       }
       return false;
@@ -158,56 +156,15 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   event.stopPropagation();
 
   // moving an ace to the foundation spot
-  if (cardObj.foundation === true) {
-    if (gameInfo.firstCard.card === null) return;
-    if (gameInfo.firstCard.card.value === 1) {
-      gameInfo.firstCard.deckBase.moveCardToDeck(this, gameInfo.firstCard.card);
-
-      gameInfo.firstCard.card.card.removeEventListener(
-        "click",
-        gameInfo.firstCard.card.boundListener
-      );
-      moveCardInTableauListener(this, gameInfo.firstCard.card);
-
-      gameInfo.firstCard.card.inFoundation = true;
-      clearGameInfo();
-      console.log("pass card");
-    }
+  if (moveAceToFoundation(this) === true) {
     return;
   }
   // moving any other card to foundation spot
-  if (cardObj.inFoundation === true && gameInfo.firstCard.card !== null) {
-    gameInfo.secondCard.deckBase = this;
-    gameInfo.secondCard.card = cardObj;
-    if (
-      gameInfo.firstCard.deckBase.moveCardToDeck(
-        gameInfo.secondCard.deckBase,
-        gameInfo.firstCard.card,
-        gameInfo.rules.moveCardToFoundationRule() // apply the rule!
-      ) !== false
-    ) {
-      gameInfo.firstCard.card.inFoundation = true;
-      removeReAddListeners();
-      clearGameInfo();
-      return;
-    }
+  if (moveAnyCardToFoundation(this) === true) {
+    return;
   }
-
   // moving a King to an empty Tableau
-  if (gameInfo.firstCard.card !== null && cardObj.fake === true) {
-    if (gameInfo.firstCard.card.value === 13) {
-      // move the card and change its listener
-      gameInfo.firstCard.deckBase.moveCardToDeck(this, gameInfo.firstCard.card);
-
-      gameInfo.firstCard.card.card.removeEventListener(
-        "click",
-        gameInfo.firstCard.card.boundListener
-      );
-      moveCardInTableauListener(this, gameInfo.firstCard.card);
-      clearGameInfo();
-
-      return;
-    }
+  if (moveKingToEmptyTableau(this) === true) {
     return;
   }
   // if a blank tableau or a foundation is clicked first abort
@@ -231,6 +188,8 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   if (gameInfo.firstCard.card === null) {
     gameInfo.firstCard.deckBase = this;
     gameInfo.firstCard.card = cardObj;
+    gameInfo.firstCard.card.card.style.setProperty("--card-size", `58px`);
+
     return;
 
     // if there is a first card, this must be the second card
@@ -254,28 +213,139 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   ///////////////////////////////////////
   //////////////HELPER FUNCTIONS
   ////////////////////////////////////
+
+  // moving an ace to the foundation spot
+  function moveAceToFoundation(source) {
+    if (cardObj.foundation === true) {
+      if (gameInfo.firstCard.card === null) return false;
+      if (gameInfo.firstCard.card.value === 1) {
+        gameInfo.firstCard.deckBase.moveCardToDeck(
+          source,
+          gameInfo.firstCard.card
+        );
+
+        gameInfo.firstCard.card.card.removeEventListener(
+          "click",
+          gameInfo.firstCard.card.boundListener
+        );
+        moveCardInTableauListener(source, gameInfo.firstCard.card);
+
+        gameInfo.firstCard.card.inFoundation = true;
+        clearGameInfo();
+      }
+      return true;
+    }
+  }
+
+  // moving any other card to foundation spot
+  function moveAnyCardToFoundation(source) {
+    if (cardObj.inFoundation === true && gameInfo.firstCard.card !== null) {
+      gameInfo.secondCard.deckBase = source;
+      gameInfo.secondCard.card = cardObj;
+      if (
+        gameInfo.firstCard.deckBase.moveCardToDeck(
+          gameInfo.secondCard.deckBase,
+          gameInfo.firstCard.card,
+          gameInfo.rules.moveCardToFoundationRule() // apply the rule!
+        ) !== false
+      ) {
+        gameInfo.firstCard.card.inFoundation = true;
+        removeReAddListeners();
+        clearGameInfo();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // moving a King to an empty Tableau
+  function moveKingToEmptyTableau(source) {
+    if (gameInfo.firstCard.card !== null && cardObj.fake === true) {
+      if (gameInfo.firstCard.card.value === 13) {
+        // move the card and change its listener
+        if (
+          // if this isn't the bottom card, but passed all other checks theres more than 1 card to move
+          gameInfo.firstCard.deckBase.deck.cards.indexOf(
+            gameInfo.firstCard.card
+          ) !==
+          gameInfo.firstCard.deckBase.deck.cards.length - 1
+        ) {
+          // make an array of the rest of the cards
+          const otherCardsToMove = gameInfo.firstCard.deckBase.deck.cards.slice(
+            gameInfo.firstCard.deckBase.deck.cards.indexOf(
+              gameInfo.firstCard.card
+            ) + 1,
+            gameInfo.firstCard.deckBase.deck.cards.length
+          );
+          // move the other cards, after the first card is moved
+          otherCardsToMove.forEach((card) => {
+            card.card.removeEventListener("click", card.boundListener);
+            const boundMoveFunc =
+              gameInfo.firstCard.deckBase.moveCardToDeck.bind(
+                gameInfo.firstCard.deckBase,
+                source,
+                card
+              );
+            const boundChangeListener = moveCardInTableauListener.bind(
+              null,
+              source,
+              card
+            );
+            setTimeout(() => {
+              boundMoveFunc();
+              boundChangeListener();
+            }, 0);
+          });
+          const bindCascade = gameInfo.firstCard.deckBase.cascade.bind(
+            gameInfo.firstCard.deckBase
+          );
+          setTimeout(() => {
+            bindCascade();
+          }, 750);
+        }
+        gameInfo.firstCard.deckBase.moveCardToDeck(
+          source,
+          gameInfo.firstCard.card
+        );
+
+        gameInfo.firstCard.card.card.removeEventListener(
+          "click",
+          gameInfo.firstCard.card.boundListener
+        );
+        moveCardInTableauListener(source, gameInfo.firstCard.card);
+
+        clearGameInfo();
+
+        return true;
+      }
+      return false;
+    }
+  }
   function clearGameInfo() {
     // reset all the props
+    if (gameInfo.firstCard.card !== null) {
+      gameInfo.firstCard.card.card.style.setProperty("--card-size", `55px`);
+    }
     gameInfo.firstCard.deckBase = null;
     gameInfo.firstCard.card = null;
     gameInfo.secondCard.deckBase = null;
     gameInfo.secondCard.card = null;
   }
-}
 
-function removeReAddListeners() {
   // remove the two listeners on the cards that had the exchange
-  game.firstCard.card.card.removeEventListener(
-    "click",
-    game.firstCard.card.boundListener
-  );
-  game.secondCard.card.card.removeEventListener(
-    "click",
-    game.secondCard.card.boundListener
-  );
-  // add new listeners to the exchanged cards
-  moveCardInTableauListener(game.secondCard.deckBase, game.firstCard.card);
-  moveCardInTableauListener(game.secondCard.deckBase, game.secondCard.card);
+  function removeReAddListeners() {
+    game.firstCard.card.card.removeEventListener(
+      "click",
+      game.firstCard.card.boundListener
+    );
+    game.secondCard.card.card.removeEventListener(
+      "click",
+      game.secondCard.card.boundListener
+    );
+    // add new listeners to the exchanged cards
+    moveCardInTableauListener(game.secondCard.deckBase, game.firstCard.card);
+    moveCardInTableauListener(game.secondCard.deckBase, game.secondCard.card);
+  }
 }
 
 export {
