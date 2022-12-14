@@ -323,8 +323,18 @@ function addDeckBase(type) {
     spinCard(topCard, 0, 0);
 
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
+    sortZIndex(source);
+    sortZIndex(destination);
 
     //////////////////Helper Functions ////////////////
+
+    function sortZIndex(deckBase) {
+      for (let index = 0; index < deckBase.deck.cards.length; index++) {
+        const card = deckBase.deck.cards[index].card;
+        card.style.zIndex = index;
+      }
+    };
+
 
     function calculateOffset(element, deckBase, index) {
       index < 0 ? (index = 1) : (index = index);
