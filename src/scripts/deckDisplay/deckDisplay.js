@@ -322,9 +322,9 @@ function addDeckBase(type) {
     await slideCard(topCard, destinationOffset, 0);
     spinCard(topCard, 0, 0);
 
+    
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
     sortZIndex(source);
-    sortZIndex(destination);
 
     //////////////////Helper Functions ////////////////
 
