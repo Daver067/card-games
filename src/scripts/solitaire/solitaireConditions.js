@@ -188,7 +188,10 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   if (gameInfo.firstCard.card === null) {
     gameInfo.firstCard.deckBase = this;
     gameInfo.firstCard.card = cardObj;
-    gameInfo.firstCard.card.card.style.setProperty("--card-size", `58px`);
+    gameInfo.firstCard.card.card.lastElementChild.lastElementChild.style.setProperty(
+      "box-shadow",
+      "rgb(251 255 0 / 45%) 0px 0px 60px 2px inset"
+    );
 
     return;
 
@@ -324,7 +327,10 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   function clearGameInfo() {
     // reset all the props
     if (gameInfo.firstCard.card !== null) {
-      gameInfo.firstCard.card.card.style.setProperty("--card-size", `55px`);
+      gameInfo.firstCard.card.card.lastElementChild.lastElementChild.style.setProperty(
+        "box-shadow",
+        ""
+      );
     }
     gameInfo.firstCard.deckBase = null;
     gameInfo.firstCard.card = null;
