@@ -203,24 +203,31 @@ const Solitaire = () => {
 
 		talon.deck.cards[0].card.addEventListener("click", turnStockCard);
 
+		const promiseArray = [];
 		for (let card = 0; card < talonLength; card++) {
-			setTimeout(() => {
+			const promise = new Promise((resolve, reject) => {
+				setTimeout(resolve, card*20);
+			}).then(function(){
 				const card = talon.moveCardToDeck(stock);
 				card.location = "stock";
 				card.flipCard();
-			}, 30 * card);
+			});
+			promiseArray.push(promise);
 		}
-	}
+		Promise.all(promiseArray).then(function(){
+			onStockClick();
+		});
+	};
 
 	function turnStockCard() {
 		const topCard = stock.deck.cards[stock.deck.cards.length - 1];
 		topCard.card.removeEventListener("click", turnStockCard);
 		const move = stock.moveCardToDeck(talon);
+		topCard.flipCard(250);
 		setTimeout(() => {
 			move.location = "talon";
-		}, 200);
-		topCard.flipCard(250);
-		onStockClick();
+			onStockClick();
+		}, 250);
 	}
 
 	// CARSONS SCRAP LOGIC STARTS HERE //
@@ -430,11 +437,18 @@ const Solitaire = () => {
 		return false;
 	}
 
-	// Returns true or false if card is last in its array. ADD TO DECK CLASS
-	function isLastCard(card, deckBase) {
+
+	function getCardIndex(card, deckBase){
 		const cardIndex = deckBase.deck.cards.findIndex(
 			(index) => index === card
 		);
+		return cardIndex;
+	};
+
+
+	// Returns true or false if card is last in its array. ADD TO DECK CLASS
+	function isLastCard(card, deckBase) {
+		const cardIndex = getCardIndex(card, deckBase);
 		if (cardIndex === deckBase.deck.cards.length - 1) {
 			return true;
 		}
