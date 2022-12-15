@@ -45,7 +45,7 @@ const Solitaire = () => {
     stock.deck.state = "idle";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
-    //stock.deck.shuffleDeck();
+    stock.deck.shuffleDeck();
 
     stock.container.classList.add("stock");
     stock.location = "stock";
