@@ -1,4 +1,4 @@
-import Card from "./cardFoundations/card";
+import Card from "./card";
 
 // the truest form of makeCard.
 // takes either no arguments and spits out a blank card, or takes as many templates and applied them to the card

@@ -1,6 +1,6 @@
-import { Animate } from "./animations/animate";
+import { Animate } from "../animations/animate";
 import makeCard from "./cardBuilder";
-import { Playing } from "./cardFoundations/playing";
+import { Playing } from "./playing";
 import Deck from "./DeckClass";
 
 function StandardCards() {

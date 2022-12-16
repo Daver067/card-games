@@ -1,4 +1,4 @@
-import makeCard from "../cardBuilder";
+import makeCard from "../cardFoundations/cardBuilder";
 import { Playing } from "../cardFoundations/playing";
 
 function testDeck() {

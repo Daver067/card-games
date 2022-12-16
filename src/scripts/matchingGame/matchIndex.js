@@ -1,6 +1,6 @@
+import Deck from "../cardFoundations/DeckClass";
+import StandardCards from "../cardFoundations/standardPackOfCards";
 import { interfaceUI, makeFlop } from "../showUI";
-import Deck from "../DeckClass";
-import StandardCards from "../standardPackOfCards";
 
 const matchGame = {
   firstChoice: null,
