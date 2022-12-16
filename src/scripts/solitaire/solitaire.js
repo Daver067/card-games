@@ -243,7 +243,7 @@ const Solitaire = () => {
 		printCardInfo(card);
 		switch (card.location) {
 			case "stock":
-				// Nothing
+				// Do Nothing!
 				break;
 			case "talon":
 				if (card.number === "A") {
@@ -262,21 +262,13 @@ const Solitaire = () => {
 					addCardToTableaus(talon, validTableauMove);
 					break;
 				}
-				/** 1) Is it an ace? --> Place on first available foundation -- return
-				 *  2) Is it a card that is on number higher and same suit than a card on foundation?
-				 *      Place on that foundation -- return
-				 *  3) Loop through tableaus
-				 *      Is the last card of this stack one number higher and opposite suit of this card?
-				 *          Place card at end of stack - return
-				 */
+
 				break;
 			case "foundation-1":
 			case "foundation-2":
 			case "foundation-3":
 			case "foundation-4":
-				/** Do nothing, once a card is in a foundation, it cannot be played. -- return
-				 *
-				 */
+				// Do nothing!
 				break;
 			case "tableau-1":
 			case "tableau-2":
@@ -325,21 +317,6 @@ const Solitaire = () => {
 					}
 				}
 
-				/** 1) Is the card faceUp? If not, end sequence and return.
-				 *  2) Is the card the last card of the stack?
-				 *    Yes:
-				 *      If its an ace, place on first available foundation -- return
-				 *      If there is a foundation one number lower and same suit, place on that foundation -- return
-				 *      Loop through tableaus except this one:
-				 *        Is there a stack where last card is one number higher and opposite suit?
-				 *          If so, place this card there -- return
-				 *    No:
-				 *      Loop through tableaus except this one:
-				 *        Is there a stack where last card is one number higher and opposite suit?
-				 *          Get all cards below this card and shift them all to that stack.
-				 *
-				 *
-				 */
 				break;
 			default:
 				console.log("Error! Unknown location!");
