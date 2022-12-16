@@ -141,6 +141,7 @@ const game = {
 
 function tableauClickHandler(cardObj, gameInfo, event) {
   event.stopPropagation();
+  console.log(cardObj);
 
   // moving an ace to the foundation spot
   if (moveAceToFoundation(this) === true) {

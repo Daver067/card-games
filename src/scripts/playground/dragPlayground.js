@@ -4,7 +4,6 @@ import { addDeckBase } from "../deckDisplay/deckDisplay";
 import { addDraggable } from "../deckDisplay/draggable/grabAndMove";
 import { makeFlop } from "../showUI";
 import { moveCardInTableauListener } from "../solitaire/solitaireConditions";
-import StandardCards from "../standardPackOfCards";
 import testDeck from "./draggabletestDeck";
 
 function initiatePlayground() {

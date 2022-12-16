@@ -1,14 +1,13 @@
 import "./_solitaireStyle.scss";
 import { addDeckBase, deckDisplay } from "../deckDisplay/deckDisplay";
-import StandardCards from "../standardPackOfCards";
 import {
   moveCardInTableauListener,
   emptyTableauListener,
   emptyFoundationListener,
 } from "./solitaireConditions";
+import StandardCards from "../cardFoundations/standardPackOfCards";
 
 const Solitaire = () => {
-
   let stock = {};
   let talon = {};
   let foundations = {};
@@ -46,7 +45,6 @@ const Solitaire = () => {
     return surface;
   };
 
-
   function buildSurface() {
     const table = document.createElement("div");
     table.classList.add("solitaire");
@@ -69,7 +67,6 @@ const Solitaire = () => {
       card.location = stock;
     }
 
-
     addDoubleClickListeners(stock.deck.cards);
 
     stock.deck.state = "idle";
@@ -91,12 +88,12 @@ const Solitaire = () => {
     recycleWrapper.addEventListener("click", recycleStock);
 
     setTimeout(() => {
-    recycleWrapper.addEventListener("click", recycleStock);
+      recycleWrapper.addEventListener("click", recycleStock);
 
-    setTimeout(() => {
-      stock.cascade();
-    }, 0);
-  }
+      setTimeout(() => {
+        stock.cascade();
+      }, 0);
+    });
   }
 
   function buildTalon(surface) {
@@ -119,7 +116,6 @@ const Solitaire = () => {
     emptyFoundationListener(foundation);
     foundation.location = "foundation";
     target.appendChild(foundation.container);
-    foundations[className] = foundation;
     return foundation;
   }
 
@@ -203,20 +199,16 @@ const Solitaire = () => {
     stock.container.style.visibility = "visible";
     const talonLength = talon.deck.cards.length;
 
-    talon.deck.cards[0].card.addEventListener(
-      "click",
-      turnStockCard
-    );
+    talon.deck.cards[0].card.addEventListener("click", turnStockCard);
 
     for (let card = 0; card < talonLength; card++) {
       setTimeout(() => {
         const card = talon.moveCardToDeck(stock);
         card.location = stock;
         card.flipCard();
-      }, 5*card);
-      
+      }, 5 * card);
     }
-
+  }
   // removes the listener from the top card of stock, updates cards location,
   // flips card adds listener to new top card of stock
   function turnStockCard() {
