@@ -1,5 +1,5 @@
-import StandardCards from "../standardPackOfCards";
-import Deck from "../DeckClass";
+import Deck from "../cardFoundations/DeckClass";
+import StandardCards from "../cardFoundations/standardPackOfCards";
 
 function buildCribbageStock() {
   const stock = new Deck(StandardCards());

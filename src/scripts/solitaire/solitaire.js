@@ -8,15 +8,44 @@ import {
 } from "./solitaireConditions";
 
 const Solitaire = () => {
+
   let stock = {};
   let talon = {};
   let foundations = {};
   let tableaus = {};
 
+  const cardValueMap = (() => {
+    const map = new Map();
+    map.set("A", 1);
+    map.set("2", 2);
+    map.set("3", 3);
+    map.set("4", 4);
+    map.set("5", 5);
+    map.set("6", 6);
+    map.set("7", 7);
+    map.set("8", 8);
+    map.set("9", 9);
+    map.set("10", 10);
+    map.set("J", 11);
+    map.set("Q", 12);
+    map.set("K", 13);
+    return map;
+  })();
+
+  const cardColorMap = (() => {
+    const map = new Map();
+    map.set("♥", "red");
+    map.set("♦", "red");
+    map.set("♠", "black");
+    map.set("♣", "black");
+    return map;
+  })();
+
   const initializeGame = () => {
     const surface = buildSurface();
     return surface;
   };
+
 
   function buildSurface() {
     const table = document.createElement("div");
@@ -40,6 +69,7 @@ const Solitaire = () => {
       card.location = stock;
     }
 
+
     addDoubleClickListeners(stock.deck.cards);
 
     stock.deck.state = "idle";
@@ -61,8 +91,12 @@ const Solitaire = () => {
     recycleWrapper.addEventListener("click", recycleStock);
 
     setTimeout(() => {
+    recycleWrapper.addEventListener("click", recycleStock);
+
+    setTimeout(() => {
       stock.cascade();
     }, 0);
+  }
   }
 
   function buildTalon(surface) {
@@ -73,7 +107,6 @@ const Solitaire = () => {
   }
 
   function buildFoundations(surface) {
-    // Initiate 4 foundations, where the cards are ultimately stacked
     buildFoundation(surface, "foundation-1");
     buildFoundation(surface, "foundation-2");
     buildFoundation(surface, "foundation-3");
@@ -86,12 +119,14 @@ const Solitaire = () => {
     emptyFoundationListener(foundation);
     foundation.location = "foundation";
     target.appendChild(foundation.container);
+    foundations[className] = foundation;
     return foundation;
   }
 
   function buildTableauAddCards(stock, surface) {
     for (let i = 1; i < 8; i++) {
       const newTableau = buildTableau(`tableau-${i}`);
+      newTableau.location = `tableau-${i}`;
       tableaus[`tableau-${i}`] = newTableau;
       surface.appendChild(newTableau.container);
     }
@@ -123,7 +158,6 @@ const Solitaire = () => {
         }
       }
     }
-    //         */
   }
 
   function buildTableau(className) {
@@ -169,19 +203,19 @@ const Solitaire = () => {
     stock.container.style.visibility = "visible";
     const talonLength = talon.deck.cards.length;
 
-    talon.deck.cards.forEach((card) => {
-      card.card.removeEventListener("click", card.boundListener);
-    });
-    talon.deck.cards[0].card.addEventListener("click", turnStockCard);
+    talon.deck.cards[0].card.addEventListener(
+      "click",
+      turnStockCard
+    );
 
     for (let card = 0; card < talonLength; card++) {
       setTimeout(() => {
         const card = talon.moveCardToDeck(stock);
         card.location = stock;
         card.flipCard();
-      }, 5 * card);
+      }, 5*card);
+      
     }
-  }
 
   // removes the listener from the top card of stock, updates cards location,
   // flips card adds listener to new top card of stock
@@ -234,6 +268,47 @@ const Solitaire = () => {
       case "tableau-5":
       case "tableau-6":
       case "tableau-7":
+        const currentTableau = tableaus[card.location];
+        if (card.faceUp === false) {
+          break;
+        }
+
+        if (isLastCard(card, currentTableau)) {
+          if (card.number === "A") {
+            addAceToFoundations(currentTableau);
+            clickToFlipToLastCard(currentTableau);
+            break;
+          }
+
+          const validFoundationMove = checkForFoundationMove(card);
+          if (validFoundationMove !== false) {
+            addCardToFoundations(currentTableau, validFoundationMove);
+            clickToFlipToLastCard(currentTableau);
+            break;
+          }
+
+          const validTableauMove = checkForTableauMove(card, currentTableau);
+          if (validTableauMove !== false) {
+            addCardToTableaus(currentTableau, validTableauMove);
+            clickToFlipToLastCard(currentTableau);
+            break;
+          }
+        } else {
+          console.log("Not last card");
+          const validTableauMove = checkForTableauMove(card, currentTableau);
+          if (validTableauMove !== false) {
+            const timer = addMultipleCardsToTableaus(
+              currentTableau,
+              validTableauMove,
+              card
+            );
+            setTimeout(() => {
+              clickToFlipToLastCard(currentTableau);
+            }, 300);
+            break;
+          }
+        }
+
         /** 1) Is the card faceUp? If not, end sequence and return.
          *  2) Is the card the last card of the stack?
          *    Yes:
@@ -262,6 +337,115 @@ const Solitaire = () => {
       "Face Up?": card.faceUp,
       Card: `${card.number} of ${card.suit}`,
     });
+  }
+
+  function addAceToFoundations(source) {
+    for (const foundation in foundations) {
+      if (Object.hasOwnProperty.call(foundations, foundation)) {
+        const pile = foundations[foundation];
+        if (pile.deck.cards.length === 0) {
+          const card = source.moveCardToDeck(pile);
+          card.location = `${foundation.location}`;
+          break;
+        }
+      }
+    }
+  }
+
+  function addCardToFoundations(source, destination) {
+    const card = source.moveCardToDeck(destination);
+    card.location = `${destination.location}`;
+    console.log(card.location);
+  }
+
+  function addCardToTableaus(source, destination) {
+    const card = source.moveCardToDeck(destination);
+    card.location = `${destination.location}`;
+    console.log(card.location);
+  }
+
+  function addMultipleCardsToTableaus(source, destination, card) {
+    const cardIndex = source.deck.cards.findIndex((index) => index === card);
+    for (let index = cardIndex; index < source.deck.cards.length; index++) {
+      setTimeout(() => {
+        const card = source.moveCardToDeck(
+          destination,
+          source.deck.cards[cardIndex]
+        );
+        card.location = `${destination.location}`;
+        console.log(card.location);
+      }, index * 30);
+    }
+  }
+
+  function checkForFoundationMove(card) {
+    const cardValue = cardValueMap.get(card.number);
+    for (const foundation in foundations) {
+      if (Object.hasOwnProperty.call(foundations, foundation)) {
+        const pile = foundations[foundation];
+        if (pile.deck.cards.length > 0) {
+          const topCard = pile.deck.cards[pile.deck.cards.length - 1];
+          const topValue = cardValueMap.get(topCard.number);
+
+          if (topCard.suit !== card.suit) continue;
+          if (topValue + 1 !== cardValue) continue;
+          return pile;
+        } else {
+          continue;
+        }
+      }
+    }
+    return false;
+  }
+
+  function checkForTableauMove(card, source) {
+    const cardValue = cardValueMap.get(card.number);
+    const cardColor = cardColorMap.get(card.suit);
+    for (const tableau in tableaus) {
+      if (Object.hasOwnProperty.call(tableaus, tableau)) {
+        const pile = tableaus[tableau];
+
+        if (pile.deck.cards.length > 0) {
+          const topCard = pile.deck.cards[pile.deck.cards.length - 1];
+          const topValue = cardValueMap.get(topCard.number);
+          const topColor = cardColorMap.get(topCard.suit);
+
+          if (pile === source) continue;
+          if (topColor === cardColor) continue;
+          if (topValue - 1 !== cardValue) continue;
+          return pile;
+        } else {
+          if (cardValue === 13) {
+            return pile;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  // Returns true or false if card is last in its array. ADD TO DECK CLASS
+  function isLastCard(card, deckBase) {
+    const cardIndex = deckBase.deck.cards.findIndex((index) => index === card);
+    if (cardIndex === deckBase.deck.cards.length - 1) {
+      return true;
+    }
+  }
+
+  function clickToFlipToLastCard(deckBase) {
+    if (deckBase.deck.cards.length === 0) {
+      return;
+    }
+    const lastCard = deckBase.deck.cards[deckBase.deck.cards.length - 1];
+    lastCard.card.addEventListener(
+      "click",
+      () => {
+        if (lastCard.faceUp === false) {
+          lastCard.flipCard();
+        }
+      },
+      { once: true }
+    );
   }
 
   // CARSONS SCRAP LOGIC ENDS HERE

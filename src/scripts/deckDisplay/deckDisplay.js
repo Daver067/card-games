@@ -1,6 +1,6 @@
 import "./styles.scss";
-import Deck from "../DeckClass";
-import StandardCards from "../standardPackOfCards";
+import Deck from "../cardFoundations/DeckClass";
+import StandardCards from "../cardFoundations/standardPackOfCards";
 import { Animate } from "../animations/animate";
 import { AnimateDeck } from "../animations/animateDeck";
 
@@ -323,6 +323,7 @@ function addDeckBase(type) {
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
     spinCard(topCard, 0, 0);
+
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
     sortZIndex(source);
     sortZIndex(destination);
@@ -342,6 +343,36 @@ function addDeckBase(type) {
       vector[1] =
         deckBase.cascadePercent[1] * parseFloat(element.offsetHeight) * index;
       return vector;
+    }
+
+    function resizeContainer(deckBase) {
+      const cardHeight = parseFloat(deckBase.deck.cards[0].card.offsetHeight);
+      const cardWidth = parseFloat(deckBase.deck.cards[0].card.offsetWidth);
+      const deckLength = deckBase.deck.cards.length;
+      const newHeight =
+        cardHeight * deckLength * Math.abs(deckBase.cascadePercent[1]) +
+        cardHeight * (1 - Math.abs(deckBase.cascadePercent[1]));
+      const newWidth =
+        cardWidth * deckLength * Math.abs(deckBase.cascadePercent[0]) +
+        cardWidth * (1 - Math.abs(deckBase.cascadePercent[0]));
+      deckBase.container.style.height = `${newHeight}px`;
+      deckBase.container.style.width = `${newWidth}px`;
+
+      const deltaX = newWidth - cardWidth;
+      const deltaY = newHeight - cardWidth;
+
+      const container = deckBase.container;
+
+      if (deckBase.cascadePercent[0] < 0) {
+        // If x is a negative percent
+      } else {
+        // If x is a positive percent
+      }
+      if (deckBase.cascadePercent[1] < 0) {
+        // If y is a negative percent
+      } else {
+        // If y is a positive percent
+      }
     }
     ///////////////////////////////////////////////////
   }
