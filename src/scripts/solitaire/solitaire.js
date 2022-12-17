@@ -253,13 +253,15 @@ const Solitaire = () => {
 
 				const validFoundationMove = checkForFoundationMove(card);
 				if (validFoundationMove !== false) {
-					addCardToFoundations(talon, validFoundationMove);
+					const movedCard = talon.moveCardToDeck(validFoundationMove);
+					movedCard.location = `${validFoundationMove.location}`;
 					break;
 				}
 
 				const validTableauMove = checkForTableauMove(card, talon);
 				if (validTableauMove !== false) {
-					addCardToTableaus(talon, validTableauMove);
+					const card = talon.moveCardToDeck(validTableauMove);
+					card.location = `${validTableauMove.location}`;
 					break;
 				}
 
@@ -282,7 +284,7 @@ const Solitaire = () => {
 					break;
 				}
 
-				if (isLastCard(card, currentTableau)) {
+				if (currentTableau.deck.isLastCard(card)) {
 					if (card.number === "A") {
 						addAceToFoundations(currentTableau);
 						clickToFlipToLastCard(currentTableau);
@@ -291,22 +293,20 @@ const Solitaire = () => {
 
 					const validFoundationMove = checkForFoundationMove(card);
 					if (validFoundationMove !== false) {
-						addCardToFoundations(
-							currentTableau,
-							validFoundationMove
-						);
+						const movedCard = currentTableau.moveCardToDeck(validFoundationMove);
+						movedCard.location = `${validFoundationMove.location}`;
 						clickToFlipToLastCard(currentTableau);
 						break;
 					}
 
 					const validTableauMove = checkForTableauMove(card, currentTableau);
 					if (validTableauMove !== false) {
-						addCardToTableaus(currentTableau, validTableauMove);
+						const card = currentTableau.moveCardToDeck(validTableauMove);
+						card.location = `${validTableauMove.location}`;
 						clickToFlipToLastCard(currentTableau);
 						break;
 					}
 				} else {
-					console.log("Not last card");
 					const validTableauMove = checkForTableauMove(card, currentTableau);
 					if (validTableauMove !== false) {
 						const timer = addMultipleCardsToTableaus(currentTableau, validTableauMove, card);
@@ -345,18 +345,6 @@ const Solitaire = () => {
 		}
 	}
 
-	function addCardToFoundations(source, destination) {
-		const card = source.moveCardToDeck(destination);
-		card.location = `${destination.location}`;
-		console.log(card.location);
-	}
-
-	function addCardToTableaus(source, destination) {
-		const card = source.moveCardToDeck(destination);
-		card.location = `${destination.location}`;
-		console.log(card.location);
-	}
-
 
     function addMultipleCardsToTableaus(source, destination, card) {
         const cardIndex = source.deck.cards.findIndex((index) => index === card);
@@ -364,7 +352,6 @@ const Solitaire = () => {
             setTimeout(() => {
                 const card = source.moveCardToDeck(destination, source.deck.cards[cardIndex]);
                 card.location = `${destination.location}`;
-                console.log(card.location);
             }, index * 30);
         }    
     }
@@ -415,22 +402,6 @@ const Solitaire = () => {
 	}
 
 
-	function getCardIndex(card, deckBase){
-		const cardIndex = deckBase.deck.cards.findIndex(
-			(index) => index === card
-		);
-		return cardIndex;
-	};
-
-
-	// Returns true or false if card is last in its array. ADD TO DECK CLASS
-	function isLastCard(card, deckBase) {
-		const cardIndex = getCardIndex(card, deckBase);
-		if (cardIndex === deckBase.deck.cards.length - 1) {
-			return true;
-		}
-	}
-
 	function clickToFlipToLastCard(deckBase) {
 		if (deckBase.deck.cards.length === 0) {
 			return;
@@ -442,8 +413,7 @@ const Solitaire = () => {
 				if (lastCard.faceUp === false) {
 					lastCard.flipCard();
 				}
-			},
-			{ once: true }
+			}
 		);
 	}
 
