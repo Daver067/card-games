@@ -240,7 +240,6 @@ const Solitaire = () => {
 	}
 
 	function onDoubleClick(card) {
-		printCardInfo(card);
 		switch (card.location) {
 			case "stock":
 				// Do Nothing!
