@@ -326,7 +326,6 @@ function addDeckBase(type) {
 
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
     sortZIndex(source);
-    sortZIndex(destination);
 
     //////////////////Helper Functions ////////////////
     function sortZIndex(deckBase) {
