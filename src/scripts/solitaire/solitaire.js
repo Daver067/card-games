@@ -114,6 +114,7 @@ const Solitaire = () => {
     foundation.container.classList.add(className);
     emptyFoundationListener(foundation);
     foundation.location = "foundation";
+    foundations[className] = foundation;
     target.appendChild(foundation.container);
     return foundation;
   }
@@ -290,6 +291,7 @@ const Solitaire = () => {
 
         if (isLastCard(card, currentTableau)) {
           if (card.number === "A") {
+            console.log("ace found step1");
             addAceToFoundations(currentTableau);
             clickToFlipToLastCard(currentTableau);
             break;
@@ -355,11 +357,16 @@ const Solitaire = () => {
   }
 
   function addAceToFoundations(source) {
-    console.log("ace found");
+    console.log("ace found step2");
+    console.log(foundations);
+
     for (const foundation in foundations) {
       if (Object.hasOwnProperty.call(foundations, foundation)) {
+        console.log("ace found step3");
         const pile = foundations[foundation];
         if (pile.deck.cards.length === 0) {
+          console.log("ace found step4");
+
           const card = source.moveCardToDeck(pile);
           break;
         }
