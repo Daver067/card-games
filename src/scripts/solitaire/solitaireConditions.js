@@ -125,7 +125,7 @@ const game = {
       }
     },
 
-    moveCardToFoundationRule() {
+    moveCardToFoundationRule(firstCard, secondCard) {
       if (
         firstCard.value === secondCard.value + 1 &&
         firstCard.suit === secondCard.suit
@@ -141,7 +141,6 @@ const game = {
 
 function tableauClickHandler(cardObj, gameInfo, event) {
   event.stopPropagation();
-  console.log(cardObj);
 
   // moving an ace to the foundation spot
   if (moveAceToFoundation(this) === true) {
@@ -175,6 +174,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   // if no first card, this first click is the first card
   if (gameInfo.firstCard === null) {
     gameInfo.firstCard = cardObj;
+
     gameInfo.firstCard.card.lastElementChild.lastElementChild.style.setProperty(
       "box-shadow",
       "rgb(251 255 0 / 45%) 0px 0px 60px 2px inset"
@@ -186,8 +186,8 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   } else {
     gameInfo.secondCard = cardObj;
   }
-
   // try to pass the first card to the second deckBase
+
   if (
     gameInfo.firstCard.location.moveCardToDeck(
       gameInfo.secondCard.location,
@@ -234,7 +234,10 @@ function tableauClickHandler(cardObj, gameInfo, event) {
         gameInfo.firstCard.location.moveCardToDeck(
           gameInfo.secondCard.location,
           gameInfo.firstCard,
-          gameInfo.rules.moveCardToFoundationRule() // apply the rule!
+          gameInfo.rules.moveCardToFoundationRule(
+            gameInfo.firstCard,
+            gameInfo.secondCard
+          ) // apply the rule!
         ) !== false
       ) {
         gameInfo.firstCard.inFoundation = true;

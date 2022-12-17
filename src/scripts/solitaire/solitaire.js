@@ -85,7 +85,6 @@ const Solitaire = () => {
     <path fill="currentColor" d="M12,6V9L16,5L12,1V4A8,8 0 0,0 4,12C4,13.57 4.46,15.03 5.24,16.26L6.7,14.8C6.25,13.97 6,13 6,12A6,6 0 0,1 12,6M18.76,7.74L17.3,9.2C17.74,10.04 18,11 18,12A6,6 0 0,1 12,18V15L8,19L12,23V20A8,8 0 0,0 20,12C20,10.43 19.54,8.97 18.76,7.74Z" />
     </svg>`;
     surface.appendChild(recycleWrapper);
-    recycleWrapper.addEventListener("click", recycleStock);
 
     setTimeout(() => {
       recycleWrapper.addEventListener("click", recycleStock);
@@ -122,7 +121,6 @@ const Solitaire = () => {
   function buildTableauAddCards(stock, surface) {
     for (let i = 1; i < 8; i++) {
       const newTableau = buildTableau(`tableau-${i}`);
-      newTableau.location = `tableau-${i}`;
       tableaus[`tableau-${i}`] = newTableau;
       surface.appendChild(newTableau.container);
     }
@@ -199,6 +197,10 @@ const Solitaire = () => {
     stock.container.style.visibility = "visible";
     const talonLength = talon.deck.cards.length;
 
+    talon.deck.cards.forEach((card) => {
+      card.card.removeEventListener("click", card.boundListener);
+    });
+
     talon.deck.cards[0].card.addEventListener("click", turnStockCard);
 
     for (let card = 0; card < talonLength; card++) {
@@ -245,28 +247,30 @@ const Solitaire = () => {
          *          Place card at end of stack - return
          */
         break;
-      case "foundation-1":
-      case "foundation-2":
-      case "foundation-3":
-      case "foundation-4":
+      case foundations[`foundation-1`]:
+      case foundations[`foundation-2`]:
+      case foundations[`foundation-3`]:
+      case foundations[`foundation-4`]:
         /** Do nothing, once a card is in a foundation, it cannot be played. -- return
          *
          */
         break;
-      case "tableau-1":
-      case "tableau-2":
-      case "tableau-3":
-      case "tableau-4":
-      case "tableau-5":
-      case "tableau-6":
-      case "tableau-7":
-        const currentTableau = tableaus[card.location];
+      case tableaus[`tableau-1`]:
+      case tableaus[`tableau-2`]:
+      case tableaus[`tableau-3`]:
+      case tableaus[`tableau-4`]:
+      case tableaus[`tableau-5`]:
+      case tableaus[`tableau-6`]:
+      case tableaus[`tableau-7`]:
+        const currentTableau = card.location;
         if (card.faceUp === false) {
           break;
         }
-
         if (isLastCard(card, currentTableau)) {
+          console.log(card.number);
           if (card.number === "A") {
+            console.log("ace");
+
             addAceToFoundations(currentTableau);
             clickToFlipToLastCard(currentTableau);
             break;
@@ -332,12 +336,12 @@ const Solitaire = () => {
   }
 
   function addAceToFoundations(source) {
+    console.log("ace found");
     for (const foundation in foundations) {
       if (Object.hasOwnProperty.call(foundations, foundation)) {
         const pile = foundations[foundation];
         if (pile.deck.cards.length === 0) {
           const card = source.moveCardToDeck(pile);
-          card.location = `${foundation.location}`;
           break;
         }
       }
@@ -346,13 +350,11 @@ const Solitaire = () => {
 
   function addCardToFoundations(source, destination) {
     const card = source.moveCardToDeck(destination);
-    card.location = `${destination.location}`;
     console.log(card.location);
   }
 
   function addCardToTableaus(source, destination) {
     const card = source.moveCardToDeck(destination);
-    card.location = `${destination.location}`;
     console.log(card.location);
   }
 
@@ -364,7 +366,6 @@ const Solitaire = () => {
           destination,
           source.deck.cards[cardIndex]
         );
-        card.location = `${destination.location}`;
         console.log(card.location);
       }, index * 30);
     }
