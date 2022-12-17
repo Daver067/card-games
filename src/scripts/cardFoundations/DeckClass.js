@@ -65,6 +65,23 @@ class Deck {
     // deal x amount of cards to y amount of players from this.drawpile
   };
 
+
+  getCardIndex(card) {
+		const cardIndex = this.cards.findIndex(
+			(index) => index === card
+		);
+		return cardIndex;
+	};
+
+
+	isLastCard(card) {
+		const cardIndex = this.getCardIndex(card);
+		if (cardIndex === this.cards.length - 1) {
+			return true;
+		}
+	};
+
+
   // Flips an array of cards with a total time equal to duration
   flipBatchDuration(cardArray, duration) {
     const flipDelay = duration / cardArray.length;

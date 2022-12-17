@@ -203,16 +203,21 @@ const Solitaire = () => {
 
     talon.deck.cards[0].card.addEventListener("click", turnStockCard);
 
+    const promiseArray = [];
     for (let card = 0; card < talonLength; card++) {
-      setTimeout(() => {
+      const promise = new Promise((resolve, reject) => {
+        setTimeout(resolve, card * 20);
+      }).then(function () {
         const card = talon.moveCardToDeck(stock);
-        card.location = stock;
         card.flipCard();
-      }, 5 * card);
+      });
+      promiseArray.push(promise);
     }
+    Promise.all(promiseArray).then(function () {
+      onStockClick();
+    });
   }
-  // removes the listener from the top card of stock, updates cards location,
-  // flips card adds listener to new top card of stock
+
   function turnStockCard() {
     const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
@@ -236,9 +241,25 @@ const Solitaire = () => {
     printCardInfo(card);
     switch (card.location) {
       case stock:
-        // Nothing, maybe flip card same as single click.
+        // Nothing
         break;
       case talon:
+        if (card.number === "A") {
+          addAceToFoundations(talon);
+          break;
+        }
+
+        const validFoundationMove = checkForFoundationMove(card);
+        if (validFoundationMove !== false) {
+          addCardToFoundations(talon, validFoundationMove);
+          break;
+        }
+
+        const validTableauMove = checkForTableauMove(card, talon);
+        if (validTableauMove !== false) {
+          addCardToTableaus(talon, validTableauMove);
+          break;
+        }
         /** 1) Is it an ace? --> Place on first available foundation -- return
          *  2) Is it a card that is on number higher and same suit than a card on foundation?
          *      Place on that foundation -- return
@@ -266,11 +287,9 @@ const Solitaire = () => {
         if (card.faceUp === false) {
           break;
         }
-        if (isLastCard(card, currentTableau)) {
-          console.log(card.number);
-          if (card.number === "A") {
-            console.log("ace");
 
+        if (isLastCard(card, currentTableau)) {
+          if (card.number === "A") {
             addAceToFoundations(currentTableau);
             clickToFlipToLastCard(currentTableau);
             break;
