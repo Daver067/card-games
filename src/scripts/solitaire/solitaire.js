@@ -229,7 +229,7 @@ const Solitaire = () => {
     onStockClick();
   }
 
-  // CARSONS SCRAP LOGIC STARTS HERE //
+
   function addDoubleClickListeners(cardArray) {
     cardArray.forEach((card) => {
       card.card.addEventListener("dblclick", function () {
@@ -252,30 +252,24 @@ const Solitaire = () => {
 
         const validFoundationMove = checkForFoundationMove(card);
         if (validFoundationMove !== false) {
-          addCardToFoundations(talon, validFoundationMove);
+					const movedCard = talon.moveCardToDeck(validFoundationMove);
+					movedCard.location = `${validFoundationMove.location}`;
           break;
         }
 
         const validTableauMove = checkForTableauMove(card, talon);
         if (validTableauMove !== false) {
-          addCardToTableaus(talon, validTableauMove);
+					const card = talon.moveCardToDeck(validTableauMove);
+					card.location = `${validTableauMove.location}`;
           break;
         }
-        /** 1) Is it an ace? --> Place on first available foundation -- return
-         *  2) Is it a card that is on number higher and same suit than a card on foundation?
-         *      Place on that foundation -- return
-         *  3) Loop through tableaus
-         *      Is the last card of this stack one number higher and opposite suit of this card?
-         *          Place card at end of stack - return
-         */
+
         break;
       case foundations[`foundation-1`]:
       case foundations[`foundation-2`]:
       case foundations[`foundation-3`]:
       case foundations[`foundation-4`]:
-        /** Do nothing, once a card is in a foundation, it cannot be played. -- return
-         *
-         */
+
         break;
       case tableaus[`tableau-1`]:
       case tableaus[`tableau-2`]:
@@ -289,7 +283,7 @@ const Solitaire = () => {
           break;
         }
 
-        if (isLastCard(card, currentTableau)) {
+				if (currentTableau.deck.isLastCard(card)) {
           if (card.number === "A") {
             console.log("ace found step1");
             addAceToFoundations(currentTableau);
@@ -299,19 +293,20 @@ const Solitaire = () => {
 
           const validFoundationMove = checkForFoundationMove(card);
           if (validFoundationMove !== false) {
-            addCardToFoundations(currentTableau, validFoundationMove);
+						const movedCard = currentTableau.moveCardToDeck(validFoundationMove);
+						movedCard.location = `${validFoundationMove.location}`;
             clickToFlipToLastCard(currentTableau);
             break;
           }
 
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
-            addCardToTableaus(currentTableau, validTableauMove);
+						const card = currentTableau.moveCardToDeck(validTableauMove);
+						card.location = `${validTableauMove.location}`;
             clickToFlipToLastCard(currentTableau);
             break;
           }
         } else {
-          console.log("Not last card");
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
             const timer = addMultipleCardsToTableaus(
@@ -325,22 +320,6 @@ const Solitaire = () => {
             break;
           }
         }
-
-        /** 1) Is the card faceUp? If not, end sequence and return.
-         *  2) Is the card the last card of the stack?
-         *    Yes:
-         *      If its an ace, place on first available foundation -- return
-         *      If there is a foundation one number lower and same suit, place on that foundation -- return
-         *      Loop through tableaus except this one:
-         *        Is there a stack where last card is one number higher and opposite suit?
-         *          If so, place this card there -- return
-         *    No:
-         *      Loop through tableaus except this one:
-         *        Is there a stack where last card is one number higher and opposite suit?
-         *          Get all cards below this card and shift them all to that stack.
-         *
-         *
-         */
         break;
       default:
         console.log("Error! Unknown location!");
@@ -374,16 +353,6 @@ const Solitaire = () => {
     }
   }
 
-  function addCardToFoundations(source, destination) {
-    const card = source.moveCardToDeck(destination);
-    console.log(card.location);
-  }
-
-  function addCardToTableaus(source, destination) {
-    const card = source.moveCardToDeck(destination);
-    console.log(card.location);
-  }
-
   function addMultipleCardsToTableaus(source, destination, card) {
     const cardIndex = source.deck.cards.findIndex((index) => index === card);
     for (let index = cardIndex; index < source.deck.cards.length; index++) {
@@ -392,7 +361,6 @@ const Solitaire = () => {
           destination,
           source.deck.cards[cardIndex]
         );
-        console.log(card.location);
       }, index * 30);
     }
   }
@@ -443,13 +411,6 @@ const Solitaire = () => {
     return false;
   }
 
-  // Returns true or false if card is last in its array. ADD TO DECK CLASS
-  function isLastCard(card, deckBase) {
-    const cardIndex = deckBase.deck.cards.findIndex((index) => index === card);
-    if (cardIndex === deckBase.deck.cards.length - 1) {
-      return true;
-    }
-  }
 
   function clickToFlipToLastCard(deckBase) {
     if (deckBase.deck.cards.length === 0) {
@@ -467,7 +428,6 @@ const Solitaire = () => {
     );
   }
 
-  // CARSONS SCRAP LOGIC ENDS HERE
 
   return {
     initializeGame,
