@@ -1,55 +1,75 @@
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .solitaire {
-    width: 100vw;
-    height: 100vh;
-    background: rgb(107, 33, 33);
-    background: url(/assets/images/45-degree-fabric-light.png),
-    radial-gradient( circle farthest-corner at 50.4% 50.5%,  rgb(214, 28, 75) 0%, rgb(40, 0, 10) 90% );
+  width: 100%;
+  height: 100vh;
+  background: rgb(107, 33, 33);
+  background: url(/assets/images/45-degree-fabric-light.png),
+    radial-gradient(
+      circle farthest-corner at 50.4% 50.5%,
+      rgb(157, 0, 255) 0%,
+      rgb(0, 0, 0) 90%
+    );
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
 }
 
 .surface {
-    padding-top: 2rem;
-    height: 100%;
+  padding-top: 2.5rem;
 
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr 3fr;
+  justify-items: center;
 
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: auto auto; 
-    justify-items: center;
-
-    gap: calc(var(--card-size)/5);
+  gap: calc(var(--card-size) / 3);
 }
 
 .stock {
   grid-column: 1/2;
   grid-row: 1/2;
+  max-width: calc(var(--card-size) * 2.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.stock > .stack > div:last-child > div > div  {
+.recycle {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  max-width: calc(var(--card-size) * 2.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recycle {
+  color: rgb(2, 2, 2);
+  transition: 0.5s;
+  z-index: 0.5;
+}
+
+.recycle:hover {
+  color: rgb(238, 238, 124);
+  transition: 0.5s;
+}
+
+.stock > .stack > div:last-child > div > div {
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }
 
 .stack + .cascade > div:has(.front):hover {
-  transform: translateY(calc(var(--card-size)*0.10*(-1)));
-  transform: rotate(3deg);
-  transition-property: all;
-  transition-duration: 200ms;
 }
 
 .stack + .cascade > div:has(.front) {
-  transform: translateY(0);
-  transform: rotate(0);
-  transition-property: all;
-  transition-duration: 200ms;
 }
 
 .talon {
@@ -123,7 +143,6 @@
   grid-row: 2/3;
 }
 
-
-
-
-
+.slide {
+  position: absolute;
+}

@@ -1,37 +1,67 @@
-import { make54 } from "./scripts/deckBuilding";
-import { matchGame } from "./scripts/matchingGame/matchIndex";
-import { interfaceUI, makeFlop } from "./scripts/showUI";
+import matchGame from "./scripts/matchingGame/matchIndex";
 import Solitaire from "./scripts/solitaire/solitaire";
-import TableDeck from "./scripts/tableDeckClass";
+import { deckDisplay } from "./scripts/deckDisplay/deckDisplay";
 import "./style.scss";
+import { initiateCribbage } from "./scripts/cribbageSquares/cribbageIndex";
+import { initiatePlayground } from "./scripts/playground/dragPlayground";
 
-//matchGame.initiateGame(); // uncomment this to play match... its broken for now from the merge.
+//document.body.appendChild(matchGame.initiateGame()); // uncomment this to play match.
 
-document.body.appendChild(Solitaire.initializeGame());
-//uncomment to play solitaire
-/* comment all this to play match
-const States = ["idle", "busy"];
+//document.body.appendChild(Solitaire.initializeGame()); // uncomment this to play solitaire.
 
-const Table = new TableDeck();
-Table.deck = make54();
-Table.deck.state = "idle";
+//document.body.appendChild(initiateCribbage());
 
-const target = document.body;
-const testFlop = makeFlop(target);
-Table.deck.forEach((card) => {
-  card.blindFlip();
-});
+//document.body.appendChild(initiatePlayground());
 
-Table.deck.forEach((card) => {
-  testFlop.appendChild(card.card);
-});
+//const deckDisplayPage = deckDisplay().displayTestPage();
+//document.body.appendChild(deckDisplayPage); // uncomment this to play match.
 
-const flipButton = interfaceUI.flipAllButton;
-flipButton.addEventListener("click", () => {
-  if (Table.deck.state === "idle") {
-    Table.deck.state = "busy";
-    Table.flipBatchIncrement(Table.deck, 40);
+const playGroundButton = document.createElement("button");
+playGroundButton.textContent = "PlayGroundButton";
+playGroundButton.addEventListener("click", () => {
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.firstChild);
   }
+  document.body.appendChild(initiatePlayground());
 });
-interfaceUI.showUI(document.body);
-// end uncomment here */
+document.body.appendChild(playGroundButton);
+
+const SolitaireButton = document.createElement("button");
+SolitaireButton.textContent = "SolitaireButton";
+SolitaireButton.addEventListener("click", () => {
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.firstChild);
+  }
+  document.body.appendChild(Solitaire.initializeGame());
+});
+
+document.body.appendChild(SolitaireButton);
+const matchGameButton = document.createElement("button");
+matchGameButton.textContent = "matchGameButton";
+matchGameButton.addEventListener("click", () => {
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.firstChild);
+  }
+  document.body.appendChild(matchGame.initiateGame());
+});
+document.body.appendChild(matchGameButton);
+
+const CribbageButton = document.createElement("button");
+CribbageButton.textContent = "CribbageButton";
+CribbageButton.addEventListener("click", () => {
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.firstChild);
+  }
+  document.body.appendChild(initiateCribbage());
+});
+document.body.appendChild(CribbageButton);
+
+const DeckDisplayButton = document.createElement("button");
+DeckDisplayButton.textContent = "DeckDisplayButton";
+DeckDisplayButton.addEventListener("click", () => {
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.firstChild);
+  }
+  document.body.appendChild(deckDisplay().displayTestPage());
+});
+document.body.appendChild(DeckDisplayButton);
