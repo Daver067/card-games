@@ -255,14 +255,14 @@ const Solitaire = () => {
         const validFoundationMove = checkForFoundationMove(card);
         if (validFoundationMove !== false) {
 					const movedCard = talon.moveCardToDeck(validFoundationMove);
-					movedCard.location = `${validFoundationMove.location}`;
+					movedCard.location = validFoundationMove;
           break;
         }
 
         const validTableauMove = checkForTableauMove(card, talon);
         if (validTableauMove !== false) {
 					const card = talon.moveCardToDeck(validTableauMove);
-					card.location = `${validTableauMove.location}`;
+					card.location = validTableauMove;
           break;
         }
 
@@ -287,7 +287,6 @@ const Solitaire = () => {
 
 				if (currentTableau.deck.isLastCard(card)) {
           if (card.number === "A") {
-            console.log("ace found step1");
             addAceToFoundations(currentTableau);
             clickToFlipToLastCard(currentTableau);
             break;
@@ -296,7 +295,7 @@ const Solitaire = () => {
           const validFoundationMove = checkForFoundationMove(card);
           if (validFoundationMove !== false) {
 						const movedCard = currentTableau.moveCardToDeck(validFoundationMove);
-						movedCard.location = `${validFoundationMove.location}`;
+						movedCard.location = validFoundationMove;
             clickToFlipToLastCard(currentTableau);
             break;
           }
@@ -304,7 +303,7 @@ const Solitaire = () => {
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
 						const card = currentTableau.moveCardToDeck(validTableauMove);
-						card.location = `${validTableauMove.location}`;
+						card.location = validTableauMove;
             clickToFlipToLastCard(currentTableau);
             break;
           }
@@ -338,15 +337,11 @@ const Solitaire = () => {
   }
 
   function addAceToFoundations(source) {
-    console.log("ace found step2");
-    console.log(foundations);
-
     for (const foundation in foundations) {
       if (Object.hasOwnProperty.call(foundations, foundation)) {
-        console.log("ace found step3");
+
         const pile = foundations[foundation];
         if (pile.deck.cards.length === 0) {
-          console.log("ace found step4");
 
           const card = source.moveCardToDeck(pile);
           break;
@@ -363,6 +358,7 @@ const Solitaire = () => {
           destination,
           source.deck.cards[cardIndex]
         );
+        card.location = destination;
       }, index * 30);
     }
   }
