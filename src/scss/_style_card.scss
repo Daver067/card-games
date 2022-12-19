@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Crete Round';
+  src: url(/assets/fonts/CreteRound-Regular.ttf);
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --card-size: 55px;
   --card-flip-speed: 0.3s;
