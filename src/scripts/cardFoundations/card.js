@@ -3,6 +3,7 @@ const Card = () => {
   // PROPERTIES
   const faceUp = false;
   const flipEnabled = true;
+  const active = true;
   let parent; // Describes where in the DOM the card currently resides
 
   // FUNCTIONS
@@ -112,6 +113,7 @@ const Card = () => {
     parent,
     faceUp,
     flipEnabled,
+    active,
 
     // Functions
     flipCard,
