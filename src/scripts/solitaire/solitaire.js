@@ -4,6 +4,7 @@ import {
   moveCardInTableauListener,
   emptyTableauListener,
   emptyFoundationListener,
+  clearAllInfo,
 } from "./solitaireConditions";
 import StandardCards from "../cardFoundations/standardPackOfCards";
 
@@ -135,7 +136,6 @@ const Solitaire = () => {
             );
 
             const card = stock.moveCardToDeck(tableaus[`tableau-${j}`]);
-            card.location = tableaus[`tableau-${j}`];
           }, j * 100 - i * 25);
         }, i * 600);
         if (i === 7 && j === 7) {
@@ -192,6 +192,7 @@ const Solitaire = () => {
         stock.container.style.visibility = "hidden";
       }, 700);
     }
+    clearAllInfo();
   }
 
   function recycleStock() {
@@ -222,13 +223,15 @@ const Solitaire = () => {
   function turnStockCard() {
     const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
-    const move = stock.moveCardToDeck(talon);
-    move.location = talon;
-    topCard.flipCard(250);
-    moveCardInTableauListener(talon, move); // adds the ability to move card to tableau
-    onStockClick();
-  }
 
+    const move = stock.moveCardToDeck(talon);
+    topCard.flipCard(250);
+
+    setTimeout(() => {
+      onStockClick();
+    }, 251);
+    moveCardInTableauListener(talon, move); // adds the ability to move card to tableau
+  }
 
   function addDoubleClickListeners(cardArray) {
     cardArray.forEach((card) => {
@@ -239,7 +242,10 @@ const Solitaire = () => {
   }
 
   function onDoubleClick(card) {
-    printCardInfo(card);
+    if (!card.active) {
+      return;
+    }
+    //printCardInfo(card);
     switch (card.location) {
       case stock:
         // Nothing
@@ -247,20 +253,27 @@ const Solitaire = () => {
       case talon:
         if (card.number === "A") {
           addAceToFoundations(talon);
+          card.card.removeEventListener("click", card.boundListener);
+          moveCardInTableauListener(card.location, card);
+          card.inFoundation = true;
           break;
         }
 
         const validFoundationMove = checkForFoundationMove(card);
         if (validFoundationMove !== false) {
-					const movedCard = talon.moveCardToDeck(validFoundationMove);
-					movedCard.location = `${validFoundationMove.location}`;
+          const movedCard = talon.moveCardToDeck(validFoundationMove);
+          card.card.removeEventListener("click", card.boundListener);
+          moveCardInTableauListener(card.location, card);
+          movedCard.inFoundation = true;
           break;
         }
 
         const validTableauMove = checkForTableauMove(card, talon);
         if (validTableauMove !== false) {
-					const card = talon.moveCardToDeck(validTableauMove);
-					card.location = `${validTableauMove.location}`;
+          const card = talon.moveCardToDeck(validTableauMove);
+          card.card.removeEventListener("click", card.boundListener);
+          moveCardInTableauListener(card.location, card);
+
           break;
         }
 
@@ -269,7 +282,6 @@ const Solitaire = () => {
       case foundations[`foundation-2`]:
       case foundations[`foundation-3`]:
       case foundations[`foundation-4`]:
-
         break;
       case tableaus[`tableau-1`]:
       case tableaus[`tableau-2`]:
@@ -283,26 +295,29 @@ const Solitaire = () => {
           break;
         }
 
-				if (currentTableau.deck.isLastCard(card)) {
+        if (currentTableau.deck.isLastCard(card)) {
           if (card.number === "A") {
-            console.log("ace found step1");
             addAceToFoundations(currentTableau);
             clickToFlipToLastCard(currentTableau);
+            card.card.removeEventListener("click", card.boundListener);
+            moveCardInTableauListener(card.location, card);
+            card.inFoundation = true;
+
             break;
           }
 
           const validFoundationMove = checkForFoundationMove(card);
           if (validFoundationMove !== false) {
-						const movedCard = currentTableau.moveCardToDeck(validFoundationMove);
-						movedCard.location = `${validFoundationMove.location}`;
+            const movedCard =
+              currentTableau.moveCardToDeck(validFoundationMove);
             clickToFlipToLastCard(currentTableau);
+            movedCard.inFoundation = true;
             break;
           }
 
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
-						const card = currentTableau.moveCardToDeck(validTableauMove);
-						card.location = `${validTableauMove.location}`;
+            const card = currentTableau.moveCardToDeck(validTableauMove);
             clickToFlipToLastCard(currentTableau);
             break;
           }
@@ -336,17 +351,11 @@ const Solitaire = () => {
   }
 
   function addAceToFoundations(source) {
-    console.log("ace found step2");
-    console.log(foundations);
-
     for (const foundation in foundations) {
       if (Object.hasOwnProperty.call(foundations, foundation)) {
-        console.log("ace found step3");
         const pile = foundations[foundation];
         if (pile.deck.cards.length === 0) {
-          console.log("ace found step4");
-
-          const card = source.moveCardToDeck(pile);
+          source.moveCardToDeck(pile);
           break;
         }
       }
@@ -357,10 +366,12 @@ const Solitaire = () => {
     const cardIndex = source.deck.cards.findIndex((index) => index === card);
     for (let index = cardIndex; index < source.deck.cards.length; index++) {
       setTimeout(() => {
-        const card = source.moveCardToDeck(
+        const cardMoved = source.moveCardToDeck(
           destination,
           source.deck.cards[cardIndex]
         );
+        cardMoved.card.removeEventListener("click", cardMoved.boundListener);
+        moveCardInTableauListener(cardMoved.location, cardMoved);
       }, index * 30);
     }
   }
@@ -411,7 +422,6 @@ const Solitaire = () => {
     return false;
   }
 
-
   function clickToFlipToLastCard(deckBase) {
     if (deckBase.deck.cards.length === 0) {
       return;
@@ -427,7 +437,6 @@ const Solitaire = () => {
       { once: true }
     );
   }
-
 
   return {
     initializeGame,

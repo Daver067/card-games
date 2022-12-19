@@ -157,9 +157,11 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   // if a blank tableau or a foundation is clicked first abort
   if (
     (gameInfo.firstCard === null && cardObj.fake === true) ||
-    (gameInfo.firstCard === null && cardObj.foundation === true)
+    (gameInfo.firstCard === null && cardObj.foundation === true) ||
+    (gameInfo.firstCard === null && cardObj.inFoundation === true) ||
+    gameInfo.firstCard === cardObj
   ) {
-    clearGameInfo();
+    clearAllInfo();
     return;
   }
 
@@ -167,7 +169,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   if (!cardObj.faceUp) {
     if (this.deck.cards.indexOf(cardObj) === this.deck.cards.length - 1)
       cardObj.flipCard();
-    clearGameInfo();
+    clearAllInfo();
     return;
   }
 
@@ -201,7 +203,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
     removeReAddListeners();
   }
 
-  clearGameInfo();
+  clearAllInfo();
   ///////////////////////////////////////
   //////////////HELPER FUNCTIONS
   ////////////////////////////////////
@@ -220,7 +222,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
         moveCardInTableauListener(source, gameInfo.firstCard);
 
         gameInfo.firstCard.inFoundation = true;
-        clearGameInfo();
+        clearAllInfo();
       }
       return true;
     }
@@ -242,7 +244,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
       ) {
         gameInfo.firstCard.inFoundation = true;
         removeReAddListeners();
-        clearGameInfo();
+        clearAllInfo();
         return true;
       }
     }
@@ -299,23 +301,12 @@ function tableauClickHandler(cardObj, gameInfo, event) {
         );
         moveCardInTableauListener(source, gameInfo.firstCard);
 
-        clearGameInfo();
+        clearAllInfo();
 
         return true;
       }
       return false;
     }
-  }
-  function clearGameInfo() {
-    // reset all the props
-    if (gameInfo.firstCard !== null) {
-      gameInfo.firstCard.card.lastElementChild.lastElementChild.style.setProperty(
-        "box-shadow",
-        ""
-      );
-    }
-    gameInfo.firstCard = null;
-    gameInfo.secondCard = null;
   }
 
   // remove the two listeners on the cards that had the exchange
@@ -333,9 +324,20 @@ function tableauClickHandler(cardObj, gameInfo, event) {
     moveCardInTableauListener(game.secondCard.location, game.secondCard);
   }
 }
+function clearAllInfo() {
+  if (game.firstCard !== null) {
+    game.firstCard.card.lastElementChild.lastElementChild.style.setProperty(
+      "box-shadow",
+      ""
+    );
+  }
+  game.firstCard = null;
+  game.secondCard = null;
+}
 
 export {
   moveCardInTableauListener,
   emptyTableauListener,
   emptyFoundationListener,
+  clearAllInfo,
 };
