@@ -158,7 +158,8 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   if (
     (gameInfo.firstCard === null && cardObj.fake === true) ||
     (gameInfo.firstCard === null && cardObj.foundation === true) ||
-    (gameInfo.firstCard === null && cardObj.inFoundation === true)
+    (gameInfo.firstCard === null && cardObj.inFoundation === true) ||
+    gameInfo.firstCard === cardObj
   ) {
     clearAllInfo();
     return;

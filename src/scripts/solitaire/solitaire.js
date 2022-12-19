@@ -242,6 +242,9 @@ const Solitaire = () => {
   }
 
   function onDoubleClick(card) {
+    if (!card.active) {
+      return;
+    }
     //printCardInfo(card);
     switch (card.location) {
       case stock:
