@@ -222,11 +222,13 @@ const Solitaire = () => {
   function turnStockCard() {
     const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
+
     const move = stock.moveCardToDeck(talon);
     topCard.flipCard(250);
+
     setTimeout(() => {
       onStockClick();
-    }, 250);
+    }, 251);
     moveCardInTableauListener(talon, move); // adds the ability to move card to tableau
   }
 

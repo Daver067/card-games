@@ -271,6 +271,9 @@ function addDeckBase(type) {
     gameRules = true, // ability to pass in rules for passing the card from one deckbase to another
     animationCallback = this.animateMoveCardToNewDeck // probably un-needed arg... but allows us to change the animation, or use null to not animate the move
   ) {
+    if (!card.active) {
+      return false;
+    }
     // will return either the card that got passed, or false if the rules aren't "true"
     const cardPassed = this.deck.passCard(
       destinationDeckBase.deck,
@@ -282,18 +285,23 @@ function addDeckBase(type) {
     if (cardPassed === false) {
       return false;
     }
-
+    card.active = false;
     card.location = destinationDeckBase; // changes location info of card
 
     // if the animation callback is set to null, don't animate anything and return
     if (animationCallback === null) {
       this.cascade();
       destinationDeckBase.cascade();
+      card.active = true;
       return card;
     }
 
     // the card got passed, and this is the animation we want to show.
-    animationCallback(this, destinationDeckBase, cardPassed);
+    animationCallback(this, destinationDeckBase, cardPassed).then(() => {
+      card.active = true;
+    });
+    // card.active isn't true until animationCallback is done
+
     return card;
   }
 
@@ -326,7 +334,7 @@ function addDeckBase(type) {
 
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
     sortZIndex(source);
-
+    return Promise.resolve(true);
     //////////////////Helper Functions ////////////////
     function sortZIndex(deckBase) {
       for (let index = 0; index < deckBase.deck.cards.length; index++) {
