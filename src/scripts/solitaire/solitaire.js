@@ -75,7 +75,7 @@ const Solitaire = () => {
     stock.deck.shuffleDeck();
 
     stock.container.classList.add("stock");
-    stock.location = "stock";
+    stock.location = stock;
 
     surface.appendChild(stock.container);
 
@@ -225,7 +225,6 @@ const Solitaire = () => {
     const move = stock.moveCardToDeck(talon);
     topCard.flipCard(250);
     setTimeout(() => {
-      move.location = talon;
       onStockClick();
     }, 250);
     moveCardInTableauListener(talon, move); // adds the ability to move card to tableau
@@ -241,7 +240,7 @@ const Solitaire = () => {
   }
 
   function onDoubleClick(card) {
-    printCardInfo(card);
+    //printCardInfo(card);
     switch (card.location) {
       case stock:
         // Nothing

@@ -84,6 +84,8 @@ const game = {
         if (firstCard.color === secondCard.color) {
           // if the first card is the same color as the second its not allowed to go there
           console.log("color match = Fail");
+          console.log(firstCard);
+          console.log(secondCard);
           return false;
         }
         return true;
@@ -93,6 +95,8 @@ const game = {
         if (firstCard.value !== secondCard.value - 1) {
           // if the first card isn't exactly 1 card less than the second card it can't be placed there
           console.log("card number mismatch = Fail");
+          console.log(firstCard);
+          console.log(secondCard);
           return false;
         }
         return true;
@@ -101,6 +105,8 @@ const game = {
       function notTheSameTableau() {
         if (firstCard.location === secondCard.location) {
           console.log("cant pass to same pile");
+          console.log(firstCard);
+          console.log(secondCard);
           return false;
         }
         return true;
@@ -113,6 +119,8 @@ const game = {
           secondCard.location.deck.cards.length - 1
         ) {
           console.log("cant place a card in the middle");
+          console.log(firstCard);
+          console.log(secondCard);
           return false;
         }
         return true;
