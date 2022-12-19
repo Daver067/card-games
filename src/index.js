@@ -5,17 +5,6 @@ import "./style.scss";
 import { initiateCribbage } from "./scripts/cribbageSquares/cribbageIndex";
 import { initiatePlayground } from "./scripts/playground/dragPlayground";
 
-//document.body.appendChild(matchGame.initiateGame()); // uncomment this to play match.
-
-//document.body.appendChild(Solitaire.initializeGame()); // uncomment this to play solitaire.
-
-//document.body.appendChild(initiateCribbage());
-
-//document.body.appendChild(initiatePlayground());
-
-//const deckDisplayPage = deckDisplay().displayTestPage();
-//document.body.appendChild(deckDisplayPage); // uncomment this to play match.
-
 const playGroundButton = document.createElement("button");
 playGroundButton.textContent = "PlayGroundButton";
 playGroundButton.addEventListener("click", () => {

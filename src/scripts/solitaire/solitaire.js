@@ -230,7 +230,6 @@ const Solitaire = () => {
     moveCardInTableauListener(talon, move); // adds the ability to move card to tableau
   }
 
-
   function addDoubleClickListeners(cardArray) {
     cardArray.forEach((card) => {
       card.card.addEventListener("dblclick", function () {
@@ -248,20 +247,29 @@ const Solitaire = () => {
       case talon:
         if (card.number === "A") {
           addAceToFoundations(talon);
+          card.card.removeEventListener("click", card.boundListener);
+          moveCardInTableauListener(card.location, card);
+          card.inFoundation = true;
           break;
         }
 
         const validFoundationMove = checkForFoundationMove(card);
         if (validFoundationMove !== false) {
-					const movedCard = talon.moveCardToDeck(validFoundationMove);
-					movedCard.location = validFoundationMove;
+          const movedCard = talon.moveCardToDeck(validFoundationMove);
+          movedCard.location = validFoundationMove;
+          card.card.removeEventListener("click", card.boundListener);
+          moveCardInTableauListener(card.location, card);
+          movedCard.inFoundation = true;
           break;
         }
 
         const validTableauMove = checkForTableauMove(card, talon);
         if (validTableauMove !== false) {
-					const card = talon.moveCardToDeck(validTableauMove);
-					card.location = validTableauMove;
+          const card = talon.moveCardToDeck(validTableauMove);
+          card.location = validTableauMove;
+          card.card.removeEventListener("click", card.boundListener);
+          moveCardInTableauListener(card.location, card);
+
           break;
         }
 
@@ -270,7 +278,6 @@ const Solitaire = () => {
       case foundations[`foundation-2`]:
       case foundations[`foundation-3`]:
       case foundations[`foundation-4`]:
-
         break;
       case tableaus[`tableau-1`]:
       case tableaus[`tableau-2`]:
@@ -284,25 +291,29 @@ const Solitaire = () => {
           break;
         }
 
-				if (currentTableau.deck.isLastCard(card)) {
+        if (currentTableau.deck.isLastCard(card)) {
           if (card.number === "A") {
             addAceToFoundations(currentTableau);
             clickToFlipToLastCard(currentTableau);
+            card.card.removeEventListener("click", card.boundListener);
+            moveCardInTableauListener(card.location, card);
+
             break;
           }
 
           const validFoundationMove = checkForFoundationMove(card);
           if (validFoundationMove !== false) {
-						const movedCard = currentTableau.moveCardToDeck(validFoundationMove);
-						movedCard.location = validFoundationMove;
+            const movedCard =
+              currentTableau.moveCardToDeck(validFoundationMove);
+            movedCard.location = validFoundationMove;
             clickToFlipToLastCard(currentTableau);
             break;
           }
 
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
-						const card = currentTableau.moveCardToDeck(validTableauMove);
-						card.location = validTableauMove;
+            const card = currentTableau.moveCardToDeck(validTableauMove);
+            card.location = validTableauMove;
             clickToFlipToLastCard(currentTableau);
             break;
           }
@@ -338,11 +349,9 @@ const Solitaire = () => {
   function addAceToFoundations(source) {
     for (const foundation in foundations) {
       if (Object.hasOwnProperty.call(foundations, foundation)) {
-
         const pile = foundations[foundation];
         if (pile.deck.cards.length === 0) {
-
-          const card = source.moveCardToDeck(pile);
+          source.moveCardToDeck(pile);
           break;
         }
       }
@@ -408,7 +417,6 @@ const Solitaire = () => {
     return false;
   }
 
-
   function clickToFlipToLastCard(deckBase) {
     if (deckBase.deck.cards.length === 0) {
       return;
@@ -424,7 +432,6 @@ const Solitaire = () => {
       { once: true }
     );
   }
-
 
   return {
     initializeGame,
