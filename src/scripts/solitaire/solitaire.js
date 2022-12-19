@@ -4,6 +4,7 @@ import {
   moveCardInTableauListener,
   emptyTableauListener,
   emptyFoundationListener,
+  clearAllInfo,
 } from "./solitaireConditions";
 import StandardCards from "../cardFoundations/standardPackOfCards";
 
@@ -75,7 +76,7 @@ const Solitaire = () => {
     stock.deck.shuffleDeck();
 
     stock.container.classList.add("stock");
-    stock.location = stock;
+    stock.location = "stock";
 
     surface.appendChild(stock.container);
 
@@ -135,7 +136,6 @@ const Solitaire = () => {
             );
 
             const card = stock.moveCardToDeck(tableaus[`tableau-${j}`]);
-            card.location = tableaus[`tableau-${j}`];
           }, j * 100 - i * 25);
         }, i * 600);
         if (i === 7 && j === 7) {
@@ -192,6 +192,7 @@ const Solitaire = () => {
         stock.container.style.visibility = "hidden";
       }, 700);
     }
+    clearAllInfo();
   }
 
   function recycleStock() {
@@ -258,7 +259,6 @@ const Solitaire = () => {
         const validFoundationMove = checkForFoundationMove(card);
         if (validFoundationMove !== false) {
           const movedCard = talon.moveCardToDeck(validFoundationMove);
-          movedCard.location = validFoundationMove;
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
           movedCard.inFoundation = true;
@@ -268,7 +268,6 @@ const Solitaire = () => {
         const validTableauMove = checkForTableauMove(card, talon);
         if (validTableauMove !== false) {
           const card = talon.moveCardToDeck(validTableauMove);
-          card.location = validTableauMove;
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
 
@@ -299,6 +298,7 @@ const Solitaire = () => {
             clickToFlipToLastCard(currentTableau);
             card.card.removeEventListener("click", card.boundListener);
             moveCardInTableauListener(card.location, card);
+            card.inFoundation = true;
 
             break;
           }
@@ -307,15 +307,14 @@ const Solitaire = () => {
           if (validFoundationMove !== false) {
             const movedCard =
               currentTableau.moveCardToDeck(validFoundationMove);
-            movedCard.location = validFoundationMove;
             clickToFlipToLastCard(currentTableau);
+            movedCard.inFoundation = true;
             break;
           }
 
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
             const card = currentTableau.moveCardToDeck(validTableauMove);
-            card.location = validTableauMove;
             clickToFlipToLastCard(currentTableau);
             break;
           }
@@ -364,11 +363,12 @@ const Solitaire = () => {
     const cardIndex = source.deck.cards.findIndex((index) => index === card);
     for (let index = cardIndex; index < source.deck.cards.length; index++) {
       setTimeout(() => {
-        const card = source.moveCardToDeck(
+        const cardMoved = source.moveCardToDeck(
           destination,
           source.deck.cards[cardIndex]
         );
-        card.location = destination;
+        cardMoved.card.removeEventListener("click", cardMoved.boundListener);
+        moveCardInTableauListener(cardMoved.location, cardMoved);
       }, index * 30);
     }
   }
