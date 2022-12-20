@@ -1,51 +1,17 @@
-function buildUI () {
-    let moves = 0;
+import moveCounter from "./moveCounter";
 
-    const navBar = (() => {
-      const element = document.createElement("div");
-      element.classList.add("nav-bar");
-      return element;
-    })();
+const menu = {
+  navBar: buildNavBar(),
+  moveCounter: moveCounter,
+};
 
-    const moveCounterContainer = (() => {
-      const element = document.createElement("div");
-      element.classList.add("move-container");
-      return element;
-    })();
+menu.navBar.appendChild(moveCounter.container); // this may be temporary... hopefully something to apply all navbar items
 
-    const moveText = (() => {
-      const element = document.createElement("p");
-      element.textContent = "Moves:";
-      moveCounterContainer.appendChild(element);
-      return element;
-    })();
+// HELPER FUNCTIONS.... SINCE IIFE DONT WORK IN OBJECT PROPS
+function buildNavBar() {
+  const element = document.createElement("div");
+  element.classList.add("nav-bar");
+  return element;
+}
 
-    const moveNumber = (() => {
-      const element = document.createElement("p");
-      element.textContent = String(moves);
-      moveCounterContainer.appendChild(element);
-      return element;
-    })();
-
-    navBar.appendChild(moveCounterContainer);
-
-    function resetMoves () {
-      moves = 0;
-      moveNumber.textContent = String(moves);
-    };
-
-    function addMove () {
-      moves += 1;
-      moveNumber.textContent = String(moves);
-    };
-
-    return {
-        navBar,
-        resetMoves,
-        addMove,
-    };
-  };
-
-  
-
-  export const menu = buildUI();
+export default menu;

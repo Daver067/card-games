@@ -7,14 +7,13 @@ import {
   clearAllInfo,
 } from "./solitaireConditions";
 import StandardCards from "../cardFoundations/standardPackOfCards";
-import { menu } from "../gameMenu/menu";
+import menu from "../gameMenu/menu";
 
 const Solitaire = () => {
   let stock = {};
   let talon = {};
   let foundations = {};
   let tableaus = {};
-  let menu = {};
 
   const cardValueMap = (() => {
     const map = new Map();
@@ -51,11 +50,9 @@ const Solitaire = () => {
   function buildTable() {
     const table = document.createElement("div");
     table.classList.add("solitaire");
-    
-    console.log(menu);
+
     table.appendChild(menu.navBar);
 
-    menu = buildUI(table);
     const surface = buildSurface(table);
 
     buildStock(surface);
@@ -64,10 +61,6 @@ const Solitaire = () => {
     buildTableauAddCards(stock, surface);
     return table;
   }
-  
-  
-
-
 
   function buildSurface(target) {
     const surface = document.createElement("div");
@@ -75,7 +68,6 @@ const Solitaire = () => {
     target.appendChild(surface);
     return surface;
   }
-
 
   function buildStock(surface) {
     stock = addDeckBase("stack");
@@ -121,14 +113,12 @@ const Solitaire = () => {
     surface.appendChild(talon.container);
   }
 
-
   function buildFoundations(surface) {
     buildFoundation(surface, "foundation-1");
     buildFoundation(surface, "foundation-2");
     buildFoundation(surface, "foundation-3");
     buildFoundation(surface, "foundation-4");
   }
-
 
   function buildFoundation(target, className) {
     const foundation = addDeckBase("stack");
@@ -139,7 +129,6 @@ const Solitaire = () => {
     target.appendChild(foundation.container);
     return foundation;
   }
-
 
   function buildTableauAddCards(stock, surface) {
     for (let i = 1; i < 8; i++) {
@@ -176,7 +165,6 @@ const Solitaire = () => {
     }
   }
 
-
   function buildTableau(className) {
     const tableau = addDeckBase("cascade");
     tableau.container.classList.add(className);
@@ -184,7 +172,6 @@ const Solitaire = () => {
     emptyTableauListener(tableau);
     return tableau;
   }
-
 
   function flipBottomCards(tableaus) {
     const cardArray = [];
@@ -244,7 +231,7 @@ const Solitaire = () => {
   }
 
   function turnStockCard() {
-    menu.addMove();
+    menu.moveCounter.addMove();
     const topCard = stock.deck.cards[stock.deck.cards.length - 1];
     topCard.card.removeEventListener("click", turnStockCard);
 
@@ -280,7 +267,7 @@ const Solitaire = () => {
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
           card.inFoundation = true;
-          menu.addMove();
+          menu.moveCounter.addMove();
           break;
         }
 
@@ -290,7 +277,7 @@ const Solitaire = () => {
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
           movedCard.inFoundation = true;
-          menu.addMove();
+          menu.moveCounter.addMove();
           break;
         }
 
@@ -299,7 +286,7 @@ const Solitaire = () => {
           const card = talon.moveCardToDeck(validTableauMove);
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
-          menu.addMove();
+          menu.moveCounter.addMove();
           break;
         }
 
@@ -328,7 +315,7 @@ const Solitaire = () => {
             card.card.removeEventListener("click", card.boundListener);
             moveCardInTableauListener(card.location, card);
             card.inFoundation = true;
-            menu.addMove();
+            menu.moveCounter.addMove();
             break;
           }
 
@@ -338,7 +325,7 @@ const Solitaire = () => {
               currentTableau.moveCardToDeck(validFoundationMove);
             clickToFlipToLastCard(currentTableau);
             movedCard.inFoundation = true;
-            menu.addMove();
+            menu.moveCounter.addMove();
             break;
           }
 
@@ -346,7 +333,7 @@ const Solitaire = () => {
           if (validTableauMove !== false) {
             const card = currentTableau.moveCardToDeck(validTableauMove);
             clickToFlipToLastCard(currentTableau);
-            menu.addMove();
+            menu.moveCounter.addMove();
             break;
           }
         } else {
@@ -360,7 +347,7 @@ const Solitaire = () => {
             setTimeout(() => {
               clickToFlipToLastCard(currentTableau);
             }, 300);
-            menu.addMove();
+            menu.moveCounter.addMove();
             break;
           }
         }
