@@ -1,5 +1,7 @@
 @use "./scss/style_card";
 @use "./scripts/deckDisplay/draggable/draggable";
+@use "./scss/deckStyles";
+
 body {
   max-width: 100vw;
   max-height: 100vh;

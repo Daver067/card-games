@@ -1,5 +1,4 @@
 import "./_solitaireStyle.scss";
-import { addDeckBase, deckDisplay } from "../deckDisplay/deckDisplay";
 import {
   moveCardInTableauListener,
   emptyTableauListener,
@@ -7,6 +6,7 @@ import {
   clearAllInfo,
 } from "./solitaireConditions";
 import StandardCards from "../cardFoundations/standardPackOfCards";
+import addDeckBase from "../cardFoundations/deckBase";
 
 const Solitaire = () => {
   let stock = {};
