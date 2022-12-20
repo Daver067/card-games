@@ -201,13 +201,22 @@ const Solitaire = () => {
       for (let index = 0; index < deckSize; index++) {
         const card = stack.moveCardToDeck(stock);
         if (card.faceUp) card.flipCard();
+        if (card.boundListener !== undefined) {
+          card.card.removeEventListener("click", card.boundListener);
+        }
+        if (card.inFoundation) {
+          delete card.inFoundation;
+        }
       }
     });
 
-    stock.deck.shuffleDeck();
     console.log(stock.deck.cards);
 
-    dealCards();
+    setTimeout(() => {
+      stock.deck.shuffleDeck();
+      stock.cascade();
+      dealCards();
+    }, 650);
   }
 
   function flipBottomCards(tableaus) {
