@@ -242,7 +242,7 @@ const Solitaire = () => {
   }
 
   function onDoubleClick(card) {
-    if (!card.active) {
+    if (card.state !== "available") {
       return;
     }
     //printCardInfo(card);

@@ -3,7 +3,7 @@ const Card = () => {
   // PROPERTIES
   const faceUp = false;
   const flipEnabled = true; // used to disable flipping during a flip
-  const active = true; // used for disabling card during animations, or possibly out of turns
+  const state = "available"; // used for disabling card during animations, or possibly out of turns
   const location = null; // location will be a deckBase, when added to one.
 
   // FUNCTIONS
@@ -103,7 +103,7 @@ const Card = () => {
     // Properties
     faceUp,
     flipEnabled,
-    active,
+    state,
     location,
 
     // Properties that are Dom related
