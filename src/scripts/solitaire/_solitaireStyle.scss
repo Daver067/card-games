@@ -1,5 +1,5 @@
 :root {
-  --theme-color: rgb(201, 24, 95);
+  --theme-color: rgb(9, 150, 115);
 }
 
 * {
@@ -26,6 +26,10 @@
 
 .nav-bar {
   background-color: rgba(0, 0, 0, 0.365);
+  border-bottom: 2px solid var(--theme-color);
+  box-shadow: 
+  0 0 10px var(--theme-color),
+  0 0 20px rgba(245, 245, 245, 0.588);
   height: 6vh;
   width: 100vw;
 
