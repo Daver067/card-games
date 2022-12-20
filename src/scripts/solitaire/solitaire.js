@@ -7,6 +7,7 @@ import {
   clearAllInfo,
 } from "./solitaireConditions";
 import StandardCards from "../cardFoundations/standardPackOfCards";
+import { menu } from "../gameMenu/menu";
 
 const Solitaire = () => {
   let stock = {};
@@ -51,6 +52,9 @@ const Solitaire = () => {
     const table = document.createElement("div");
     table.classList.add("solitaire");
     
+    console.log(menu);
+    table.appendChild(menu.navBar);
+
     menu = buildUI(table);
     const surface = buildSurface(table);
 
@@ -62,49 +66,7 @@ const Solitaire = () => {
   }
   
   
-  function buildUI (target) {
-    let moves = 0;
 
-    const navBar = (() => {
-      const element = document.createElement("div");
-      element.classList.add("nav-bar");
-      target.appendChild(element);
-      return element;
-    })();
-    const moveCounterContainer = (() => {
-      const element = document.createElement("div");
-      element.classList.add("move-container");
-      return element;
-    })();
-    const moveText = (() => {
-      const element = document.createElement("p");
-      element.textContent = "Moves:";
-      moveCounterContainer.appendChild(element);
-      return element;
-    })();
-    const moveNumber = (() => {
-      const element = document.createElement("p");
-      element.textContent = String(moves);
-      moveCounterContainer.appendChild(element);
-      return element;
-    })();
-    navBar.appendChild(moveCounterContainer);
-
-    function resetMoves () {
-      moves = 0;
-      moveNumber.textContent = String(moves);
-    };
-
-    function addMove () {
-      moves += 1;
-      moveNumber.textContent = String(moves);
-    };
-
-    return {
-      resetMoves,
-      addMove,
-    };
-  };
 
 
   function buildSurface(target) {
