@@ -77,7 +77,7 @@ function addDeckBase(type = "stack") {
     gameRules = true, // ability to pass in rules for passing the card from one deckbase to another
     animationCallback = this.animateMoveCardToNewDeck // probably un-needed arg... but allows us to change the animation, or use null to not animate the move
   ) {
-    if (!card.active) {
+    if (card.state !== "available") {
       return false;
     }
     // will return either the card that got passed, or false if the rules aren't "true"
@@ -91,22 +91,22 @@ function addDeckBase(type = "stack") {
     if (cardPassed === false) {
       return false;
     }
-    card.active = false;
+    card.state = "busy";
     card.location = destinationDeckBase; // changes location info of card
 
     // if the animation callback is set to null, don't animate anything and return
     if (animationCallback === null) {
       this.cascade();
       destinationDeckBase.cascade();
-      card.active = true;
+      card.state = "available";
       return card;
     }
 
     // the card got passed, and this is the animation we want to show.
     animationCallback(this, destinationDeckBase, cardPassed).then(() => {
-      card.active = true;
+      card.state = "available";
     });
-    // card.active isn't true until animationCallback is done
+    // card.state isn't true until animationCallback is done
 
     return card;
   }

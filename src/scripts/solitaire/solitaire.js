@@ -70,7 +70,7 @@ const Solitaire = () => {
 
     addDoubleClickListeners(stock.deck.cards);
 
-    stock.deck.state = "idle";
+    stock.deck.state = "available";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
     stock.deck.shuffleDeck();

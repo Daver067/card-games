@@ -3,7 +3,7 @@ const Card = () => {
   // PROPERTIES
   const faceUp = false;
   const flipEnabled = true; // used to disable flipping during a flip
-  const state = "available"; // used for disabling card during animations, or possibly out of turns
+  const state = "available"; // 'available' or 'busy' used for disabling card during animations, or possibly out of turns
   const location = null; // location will be a deckBase, when added to one.
 
   // FUNCTIONS

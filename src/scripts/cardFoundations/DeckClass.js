@@ -2,7 +2,7 @@ class Deck {
   constructor(arrayOfCards = []) {
     // takes an array of cards and makes them the deck... or if none makes empty deck
     this.cards = arrayOfCards;
-    this.state = "idle"; // Can be "idle" or "busy"
+    this.state = "available"; // Can be "available" or "busy"
   }
   // getters and setters
 
@@ -77,7 +77,7 @@ class Deck {
   flipBatchDuration(cardArray, duration) {
     const flipDelay = duration / cardArray.length;
     const animFinished = new Promise((resolve) => {
-      if (this.state === "idle") {
+      if (this.state === "available") {
         this.state = "busy";
         for (let i = 0; i < cardArray.length; i++) {
           const timeDelay = flipDelay * i;
@@ -89,7 +89,7 @@ class Deck {
       const totalDuration = parseFloat(flipSpeed) * 1000 + duration;
       setTimeout(resolve, totalDuration);
     }).then(() => {
-      this.state = "idle";
+      this.state = "available";
     });
     return animFinished;
   }
@@ -97,7 +97,7 @@ class Deck {
   // Flips an array of cards with a set delay between each flip
   flipBatchIncrement(cardArray, delay) {
     const animFinished = new Promise((resolve) => {
-      if (this.state === "idle") {
+      if (this.state === "available") {
         this.state = "busy";
         for (let i = 0; i < cardArray.length; i++) {
           let timeDelay = delay * i;
@@ -110,7 +110,7 @@ class Deck {
         parseFloat(flipSpeed) * 1000 + (cardArray.length + 1) * delay;
       setTimeout(resolve, totalDuration);
     }).then(() => {
-      this.state = "idle";
+      this.state = "available";
     });
     return animFinished;
   }
