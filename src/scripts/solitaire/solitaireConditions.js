@@ -1,5 +1,6 @@
 import Card from "../cardFoundations/card";
 import { Playing } from "../cardFoundations/playing";
+import menu from "../gameMenu/menu";
 
 function moveCardInTableauListener(deckBase, cardObj) {
   cardObj.boundListener = tableauClickHandler.bind(deckBase, cardObj, game);
@@ -144,14 +145,17 @@ function tableauClickHandler(cardObj, gameInfo, event) {
 
   // moving an ace to the foundation spot
   if (moveAceToFoundation(this) === true) {
+    menu.moveCounter.addMove();
     return;
   }
   // moving any other card to foundation spot
   if (moveAnyCardToFoundation(this) === true) {
+    menu.moveCounter.addMove();
     return;
   }
   // moving a King to an empty Tableau
   if (moveKingToEmptyTableau(this) === true) {
+    menu.moveCounter.addMove();
     return;
   }
   // if a blank tableau or a foundation is clicked first abort
@@ -200,6 +204,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
       ) // apply the rule!
     ) !== false
   ) {
+    menu.moveCounter.addMove();
     removeReAddListeners();
   }
 
