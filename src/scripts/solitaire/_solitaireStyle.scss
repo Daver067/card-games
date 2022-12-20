@@ -1,6 +1,4 @@
-:root {
-  --theme-color: rgb(9, 150, 115);
-}
+
 
 * {
   padding: 0;
@@ -9,7 +7,7 @@
 
 .solitaire {
   width: 100%;
-  height: 100vh;
+  height: 110vh;
   background: var(--theme-color);
   background: url(/assets/images/45-degree-fabric-light.png),
     radial-gradient(
@@ -25,13 +23,14 @@
 }
 
 .nav-bar {
+  padding: 0.5rem 0 0.5rem 0;
   background-color: rgba(0, 0, 0, 0.365);
   border-bottom: 2px solid var(--theme-color);
   box-shadow: 
   0 0 10px var(--theme-color),
   0 0 20px rgba(245, 245, 245, 0.588);
   height: 6vh;
-  width: 100vw;
+  width: 100%;
 
   display: flex;
   justify-content: space-between;

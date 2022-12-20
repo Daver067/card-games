@@ -15,6 +15,8 @@ const Solitaire = () => {
   let foundations = {};
   let tableaus = {};
 
+  menu.resetGame.button.addEventListener("click", resetSolitaire);
+
   const cardValueMap = (() => {
     const map = new Map();
     map.set("A", 1);
@@ -136,6 +138,18 @@ const Solitaire = () => {
       tableaus[`tableau-${i}`] = newTableau;
       surface.appendChild(newTableau.container);
     }
+    dealCards();
+  }
+
+  function buildTableau(className) {
+    const tableau = addDeckBase("cascade");
+    tableau.container.classList.add(className);
+    tableau.location = "tableau";
+    emptyTableauListener(tableau);
+    return tableau;
+  }
+
+  function dealCards() {
     for (let i = 1; i < 8; i++) {
       for (let j = i; j < 8; j++) {
         setTimeout(() => {
@@ -165,12 +179,44 @@ const Solitaire = () => {
     }
   }
 
-  function buildTableau(className) {
-    const tableau = addDeckBase("cascade");
-    tableau.container.classList.add(className);
-    tableau.location = "tableau";
-    emptyTableauListener(tableau);
-    return tableau;
+  function resetSolitaire() {
+    const allPiles = [
+      talon,
+      foundations[`foundation-1`],
+      foundations[`foundation-2`],
+      foundations[`foundation-3`],
+      foundations[`foundation-4`],
+      tableaus[`tableau-1`],
+      tableaus[`tableau-2`],
+      tableaus[`tableau-3`],
+      tableaus[`tableau-4`],
+      tableaus[`tableau-5`],
+      tableaus[`tableau-6`],
+      tableaus[`tableau-7`],
+    ];
+
+    allPiles.forEach((stack) => {
+      console.log(stack);
+      const deckSize = stack.deck.cards.length;
+      for (let index = 0; index < deckSize; index++) {
+        const card = stack.moveCardToDeck(stock);
+        if (card.faceUp) card.flipCard();
+        if (card.boundListener !== undefined) {
+          card.card.removeEventListener("click", card.boundListener);
+        }
+        if (card.inFoundation) {
+          delete card.inFoundation;
+        }
+      }
+    });
+
+    console.log(stock.deck.cards);
+
+    setTimeout(() => {
+      stock.deck.shuffleDeck();
+      stock.cascade();
+      dealCards();
+    }, 650);
   }
 
   function flipBottomCards(tableaus) {
