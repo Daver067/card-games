@@ -7,6 +7,7 @@ const resetGame = {
 
   function buildResetButton () {
     const element = document.createElement('button');
+    element.type = "button";
     element.textContent = "Reset Game";
     return element;
   };
