@@ -14,8 +14,9 @@ const Solitaire = () => {
   let talon = {};
   let foundations = {};
   let tableaus = {};
-
-  menu.resetGame.button.addEventListener("click", resetSolitaire);
+  let resetDisabled = true;
+  
+  menu.resetGame.button.addEventListener('click', resetSolitaire);
 
   const cardValueMap = (() => {
     const map = new Map();
@@ -176,11 +177,16 @@ const Solitaire = () => {
           }, i * 750);
         }
       }
-    }
-  }
+    };
+    setTimeout(() => {
+      resetDisabled = false;
+      console.log(resetDisabled);
+    }, 7500);
+  };
 
-  function resetSolitaire() {
+  function isCardsActive () {
     const allPiles = [
+      stock,
       talon,
       foundations[`foundation-1`],
       foundations[`foundation-2`],
@@ -195,12 +201,14 @@ const Solitaire = () => {
       tableaus[`tableau-7`],
     ];
 
+    let isActive = true;
     allPiles.forEach((stack) => {
-      console.log(stack);
       const deckSize = stack.deck.cards.length;
       for (let index = 0; index < deckSize; index++) {
-        const card = stack.moveCardToDeck(stock);
-        if (card.faceUp) card.flipCard();
+        const card = stack.deck.cards[index];
+        if ((card.active === false) || (card.flipEnabled === false)) {
+          isActive = false;
+        };
         if (card.boundListener !== undefined) {
           card.card.removeEventListener("click", card.boundListener);
         }
@@ -209,14 +217,50 @@ const Solitaire = () => {
         }
       }
     });
+    return isActive;
+  }
 
-    console.log(stock.deck.cards);
-
-    setTimeout(() => {
-      stock.deck.shuffleDeck();
-      stock.cascade();
-      dealCards();
-    }, 650);
+  async function resetSolitaire() {
+    if(resetDisabled === false) {
+      resetDisabled = true;
+      const cardsActive = isCardsActive();
+      if(cardsActive === false) return;
+      const allPiles = [
+        talon,
+        foundations[`foundation-1`],
+        foundations[`foundation-2`],
+        foundations[`foundation-3`],
+        foundations[`foundation-4`],
+        tableaus[`tableau-1`],
+        tableaus[`tableau-2`],
+        tableaus[`tableau-3`],
+        tableaus[`tableau-4`],
+        tableaus[`tableau-5`],
+        tableaus[`tableau-6`],
+        tableaus[`tableau-7`],
+      ];
+  
+      allPiles.forEach((stack) => {
+        const deckSize = stack.deck.cards.length;
+        for (let index = 0; index < deckSize; index++) {
+          const card = stack.moveCardToDeck(stock);
+          if (card.faceUp) card.flipCard();
+          if (card.boundListener !== undefined) {
+            card.card.removeEventListener("click", card.boundListener);
+          }
+          if (card.inFoundation) {
+            delete card.inFoundation;
+          }
+        }
+      });
+  
+      setTimeout(() => {
+        stock.deck.shuffleDeck();
+        stock.cascade();
+        dealCards(); 
+      }, 650);
+  
+    };
   }
 
   function flipBottomCards(tableaus) {
