@@ -2,9 +2,9 @@
 const Card = () => {
   // PROPERTIES
   const faceUp = false;
-  const flipEnabled = true;
-  const active = true;
-  let parent; // Describes where in the DOM the card currently resides
+  const flipEnabled = true; // used to disable flipping during a flip
+  const state = "available"; // 'available' or 'busy' used for disabling card during animations, or possibly out of turns
+  const location = null; // location will be a deckBase, when added to one.
 
   // FUNCTIONS
   const front = (() => {
@@ -84,9 +84,6 @@ const Card = () => {
 
   function blindFlip() {
     const cardParent = this.card.firstElementChild;
-
-    // flipEnabled stops the user from flipping a card rapidly over and over.
-
     if (this.faceUp === false) {
       cardParent.appendChild(this.front);
     }
@@ -95,25 +92,24 @@ const Card = () => {
 
     if (this.faceUp === false) {
       this.faceUp = true;
-      this.flipEnabled = true;
     } else {
       cardParent.removeChild(this.front);
       this.faceUp = false;
-      this.flipEnabled = true;
     }
-
     this.front.classList.toggle("flipped");
   }
 
   return {
     // Properties
+    faceUp,
+    flipEnabled,
+    state,
+    location,
+
+    // Properties that are Dom related
     front,
     back,
     card,
-    parent,
-    faceUp,
-    flipEnabled,
-    active,
 
     // Functions
     flipCard,

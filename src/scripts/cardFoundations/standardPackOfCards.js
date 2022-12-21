@@ -1,7 +1,6 @@
 import { Animate } from "../animations/animate";
 import makeCard from "./cardBuilder";
 import { Playing } from "./playing";
-import Deck from "./DeckClass";
 
 function StandardCards() {
   // Dictionary of Standard 52 Card deck definitions

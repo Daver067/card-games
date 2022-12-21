@@ -1,11 +1,10 @@
+import addDeckBase from "../cardFoundations/deckBase";
 import Deck from "../cardFoundations/DeckClass";
 import StandardCards from "../cardFoundations/standardPackOfCards";
-import { addDeckBase } from "../deckDisplay/deckDisplay";
 import { addDraggable } from "../deckDisplay/draggable/grabAndMove";
 import { makeFlop } from "../showUI";
 import { moveCardInTableauListener } from "../solitaire/solitaireConditions";
 import testDeck from "./draggabletestDeck";
-
 function initiatePlayground() {
   const deck = new Deck(StandardCards());
   const allTheCardsDiv = buildPlayground(deck);
