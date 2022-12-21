@@ -327,14 +327,14 @@ function addDeckBase(type) {
     vector2[0] = destinationBox.x + destinationOffset[0] - sourceBox.x;
     vector2[1] = destinationBox.y + destinationOffset[1] - sourceBox.y;
 
-    await slideCard(topCard, vector2, 600);
+    const anim = await slideCard(topCard, vector2, 500);
     await destination.container.appendChild(topCard.card);
     await slideCard(topCard, destinationOffset, 0);
     spinCard(topCard, 0, 0);
 
     topCard.card.style.zIndex = destination.deck.cards.length - 1;
     sortZIndex(source);
-    return Promise.resolve(true);
+    return anim;
     //////////////////Helper Functions ////////////////
     function sortZIndex(deckBase) {
       for (let index = 0; index < deckBase.deck.cards.length; index++) {
