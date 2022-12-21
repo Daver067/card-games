@@ -180,11 +180,10 @@ const Solitaire = () => {
     };
     setTimeout(() => {
       resetDisabled = false;
-      console.log(resetDisabled);
     }, 7500);
   };
 
-  function isCardsActive () {
+  function areCardsIdle () {
     const allPiles = [
       stock,
       talon,
@@ -201,13 +200,15 @@ const Solitaire = () => {
       tableaus[`tableau-7`],
     ];
 
-    let isActive = true;
+
+    // THis needs to be tested, not sure if it's working correctly
+    let isIdle = true;
     allPiles.forEach((stack) => {
       const deckSize = stack.deck.cards.length;
       for (let index = 0; index < deckSize; index++) {
         const card = stack.deck.cards[index];
-        if ((card.active === false) || (card.flipEnabled === false)) {
-          isActive = false;
+        if ((card.state !== "available") || (card.flipEnabled === false)) {
+          isIdle = false;
         };
         if (card.boundListener !== undefined) {
           card.card.removeEventListener("click", card.boundListener);
@@ -217,14 +218,14 @@ const Solitaire = () => {
         }
       }
     });
-    return isActive;
+    return isIdle;
   }
 
   async function resetSolitaire() {
     if(resetDisabled === false) {
       resetDisabled = true;
-      const cardsActive = isCardsActive();
-      if(cardsActive === false) return;
+      const cardsIdle = areCardsIdle();
+      if(cardsIdle === false) return;
       const allPiles = [
         talon,
         foundations[`foundation-1`],
