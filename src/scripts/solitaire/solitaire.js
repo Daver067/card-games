@@ -15,8 +15,8 @@ const Solitaire = () => {
   let foundations = {};
   let tableaus = {};
   let resetDisabled = true;
-  
-  menu.resetGame.button.addEventListener('click', resetSolitaire);
+
+  menu.resetGame.button.addEventListener("click", resetSolitaire);
 
   const cardValueMap = (() => {
     const map = new Map();
@@ -177,13 +177,13 @@ const Solitaire = () => {
           }, i * 750);
         }
       }
-    };
+    }
     setTimeout(() => {
       resetDisabled = false;
     }, 7500);
-  };
+  }
 
-  function areCardsIdle () {
+  function areCardsIdle() {
     const allPiles = [
       stock,
       talon,
@@ -200,16 +200,15 @@ const Solitaire = () => {
       tableaus[`tableau-7`],
     ];
 
-
     // THis needs to be tested, not sure if it's working correctly
     let isIdle = true;
     allPiles.forEach((stack) => {
       const deckSize = stack.deck.cards.length;
       for (let index = 0; index < deckSize; index++) {
         const card = stack.deck.cards[index];
-        if ((card.state !== "available") || (card.flipEnabled === false)) {
+        if (card.state !== "available" || card.flipEnabled === false) {
           isIdle = false;
-        };
+        }
         if (card.boundListener !== undefined) {
           card.card.removeEventListener("click", card.boundListener);
         }
@@ -222,10 +221,10 @@ const Solitaire = () => {
   }
 
   async function resetSolitaire() {
-    if(resetDisabled === false) {
+    if (resetDisabled === false) {
       resetDisabled = true;
       const cardsIdle = areCardsIdle();
-      if(cardsIdle === false) return;
+      if (cardsIdle === false) return;
       const allPiles = [
         talon,
         foundations[`foundation-1`],
@@ -240,7 +239,11 @@ const Solitaire = () => {
         tableaus[`tableau-6`],
         tableaus[`tableau-7`],
       ];
-  
+      if (stock.deck.length > 0) {
+        stock.deck.cards[
+          stock.deck.cards.length - 1
+        ].card.card.removeEventListener("click", turnStockCard);
+      }
       allPiles.forEach((stack) => {
         const deckSize = stack.deck.cards.length;
         for (let index = 0; index < deckSize; index++) {
@@ -254,15 +257,14 @@ const Solitaire = () => {
           }
         }
       });
-  
+
       setTimeout(() => {
         menu.moveCounter.resetMoves();
         stock.deck.shuffleDeck();
         stock.cascade();
-        dealCards(); 
+        dealCards();
       }, 650);
-  
-    };
+    }
   }
 
   function flipBottomCards(tableaus) {
