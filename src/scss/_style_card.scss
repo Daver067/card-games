@@ -1,21 +1,54 @@
 @font-face {
-  font-family: 'Crete Round';
+  font-family: "Crete Round";
   src: url(/assets/fonts/CreteRound-Regular.ttf) format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
+$size__site_content_width: 1024px;
+
+/* Media Queries */
+$media_queries: (
+  "mobile": unquote("only screen and (max-width: 667px)"),
+  "tablet":
+    unquote("only screen and (min-width: 668px) and (max-width: 1024px)"),
+  "desktop": unquote("only screen and (min-width: 1025px)"),
+);
+
+@mixin for_breakpoint($breakpoints) {
+  $conditions: ();
+  @each $breakpoint in $breakpoints {
+    // If the key exists in the map
+    $conditions: append(
+      $conditions,
+      #{inspect(map-get($media_queries, $breakpoint))},
+      comma
+    );
+  }
+
+  @media #{$conditions} {
+    @content;
+  }
+}
+
 :root {
-  --card-size: 55px;
   --card-flip-speed: 0.3s;
+  @include for_breakpoint(mobile) {
+    --card-size: 18px;
+  }
+  @include for_breakpoint(tablet) {
+    --card-size: 30px;
+  }
+  @include for_breakpoint(desktop) {
+    --card-size: 55px;
+  }
 }
 
 * {
   padding: 0;
   margin: 0;
-  font-family: 'Crete Round', serif;
-  
-  
+  font-family: "Crete Round", serif;
+
   /* Prevents text from being highlighted on cards */
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
@@ -75,7 +108,7 @@
 
 .front,
 .joker {
-  padding: calc(var(--card-size)/15);
+  padding: calc(var(--card-size) / 15);
   background-color: whitesmoke;
   border: calc(0.05 * var(--card-size)) solid;
   transform: perspective(1000px) rotateY(0deg);
@@ -87,7 +120,7 @@
 }
 
 .playing {
-  font-size: calc(var(--card-size)*0.4);
+  font-size: calc(var(--card-size) * 0.4);
   display: grid;
   grid-template-columns: calc(var(--card-size) / 3) 3fr calc(
       var(--card-size) / 3
@@ -188,7 +221,7 @@
 
 .center-flex[data-number="A"] {
   justify-content: center;
-  font-size: calc(var(--card-size)*1.5);
+  font-size: calc(var(--card-size) * 1.5);
 }
 
 .center-flex[data-number="5"] {
@@ -212,15 +245,15 @@
 
 .center-flex[data-number="J"] {
   justify-content: center;
-  font-size: calc(var(--card-size)*1.5);
+  font-size: calc(var(--card-size) * 1.5);
 }
 
 .center-flex[data-number="Q"] {
   justify-content: center;
-  font-size: calc(var(--card-size)*1.5);
+  font-size: calc(var(--card-size) * 1.5);
 }
 
 .center-flex[data-number="K"] {
   justify-content: center;
-  font-size: calc(var(--card-size)*1.5);
+  font-size: calc(var(--card-size) * 1.5);
 }
