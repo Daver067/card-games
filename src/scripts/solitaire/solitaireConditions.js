@@ -369,6 +369,7 @@ function autoFlipLastCard(deckBase) {
     return;
   }
   const lastCard = deckBase.deck.cards[deckBase.deck.cards.length - 1];
+  if(lastCard.faceUp === true) return;
   setTimeout(() => {
     lastCard.flipCard(100);
   }, 600);
