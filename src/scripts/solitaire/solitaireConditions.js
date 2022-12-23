@@ -73,10 +73,15 @@ const game = {
           }, 0);
         });
         const bindCascade = firstCard.location.cascade.bind(firstCard.location);
+        const bindAutoFlip = autoFlipLastCard.bind(
+          null,
+          game.movedCardOriginalDeckbase
+        );
         setTimeout(() => {
           bindCascade();
         }, 750);
       }
+
       return true;
       ///////////////////////////////////////////////
       //////////////////HELPER FUNCTIONS/////////////
@@ -127,6 +132,9 @@ const game = {
     },
 
     moveCardToFoundationRule(firstCard, secondCard) {
+      if (firstCard.location.deck.isLastCard(firstCard) === false) {
+        return false;
+      }
       if (
         firstCard.value === secondCard.value + 1 &&
         firstCard.suit === secondCard.suit
@@ -138,24 +146,39 @@ const game = {
   },
   firstCard: null,
   secondCard: null,
+  movedCardOriginalDeckbase: null,
 };
 
 function tableauClickHandler(cardObj, gameInfo, event) {
   event.stopPropagation();
+  const cardsOldLocation = gameInfo.movedCardOriginalDeckbase;
 
   // moving an ace to the foundation spot
   if (moveAceToFoundation(this) === true) {
     menu.moveCounter.addMove();
+    setTimeout(() => {
+      autoFlipLastCard(cardsOldLocation);
+    }, 100);
+    clearAllInfo();
     return;
   }
   // moving any other card to foundation spot
   if (moveAnyCardToFoundation(this) === true) {
     menu.moveCounter.addMove();
+    setTimeout(() => {
+      autoFlipLastCard(cardsOldLocation);
+    }, 100);
+    removeReAddListeners();
+    clearAllInfo();
     return;
   }
   // moving a King to an empty Tableau
   if (moveKingToEmptyTableau(this) === true) {
     menu.moveCounter.addMove();
+    setTimeout(() => {
+      autoFlipLastCard(cardsOldLocation);
+    }, 100);
+    clearAllInfo();
     return;
   }
   // if a blank tableau or a foundation is clicked first abort
@@ -180,6 +203,7 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   // if no first card, this first click is the first card
   if (gameInfo.firstCard === null) {
     gameInfo.firstCard = cardObj;
+    gameInfo.movedCardOriginalDeckbase = cardObj.location;
 
     gameInfo.firstCard.card.lastElementChild.lastElementChild.style.setProperty(
       "box-shadow",
@@ -192,8 +216,8 @@ function tableauClickHandler(cardObj, gameInfo, event) {
   } else {
     gameInfo.secondCard = cardObj;
   }
-  // try to pass the first card to the second deckBase
 
+  // try to pass the first card to the second deckBase
   if (
     gameInfo.firstCard.location.moveCardToDeck(
       gameInfo.secondCard.location,
@@ -205,10 +229,14 @@ function tableauClickHandler(cardObj, gameInfo, event) {
     ) !== false
   ) {
     menu.moveCounter.addMove();
+    setTimeout(() => {
+      autoFlipLastCard(cardsOldLocation);
+    }, 100);
+
     removeReAddListeners();
+    clearAllInfo();
   }
 
-  clearAllInfo();
   ///////////////////////////////////////
   //////////////HELPER FUNCTIONS
   ////////////////////////////////////
@@ -227,7 +255,6 @@ function tableauClickHandler(cardObj, gameInfo, event) {
         moveCardInTableauListener(source, gameInfo.firstCard);
 
         gameInfo.firstCard.inFoundation = true;
-        clearAllInfo();
       }
       return true;
     }
@@ -248,8 +275,6 @@ function tableauClickHandler(cardObj, gameInfo, event) {
         ) !== false
       ) {
         gameInfo.firstCard.inFoundation = true;
-        removeReAddListeners();
-        clearAllInfo();
         return true;
       }
     }
@@ -306,8 +331,6 @@ function tableauClickHandler(cardObj, gameInfo, event) {
         );
         moveCardInTableauListener(source, gameInfo.firstCard);
 
-        clearAllInfo();
-
         return true;
       }
       return false;
@@ -338,6 +361,17 @@ function clearAllInfo() {
   }
   game.firstCard = null;
   game.secondCard = null;
+  game.movedCardOriginalDeckbase = null;
+}
+
+function autoFlipLastCard(deckBase) {
+  if (deckBase.deck.cards.length === 0 || deckBase.location === "talon") {
+    return;
+  }
+  const lastCard = deckBase.deck.cards[deckBase.deck.cards.length - 1];
+  setTimeout(() => {
+    lastCard.flipCard(100);
+  }, 600);
 }
 
 export {

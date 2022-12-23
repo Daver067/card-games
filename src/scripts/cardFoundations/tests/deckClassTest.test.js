@@ -49,3 +49,23 @@ test("passCard wont work if the rules return false", () => {
   expect(deck.cards.length).toBe(54);
   expect(secondDeck.cards.length).toBe(0);
 });
+
+test("card index is working correctly", () => {
+  const deck = new Deck(StandardCards());
+  const sixOfDiamonds = deck.cards[5];
+  expect(deck.getCardIndex(sixOfDiamonds)).toBe(5);
+});
+
+test("is last card is working correctly", () => {
+  const deck = new Deck(StandardCards());
+  deck.removeCard("joker", "joker");
+  deck.removeCard("joker", "joker");
+  const aceOfClubs = deck.cards[39];
+  const secondDeck = new Deck();
+  for (let i = 0; i <= 12; i++) {
+    deck.passCard(secondDeck);
+  }
+  expect(secondDeck.getCardIndex(aceOfClubs)).toBe(12);
+  expect(secondDeck.isLastCard(aceOfClubs)).toBeTruthy();
+  expect(secondDeck.isLastCard(secondDeck.cards[0])).toBeFalsy();
+});

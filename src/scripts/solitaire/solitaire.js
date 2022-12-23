@@ -86,7 +86,7 @@ const Solitaire = () => {
     stock.deck.state = "available";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
-    stock.deck.shuffleDeck();
+    //stock.deck.shuffleDeck();
 
     stock.container.classList.add("stock");
     stock.location = "stock";
@@ -223,8 +223,7 @@ const Solitaire = () => {
   async function resetSolitaire() {
     if (resetDisabled === false) {
       resetDisabled = true;
-      const cardsIdle = areCardsIdle();
-      if (cardsIdle === false) return;
+      if (!areCardsIdle()) return;
       const allPiles = [
         talon,
         foundations[`foundation-1`],
@@ -239,11 +238,17 @@ const Solitaire = () => {
         tableaus[`tableau-6`],
         tableaus[`tableau-7`],
       ];
+      // removes the turnStock listener from top stock card
       if (stock.deck.length > 0) {
         stock.deck.cards[
           stock.deck.cards.length - 1
         ].card.card.removeEventListener("click", turnStockCard);
       }
+      // if no cards are in the stock its invisible, make it visible again
+      if (stock.deck.cards.length === 0) {
+        stock.container.style.visibility = "visible";
+      }
+      // pass all the cards back to stock
       allPiles.forEach((stack) => {
         const deckSize = stack.deck.cards.length;
         for (let index = 0; index < deckSize; index++) {
@@ -251,6 +256,7 @@ const Solitaire = () => {
           if (card.faceUp) card.flipCard();
           if (card.boundListener !== undefined) {
             card.card.removeEventListener("click", card.boundListener);
+            delete card.boundListener;
           }
           if (card.inFoundation) {
             delete card.inFoundation;
@@ -261,8 +267,7 @@ const Solitaire = () => {
       setTimeout(() => {
         menu.moveCounter.resetMoves();
         stock.deck.shuffleDeck();
-        stock.cascade();
-        dealCards();
+        stock.cascade().then(dealCards());
       }, 650);
     }
   }
@@ -405,7 +410,7 @@ const Solitaire = () => {
         if (currentTableau.deck.isLastCard(card)) {
           if (card.number === "A") {
             addAceToFoundations(currentTableau);
-            clickToFlipToLastCard(currentTableau);
+            autoFlipLastCard(currentTableau);
             card.card.removeEventListener("click", card.boundListener);
             moveCardInTableauListener(card.location, card);
             card.inFoundation = true;
@@ -417,7 +422,7 @@ const Solitaire = () => {
           if (validFoundationMove !== false) {
             const movedCard =
               currentTableau.moveCardToDeck(validFoundationMove);
-            clickToFlipToLastCard(currentTableau);
+            autoFlipLastCard(currentTableau);
             movedCard.inFoundation = true;
             menu.moveCounter.addMove();
             break;
@@ -426,7 +431,7 @@ const Solitaire = () => {
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
             const card = currentTableau.moveCardToDeck(validTableauMove);
-            clickToFlipToLastCard(currentTableau);
+            autoFlipLastCard(currentTableau);
             menu.moveCounter.addMove();
             break;
           }
@@ -439,7 +444,7 @@ const Solitaire = () => {
               card
             );
             setTimeout(() => {
-              clickToFlipToLastCard(currentTableau);
+              autoFlipLastCard(currentTableau);
             }, 300);
             menu.moveCounter.addMove();
             break;
@@ -532,20 +537,14 @@ const Solitaire = () => {
     return false;
   }
 
-  function clickToFlipToLastCard(deckBase) {
+  function autoFlipLastCard(deckBase) {
     if (deckBase.deck.cards.length === 0) {
       return;
     }
     const lastCard = deckBase.deck.cards[deckBase.deck.cards.length - 1];
-    lastCard.card.addEventListener(
-      "click",
-      () => {
-        if (lastCard.faceUp === false) {
-          lastCard.flipCard();
-        }
-      },
-      { once: true }
-    );
+    setTimeout(() => {
+      lastCard.flipCard(100);
+    }, 600);
   }
 
   return {
