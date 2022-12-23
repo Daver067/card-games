@@ -238,12 +238,6 @@ const Solitaire = () => {
         tableaus[`tableau-6`],
         tableaus[`tableau-7`],
       ];
-      // removes the turnStock listener from top stock card
-      if (stock.deck.length > 0) {
-        stock.deck.cards[
-          stock.deck.cards.length - 1
-        ].card.card.removeEventListener("click", turnStockCard);
-      }
       // if no cards are in the stock its invisible, make it visible again
       if (stock.deck.cards.length === 0) {
         stock.container.style.visibility = "visible";
@@ -267,7 +261,12 @@ const Solitaire = () => {
       setTimeout(() => {
         menu.moveCounter.resetMoves();
         stock.deck.shuffleDeck();
-        stock.cascade().then(dealCards());
+        stock.cascade().then(()=>{
+          stock.deck.cards.forEach(card=>{
+            card.card.removeEventListener("click", turnStockCard)
+          })
+          dealCards()
+        });
       }, 650);
     }
   }
