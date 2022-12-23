@@ -86,7 +86,7 @@ const Solitaire = () => {
     stock.deck.state = "available";
     stock.deck.removeCard("joker", "joker");
     stock.deck.removeCard("joker", "joker");
-    //stock.deck.shuffleDeck();
+    stock.deck.shuffleDeck();
 
     stock.container.classList.add("stock");
     stock.location = "stock";
@@ -542,6 +542,7 @@ const Solitaire = () => {
       return;
     }
     const lastCard = deckBase.deck.cards[deckBase.deck.cards.length - 1];
+    if(lastCard.faceUp === true) return;
     setTimeout(() => {
       lastCard.flipCard(100);
     }, 600);
