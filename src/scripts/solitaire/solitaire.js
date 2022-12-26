@@ -363,6 +363,7 @@ const Solitaire = () => {
         if (card.number === "A") {
           addAceToFoundations(talon);
           card.card.removeEventListener("click", card.boundListener);
+          clearAllInfo();
           moveCardInTableauListener(card.location, card);
           card.inFoundation = true;
           menu.moveCounter.addMove();
@@ -371,6 +372,7 @@ const Solitaire = () => {
 
         const validFoundationMove = checkForFoundationMove(card);
         if (validFoundationMove !== false) {
+          clearAllInfo();
           const movedCard = talon.moveCardToDeck(validFoundationMove);
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
@@ -381,6 +383,7 @@ const Solitaire = () => {
 
         const validTableauMove = checkForTableauMove(card, talon);
         if (validTableauMove !== false) {
+          clearAllInfo();
           const card = talon.moveCardToDeck(validTableauMove);
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
@@ -411,6 +414,7 @@ const Solitaire = () => {
             addAceToFoundations(currentTableau);
             autoFlipLastCard(currentTableau);
             card.card.removeEventListener("click", card.boundListener);
+            clearAllInfo();
             moveCardInTableauListener(card.location, card);
             card.inFoundation = true;
             menu.moveCounter.addMove();
@@ -419,6 +423,7 @@ const Solitaire = () => {
 
           const validFoundationMove = checkForFoundationMove(card);
           if (validFoundationMove !== false) {
+            clearAllInfo();
             const movedCard =
               currentTableau.moveCardToDeck(validFoundationMove);
             autoFlipLastCard(currentTableau);
@@ -437,6 +442,7 @@ const Solitaire = () => {
         } else {
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
+            clearAllInfo();
             const timer = addMultipleCardsToTableaus(
               currentTableau,
               validTableauMove,
