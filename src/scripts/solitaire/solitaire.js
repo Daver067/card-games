@@ -238,12 +238,6 @@ const Solitaire = () => {
         tableaus[`tableau-6`],
         tableaus[`tableau-7`],
       ];
-      // removes the turnStock listener from top stock card
-      if (stock.deck.length > 0) {
-        stock.deck.cards[
-          stock.deck.cards.length - 1
-        ].card.card.removeEventListener("click", turnStockCard);
-      }
       // if no cards are in the stock its invisible, make it visible again
       if (stock.deck.cards.length === 0) {
         stock.container.style.visibility = "visible";
@@ -267,7 +261,12 @@ const Solitaire = () => {
       setTimeout(() => {
         menu.moveCounter.resetMoves();
         stock.deck.shuffleDeck();
-        stock.cascade().then(dealCards());
+        stock.cascade().then(()=>{
+          stock.deck.cards.forEach(card=>{
+            card.card.removeEventListener("click", turnStockCard)
+          })
+          dealCards()
+        });
       }, 650);
     }
   }
@@ -364,6 +363,7 @@ const Solitaire = () => {
         if (card.number === "A") {
           addAceToFoundations(talon);
           card.card.removeEventListener("click", card.boundListener);
+          clearAllInfo();
           moveCardInTableauListener(card.location, card);
           card.inFoundation = true;
           menu.moveCounter.addMove();
@@ -372,6 +372,7 @@ const Solitaire = () => {
 
         const validFoundationMove = checkForFoundationMove(card);
         if (validFoundationMove !== false) {
+          clearAllInfo();
           const movedCard = talon.moveCardToDeck(validFoundationMove);
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
@@ -382,6 +383,7 @@ const Solitaire = () => {
 
         const validTableauMove = checkForTableauMove(card, talon);
         if (validTableauMove !== false) {
+          clearAllInfo();
           const card = talon.moveCardToDeck(validTableauMove);
           card.card.removeEventListener("click", card.boundListener);
           moveCardInTableauListener(card.location, card);
@@ -412,6 +414,7 @@ const Solitaire = () => {
             addAceToFoundations(currentTableau);
             autoFlipLastCard(currentTableau);
             card.card.removeEventListener("click", card.boundListener);
+            clearAllInfo();
             moveCardInTableauListener(card.location, card);
             card.inFoundation = true;
             menu.moveCounter.addMove();
@@ -420,6 +423,7 @@ const Solitaire = () => {
 
           const validFoundationMove = checkForFoundationMove(card);
           if (validFoundationMove !== false) {
+            clearAllInfo();
             const movedCard =
               currentTableau.moveCardToDeck(validFoundationMove);
             autoFlipLastCard(currentTableau);
@@ -438,6 +442,7 @@ const Solitaire = () => {
         } else {
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
+            clearAllInfo();
             const timer = addMultipleCardsToTableaus(
               currentTableau,
               validTableauMove,
