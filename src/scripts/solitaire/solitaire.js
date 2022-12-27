@@ -261,11 +261,11 @@ const Solitaire = () => {
       setTimeout(() => {
         menu.moveCounter.resetMoves();
         stock.deck.shuffleDeck();
-        stock.cascade().then(()=>{
-          stock.deck.cards.forEach(card=>{
-            card.card.removeEventListener("click", turnStockCard)
-          })
-          dealCards()
+        stock.cascade().then(() => {
+          stock.deck.cards.forEach((card) => {
+            card.card.removeEventListener("click", turnStockCard);
+          });
+          dealCards();
         });
       }, 650);
     }
@@ -434,6 +434,7 @@ const Solitaire = () => {
 
           const validTableauMove = checkForTableauMove(card, currentTableau);
           if (validTableauMove !== false) {
+            clearAllInfo();
             const card = currentTableau.moveCardToDeck(validTableauMove);
             autoFlipLastCard(currentTableau);
             menu.moveCounter.addMove();
@@ -547,7 +548,7 @@ const Solitaire = () => {
       return;
     }
     const lastCard = deckBase.deck.cards[deckBase.deck.cards.length - 1];
-    if(lastCard.faceUp === true) return;
+    if (lastCard.faceUp === true) return;
     setTimeout(() => {
       lastCard.flipCard(100);
     }, 600);
