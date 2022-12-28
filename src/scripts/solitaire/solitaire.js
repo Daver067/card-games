@@ -267,6 +267,7 @@ const Solitaire = () => {
 
 			setTimeout(() => {
 				menu.moveCounter.resetMoves();
+				menu.timer.resetTimer();
 				stock.deck.shuffleDeck();
 				stock.cascade().then(() => {
 					stock.deck.cards.forEach((card) => {

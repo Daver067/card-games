@@ -12,7 +12,10 @@ const timer = {
   timeText: buildTimeText(),
 
   resetTimer(){
-
+    this.seconds = 0;
+    this.minutes = 0;
+    this.hours = 0;
+    this.updateTimer();
   },
 
   updateTimer(){
