@@ -1,5 +1,6 @@
 import moveCounter from "./moveCounter";
 import resetGame from "./resetGame";
+import timer from "./timer";
 
 const menu = {
   navBar: buildNavBar(),
@@ -8,6 +9,7 @@ const menu = {
 };
 
 menu.navBar.appendChild(moveCounter.container); // this may be temporary... hopefully something to apply all navbar items
+menu.navBar.appendChild(timer.container);
 menu.navBar.appendChild(resetGame.button);
 
 // HELPER FUNCTIONS.... SINCE IIFE DONT WORK IN OBJECT PROPS
