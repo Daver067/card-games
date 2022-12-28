@@ -27,12 +27,12 @@ setInterval(() => {
   if(timer.timerStarted === false) return;
   timer.seconds += 1;
 
-  if(timer.seconds > 60){
+  if(timer.seconds >= 60){
     timer.seconds = 0;
     timer.minutes += 1;
   };
 
-  if(timer.minutes > 60){
+  if(timer.minutes >= 60){
     timer.minutes = 0;
     timer.hours += 1;
   };
