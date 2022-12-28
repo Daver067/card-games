@@ -5,7 +5,7 @@ const timer = {
 
   timeString: "0",
 
-  timerStarted: true,
+  timerStarted: false,
 
   container: buildClockContainer(),
   clock: buildTimeSymbol(),
@@ -21,6 +21,14 @@ const timer = {
   updateTimer(){
     this.timeString = `${this.hours}:${this.minutes}:${this.seconds}`;
     this.timeText.textContent = this.timeString;
+  },
+
+  startTimer(){
+    this.timerStarted = true;
+  },
+
+  stopTimer(){
+    this.timerStarted = false;
   },
 };
 

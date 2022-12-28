@@ -183,6 +183,7 @@ const Solitaire = () => {
 		}
 		setTimeout(() => {
 			resetDisabled = false;
+			menu.timer.startTimer();
 		}, 7500);
 	}
 
@@ -227,6 +228,7 @@ const Solitaire = () => {
 		const idleState = areCardsIdle();
 		if (idleState === true) {
 			resetDisabled = true;
+			menu.timer.stopTimer();
 			if (!areCardsIdle()) return;
 			const allPiles = [
 				talon,

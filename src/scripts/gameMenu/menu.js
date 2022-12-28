@@ -5,6 +5,7 @@ import timer from "./timer";
 const menu = {
   navBar: buildNavBar(),
   moveCounter: moveCounter,
+  timer: timer,
   resetGame: resetGame,
 };
 
