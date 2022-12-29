@@ -445,42 +445,36 @@ const Solitaire = () => {
 						break;
 					}
 
-					const validTableauMove = checkForTableauMove(
-						card,
-						currentTableau
-					);
-					if (validTableauMove !== false) {
-						const card =
-							currentTableau.moveCardToDeck(validTableauMove);
-						autoFlipLastCard(currentTableau);
-						menu.moveCounter.addMove();
-						break;
-					}
-				} else {
-					const validTableauMove = checkForTableauMove(
-						card,
-						currentTableau
-					);
-					if (validTableauMove !== false) {
-						clearAllInfo();
-						const timer = addMultipleCardsToTableaus(
-							currentTableau,
-							validTableauMove,
-							card
-						);
-						setTimeout(() => {
-							autoFlipLastCard(currentTableau);
-						}, 300);
-						menu.moveCounter.addMove();
-						break;
-					}
-				}
-				break;
-			default:
-				console.log("Error! Unknown location!");
-				break;
-		}
-	}
+          const validTableauMove = checkForTableauMove(card, currentTableau);
+          if (validTableauMove !== false) {
+            clearAllInfo();
+            const card = currentTableau.moveCardToDeck(validTableauMove);
+            autoFlipLastCard(currentTableau);
+            menu.moveCounter.addMove();
+            break;
+          }
+        } else {
+          const validTableauMove = checkForTableauMove(card, currentTableau);
+          if (validTableauMove !== false) {
+            clearAllInfo();
+            const timer = addMultipleCardsToTableaus(
+              currentTableau,
+              validTableauMove,
+              card
+            );
+            setTimeout(() => {
+              autoFlipLastCard(currentTableau);
+            }, 300);
+            menu.moveCounter.addMove();
+            break;
+          }
+        }
+        break;
+      default:
+        console.log("Error! Unknown location!");
+        break;
+    }
+  }
 
 	function printCardInfo(card) {
 		console.table({
