@@ -3,7 +3,7 @@ const timer = {
   minutes: 0,
   hours: 0,
 
-  timeString: "0",
+  timeString: "00:00",
 
   timerStarted: false,
 
@@ -14,12 +14,13 @@ const timer = {
   resetTimer(){
     this.seconds = 0;
     this.minutes = 0;
-    this.hours = 0;
     this.updateTimer();
   },
 
   updateTimer(){
-    this.timeString = `${this.hours}:${this.minutes}:${this.seconds}`;
+    const stringMinutes = String(this.minutes).padStart(2,0);
+    const stringSeconds = String(this.seconds).padStart(2,0);
+    this.timeString = `${stringMinutes}:${stringSeconds}`;
     this.timeText.textContent = this.timeString;
   },
 
@@ -37,15 +38,11 @@ buildClock();
 setInterval(() => {
   if(timer.timerStarted === false) return;
   timer.seconds += 1;
+  timer.seconds;
 
   if(timer.seconds >= 60){
     timer.seconds = 0;
     timer.minutes += 1;
-  };
-
-  if(timer.minutes >= 60){
-    timer.minutes = 0;
-    timer.hours += 1;
   };
 
   timer.updateTimer();
@@ -66,7 +63,7 @@ function buildTimeSymbol() {
 
 function buildTimeText() {
   const element = document.createElement("p");
-  element.textContent = "0";
+  element.textContent = "00:00";
   return element;
 }
 
